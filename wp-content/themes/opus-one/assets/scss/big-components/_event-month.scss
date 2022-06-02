@@ -1,0 +1,24 @@
+.event-month {
+
+}
+
+.event-month__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // width: 100%;
+    height: 85vh;
+    // overflow: hidden;
+    @include fs-big;
+    text-transform: uppercase;
+}
+
+.event-month__word {
+    display: flex;
+}
+
+.event-month__letter {
+    --wght: 500;
+    --wdth: 0;
+    font-variation-settings: "wght" var(--wght),"wdth" var(--wdth),"ital" 0;
+}

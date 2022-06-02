@@ -1,0 +1,54 @@
+$gutter: 20px;
+
+$sm : 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1350px;
+$xxl: 1700px;
+
+$black: #000;
+$white: #FFF;
+$purple: #6E32FF;
+$light-purple: #A7A5CD;
+$corail: #FF5765;
+$red: #EE3B3B;
+$yellow: #FEFB34;
+$green: #10CF72;
+$fluo-green: #00FF8D;
+$forest-green: #1B3B23;
+$night-blue: #02097D;
+$cream: #FFDE96;
+$bordeaux: #9E003A;
+
+//$color-ig: ;
+$color-fb: #4267B2;
+$color-tw: #1DA1F2;
+$color-yt: #FF0000;
+$color-li: #0077B5;
+
+$font--primary: Arial, sans-serif;
+$font--secondary: 'Bridges';
+
+$space-sm: $gutter;
+$space-md: 30px;
+$space-lg: $gutter * 2;
+$space-xl: 60px;
+$space-2xl: 90px;
+$space-3xl: 110px;
+
+// font-size: min(max(#{$min}, #{$valVW}), #{$max});
+// font-size: clamp(#{$min}, #{$valVW}, #{$max});
+
+// $space-min-max-sm: min(max(#{$min}, #{$valVW}), #{$max});
+// $space-min-max-md: min(max(#{$min}, #{$valVW}), #{$max});
+// $space-min-max-lg: min(max(#{$min}, #{$valVW}), #{$max});
+// $space-min-max-xl: min(max(#{$min}, #{$valVW}), #{$max});
+// $space-min-max-2xl: min(max(#{$min}, #{$valVW}), #{$max});
+// $space-min-max-3xl: min(max(#{$min}, #{$valVW}), #{$max});
+
+// $space-clamp-sm: clamp();
+// $space-clamp-md: clamp();
+// $space-clamp-lg: clamp();
+// $space-clamp-xl: clamp();
+// $space-clamp-2xl: clamp();
+// $space-clamp-3xl: clamp();

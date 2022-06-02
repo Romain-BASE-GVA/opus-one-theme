@@ -1,0 +1,29 @@
+@font-face {
+  font-family: "Baikal";
+  src: url("../fonts/baikal.ttf") format("truetype-variations");
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: "Baikal";
+    // font-family: $font--primary;
+    background-color: black;
+    color: white;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    margin: 0;
+}
+
+p {
+
+}
+
