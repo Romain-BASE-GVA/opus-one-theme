@@ -13,6 +13,7 @@
 .logo--topbar {
 	display: flex;
 	align-items: center;
+    margin-right: $gutter*2;
 	
 	a {
 		display: flex;
@@ -52,4 +53,42 @@
         display: block;
         //transform: translate3d(0, 100%, 0);
     }
+}
+
+.topbar--page-nav {
+    flex: 1 1 100%;
+    opacity: 0;
+    visibility: hidden;
+
+    span {
+        @include fs-md;
+    }
+}
+
+.page-nav {
+    @include clean-list;
+    display: flex;
+}
+
+.page-nav__item {
+    @include fs-md;
+    margin-right: 1em;
+
+    &:last-child {
+        margin-right: 0;
+    }
+}
+
+.page-nav__link {
+    text-decoration: none;
+    color: $white;
+    opacity: .5;
+    text-transform: capitalize;
+    @include transition;
+
+    .page-nav__item--is-active &,
+    &:hover {
+        opacity: 1;
+    }
+    
 }

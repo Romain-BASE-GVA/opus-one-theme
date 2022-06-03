@@ -2,6 +2,7 @@
     display: flex;
     align-items: center;
     border: none;
+    margin-left: $gutter*2;
     padding: 0;
     background-color: transparent;
     color: currentColor;
@@ -58,7 +59,7 @@
     @include transition;
     &:hover {
         background-color: $white;
-        color: $purple;
+        color: var(--section-bg-color, $purple);
     }
 } 
 

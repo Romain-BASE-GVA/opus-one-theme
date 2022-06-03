@@ -16,6 +16,7 @@ body {
     // font-family: $font--primary;
     background-color: black;
     color: white;
+    @include transition;
 }
 
 h1, h2, h3, h4, h5, h6 {

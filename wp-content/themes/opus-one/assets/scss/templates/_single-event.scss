@@ -1,0 +1,19 @@
+.single-event {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-column-gap: $gutter;
+}
+
+.single-event__side {
+
+}
+
+.single-event__side--main {
+    grid-area: 1 / 2 / 2 / 8;
+}
+
+.single-event__side--ticket {
+    position: sticky;
+    top: 0;
+    grid-area: 1 / 8 / 2 / 12;
+}

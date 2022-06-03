@@ -4,6 +4,7 @@
 //@prepros-append vendor/gsap.min.js
 //@prepros-append vendor/scrollTrigger.js
 //@prepros-append vendor/scrollToPlugin.js
+//@prepros-append vendor/flickity.js
 //@prepros-append vendor/marquee3k.js
 
 //@prepros-append app.js
