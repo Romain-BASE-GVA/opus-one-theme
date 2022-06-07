@@ -205,7 +205,6 @@ $(document).ready(function() {
                 pageNav.prepend(pageNavTemplate);
                 
                 gsap.to($('.topbar--page-nav'), {autoAlpha: 1});
-
                 
             }
             // afterEnter(data) {
@@ -249,11 +248,33 @@ $(document).ready(function() {
             namespace: 'single-event',
             afterEnter({current, next, trigger}) {
                 var eventTitle = $(next.container).data('event-title');
-                eventTitle = $('<span>'+ eventTitle +'</span>');
+                    eventTitle = $('<span>'+ eventTitle +'</span>');
 
                 pageNav.prepend(eventTitle);
                 
                 gsap.to($('.topbar--page-nav'), {autoAlpha: 1});
+
+                setTimeout(reInitMarquee, 100)
+
+                function reInitMarquee() {
+                    Marquee3k.init();
+                    Marquee3k.pauseAll();
+                    $('.one-ticket__marquee').each(function(e){
+    
+                        var thisIsPlaying = false;
+                        var thisA = $(this).parents('.one-ticket').find('a');
+                        
+    
+                        thisA.on('mouseover', function(){
+                            Marquee3k.play(e);
+                        });
+            
+                        thisA.on('mouseleave', function(){
+                            Marquee3k.pause(e);
+                        });
+                    });
+                };
+
             },
         }
         //     afterEnter(data) {
@@ -489,10 +510,29 @@ $(document).ready(function() {
                     .from('.socials__item span', {duration: 1.5, yPercent: 20, rotation: '45deg', autoAlpha: 0, stagger: .2, ease: Power3.easeOut}, 'footerAnim+=.2')
                     .from('.socials_item__title', {duration: 1.5, yPercent: 100, autoAlpha: 0, stagger: .2, ease: Power3.easeOut}, 'footerAnim+=.4');
 
-        Marquee3k.init({
-            selector: 'shortly__marquee',
-            speed: 10
-        });
+        Marquee3k.init();
+
+        // if($('.one-ticket__marquee').length){
+        //     Marquee3k.pauseAll();
+        //     console.log('PAUSE ALL');
+        // } else {
+        //     Marquee3k.playAll();
+        //     console.log('PLAY ALL');
+        // }
+
+        // $('.one-ticket__marquee').each(function(e){
+        //     //Marquee3k.pause(e);
+        //     var thisIsPlaying = false;
+        //     var thisA = $(this).parents('.one-ticket').find('a');
+
+        //     thisA.on('mouseover', function(){
+        //         Marquee3k.play(e);
+        //     });
+
+        //     thisA.on('mouseleave', function(){
+        //         Marquee3k.pause(e);
+        //     });
+        // });
     };
 
     function killAllScrollTrigger(){

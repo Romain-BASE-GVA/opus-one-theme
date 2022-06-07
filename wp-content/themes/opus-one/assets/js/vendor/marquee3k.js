@@ -156,7 +156,7 @@
           MARQUEES[i].paused = !MARQUEES[i].paused;
         }
       }
-  
+
       static init(options = { selector: 'marquee3k' }) {
         if (animationId) window.cancelAnimationFrame(animationId);
   
