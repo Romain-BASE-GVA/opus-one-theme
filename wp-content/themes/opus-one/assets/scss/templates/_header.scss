@@ -2,11 +2,35 @@
 
 }
 
+.header--regular {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+}
+
+.header--regular__title {
+    --wght: 500;
+    --wdth: 0;
+    @include fs-3xl;
+    font-variation-settings: "wght" var(--wght),"wdth" var(--wdth),"ital" 0;
+    text-transform: uppercase;
+    line-height: 0.75;
+}
+
+.header--regular__sub-title {
+    @include fs-md;
+    font-variation-settings: "wght" 100,"wdth" 100,"ital" 0;
+}
+
 .header--single-event {
     height: 90vh;
     overflow: hidden;
     background-color: $black;
 }
+
+
 
 .header-carousel {
     width: 100%;

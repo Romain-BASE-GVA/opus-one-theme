@@ -33,10 +33,14 @@
     font-size: 2.5rem;
 }
 
+// @mixin fs-xl {
+//     // @include font-size(20px, 2.858vw, 80px, 4);
+//     font-size: 40px;
+//     font-size: 4rem;
+// }
+
 @mixin fs-xl {
-    // @include font-size(20px, 2.858vw, 80px, 4);
-    font-size: 40px;
-    font-size: 4rem;
+    @include font-size(30px, 2.858vw, 50px, 4);
 }
 
 // DONE
@@ -46,13 +50,13 @@
 }
 
 @mixin fs-3xl {
-    @include font-size(160px, 6.429vw, 220px, 20);
+    @include font-size(160px, 14.645vw, 350px, 20);
 }
 
 // DONE
 
 @mixin fs-big {
-    @include font-size(300px, 44vw, 700px, 60);
+    @include font-size(300px, 44vw, 800px, 60);
 } 
 
 @mixin img-cover {

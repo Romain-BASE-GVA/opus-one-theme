@@ -1,0 +1,33 @@
+.two-sides {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-column-gap: $gutter;
+}
+
+.two-sides__side--left {
+    grid-area: 1 / 1 / 2 / 6;
+}
+
+.two-sides__side--right {
+    grid-area: 1 / 6 / 2 / 13;
+}
+
+.two-sides__title {
+    --wght: 500;
+    --wdth: 0;
+    position: sticky;
+    top: 126px;
+    left: 0;
+    @include fs-3xl;
+    margin-bottom: 126px;
+    font-variation-settings: "wght" var(--wght),"wdth" var(--wdth),"ital" 0;
+    text-transform: uppercase;
+    line-height: 0.75;
+}
+
+.two-side__content {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-column-gap: $gutter;
+    padding-bottom: 126px;
+}

@@ -1,0 +1,97 @@
+.card {
+    position: relative;
+}
+
+.card--artist {
+
+}
+
+.card__link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.card__img {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background-color: $red;
+    overflow: hidden;
+    transition: background-color .3s ease-in-out;
+
+    img, 
+    .img {
+        position: absolute;
+        width: 100%;
+        height: calc(100% + 10vh);
+        top: 0;
+        left: 0;
+        filter: grayscale(1);
+        mix-blend-mode: lighten;
+        transition: filter .3s ease-in-out;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+
+        @supports not (object-fit: cover) {
+            display: none;
+        }
+
+    }
+
+    .img {
+        display: none;
+        background-size: cover;
+        background-position: center;
+
+        @supports not (object-fit: cover) {
+            display: block;
+        }
+    }
+
+
+    @supports (aspect-ratio: 16/9) {
+        padding-top: unset;
+        aspect-ratio: 16/9;
+    }
+
+    @supports not (aspect-ratio: 16/9) {
+        padding-top: 56.25%;
+    }
+}
+
+.card__link:hover + .card__img {
+    background-color: $black;
+
+    img,
+    .img {
+        filter: grayscale(0);
+    }
+}
+
+.card__title {
+    @include fs-xl;
+    margin: .33em 0;
+}
+
+.card__date-list {
+
+}
+
+.card__date {
+
+}
+
+.card__category {
+    display: block;
+    padding-top: .5em;
+    @include fs-sm;
+}

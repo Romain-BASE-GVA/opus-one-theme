@@ -1,0 +1,52 @@
+.block--one-img {
+
+}
+
+.one-img {
+    position: relative;
+    overflow: hidden;
+
+    img {
+        display: block;
+        width: 100%;
+    }
+}
+
+.one-img--16-9 {
+    width: 100%;
+    
+    img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: calc(100% + 20vh);
+        object-fit: cover;
+        object-position: center;
+    }
+
+    @supports (aspect-ratio: 16/9) {
+        padding-top: unset;
+        aspect-ratio: 16/9;
+    }
+
+    @supports not (aspect-ratio: 16/9) {
+        padding-top: 56.25%;
+    }
+}
+
+.one-img--no-ratio {
+    img:first-child {
+        position: relative;
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    img:last-child {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: calc(100% + 20vh);
+        object-fit: cover;
+        object-position: center;
+    }
+}

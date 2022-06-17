@@ -6,9 +6,23 @@
     padding: $gutter*5 $gutter*2 $gutter*10;
 }
 
+.section--no-padding-x {
+    padding-right: 0;
+    padding-left: 0;
+}
+
 .section--highlights {
     // color: var(--section-color);
     // background: var(--section-bg-color);
+}
+
+.section--agenda-cta {
+    padding: $gutter*5 $gutter*2 $gutter*5;
+}
+
+.section--two-sides {
+    background-color: transparent;
+    padding: 0;
 }
 
 .section__title {
