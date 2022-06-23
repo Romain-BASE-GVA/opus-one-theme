@@ -2,7 +2,7 @@
     // --section-color: $white;
     // --section--bg-color: $black;
     color: var(--section-color, $white);
-    background-color: var(--section-bg-color, $purple);
+    background-color: var(--current-bg-color, $purple);
     padding: $gutter*5 $gutter*2 $gutter*10;
 }
 
@@ -12,8 +12,8 @@
 }
 
 .section--highlights {
-    // color: var(--section-color);
-    // background: var(--section-bg-color);
+    color: var(--section-color);
+    background: var(--current-bg-color);
 }
 
 .section--agenda-cta {

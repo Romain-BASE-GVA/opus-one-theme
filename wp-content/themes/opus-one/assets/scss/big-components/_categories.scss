@@ -86,16 +86,16 @@
     display: inline-block;
     margin: 0 auto;
     padding: $gutter $gutter*3;
-    color: $white;
-    border: 2px solid $white;
+    color: var(--current-txt-color, $white);
+    border: 2px solid var(--current-txt-color, $white);
     border-radius: 100px;
     text-decoration: none;
     @include fs-md;
     transition: background-color .3s ease-in-out, color .3s ease-in-out;
 
     &:hover {
-        background-color: $white;
-        color: $purple;
+        background-color: var(--current-txt-color, $white);
+        color: var(--current-bg-color, $purple);
     }
 }
 

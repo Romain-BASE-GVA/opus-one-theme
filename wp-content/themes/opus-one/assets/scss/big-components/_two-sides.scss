@@ -1,7 +1,12 @@
 .two-sides {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-column-gap: $gutter;
+    display: flex;
+    flex-direction: column;
+
+    @media screen and (min-width: $lg + 1){
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-column-gap: $gutter;
+    }
 }
 
 .two-sides__side--left {
@@ -16,7 +21,7 @@
     --wght: 500;
     --wdth: 0;
     position: sticky;
-    top: 126px;
+    top: 166px;
     left: 0;
     @include fs-3xl;
     margin-bottom: 126px;
@@ -26,8 +31,13 @@
 }
 
 .two-side__content {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-column-gap: $gutter;
-    padding-bottom: 126px;
+    display: flex;
+    flex-direction: column;
+
+    @media screen and (min-width: $lg + 1){
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        grid-column-gap: $gutter;
+        padding-bottom: 126px;
+    }
 }

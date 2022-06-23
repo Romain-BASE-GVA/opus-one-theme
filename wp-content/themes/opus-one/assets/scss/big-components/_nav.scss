@@ -54,10 +54,14 @@
 } 
 
 .nav--footer--shortcuts {
+    ul {
+        flex-direction: column;
+    }
 
     li {
-        margin-right: 60px;
+        
         overflow: hidden;
+        border-bottom: 1px solid rgba($white, .6);
 
         &:last-child {
             margin-right: 0;
@@ -67,11 +71,28 @@
     a {
         @include fs-lg;
         display: inline-block;
-
+        width: 100%;
+        padding: 1em 0;
         // &:hover {
         //     animation: rainbow 1s ease-out;
         //     animation-iteration-count: 1;
         // }
+    }
+
+    @media screen and (min-width: $lg + 1){
+        ul {
+            flex-direction: row;
+        }
+
+        li {
+            border: none;
+            margin-right: 60px;
+        }
+
+        a {
+            padding: 0;
+            width: auto;
+        }
     }
 }
 
@@ -84,7 +105,7 @@
 }
 
 .socials__item {
-    margin-right: 60px;
+    margin-right: $gutter/2;
 
     a {
         display: flex;
@@ -99,7 +120,7 @@
         width: 60px;
         height: 60px;
         @include fs-md;
-        border: 1px solid $white;
+        border: 2px solid $white;
         border-radius: 50%;
         @include transition('background-color');
     }
@@ -160,6 +181,14 @@
         a:hover span {
             background-color: $color-li;
         }
+    }
+
+    @media screen and (min-width: $md + 1){
+        margin-right: $gutter;
+    }
+
+    @media screen and (min-width: $lg + 1){
+        margin-right: 60px;
     }
 
 }

@@ -1,0 +1,30 @@
+.single-event__header {
+    margin-bottom: $gutter*2;
+}
+
+.single-event__title {
+    @include fs-2xl;
+    margin-bottom: 1em
+}
+
+.single-event__tour {
+    @include fs-lg;
+}
+
+.single-event__style {
+    display: flex;
+    flex-direction: column;
+
+    span {
+        &:first-child {
+            @include fs-sm;
+            opacity: .6;
+            margin: .5em 0;
+        }
+    }
+}
+
+.single-event__hashtag {
+    @include fs-lg;
+}
+

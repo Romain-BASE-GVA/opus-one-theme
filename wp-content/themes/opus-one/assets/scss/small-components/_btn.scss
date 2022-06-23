@@ -57,30 +57,36 @@
 
 .double-bouttons__btn {
     @include transition;
+    text-align: center;
+
     &:hover {
         background-color: $white;
-        color: var(--section-bg-color, $purple);
+        color: var(--current-bg-color, $purple);
     }
 } 
 
 .double-bouttons__btn--info {
     padding: 1em 4em;
-    border-top: 1px solid $white;
-    border-bottom: 1px solid $white;
-    border-left: 1px solid $white;
-    border-right: 1px dashed $white;
+    border-top: 2px solid var(--current-txt-color, $white);
+    border-bottom: 2px solid var(--current-txt-color, $white);
+    border-left: 2px solid var(--current-txt-color, $white);
+    border-right: 2px dashed var(--current-txt-color, $white);
     border-top-left-radius: 100px;
     border-bottom-left-radius: 100px;
-    margin-right: -1px;
+    margin-right: -2px;
+    
+    .event__call-back--mobile & {
+        flex: auto;
+    }
 }
 
 .double-bouttons__btn--ticket {
     position: relative;
     padding: 1em 2em;
-    border-top: 1px solid $white;
-    border-bottom: 1px solid $white;
-    border-right: 1px solid $white;
-    border-left: 1px dashed $white;
+    border-top: 2px solid var(--current-txt-color, $white);
+    border-bottom: 2px solid var(--current-txt-color, $white);
+    border-right: 2px solid var(--current-txt-color, $white);
+    border-left: 2px dashed var(--current-txt-color, $white);
     border-top-right-radius: 100px;
     border-bottom-right-radius: 100px;
     transform-origin: bottom left;
@@ -121,7 +127,7 @@
     @include fs-md;
     color: $white;
     text-decoration: none;
-    border: 1px solid $white;
+    border: 2px solid $white;
     border-radius: 50px;
     padding: .5em 3em;
     overflow: hidden;

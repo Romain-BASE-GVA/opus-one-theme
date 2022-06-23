@@ -2,9 +2,7 @@
     position: relative;
 }
 
-.card--artist {
-
-}
+.card--artist {}
 
 .card__link {
     position: absolute;
@@ -19,11 +17,11 @@
     position: relative;
     width: 100%;
     aspect-ratio: 16/9;
-    background-color: $red;
+    background-color: $purple;
     overflow: hidden;
     transition: background-color .3s ease-in-out;
 
-    img, 
+    img,
     .img {
         position: absolute;
         width: 100%;
@@ -68,7 +66,7 @@
     }
 }
 
-.card__link:hover + .card__img {
+.card__link:hover+.card__img {
     background-color: $black;
 
     img,
@@ -82,16 +80,228 @@
     margin: .33em 0;
 }
 
-.card__date-list {
+.card__date-list {}
 
-}
-
-.card__date {
-
-}
+.card__date {}
 
 .card__category {
     display: block;
     padding-top: .5em;
     @include fs-sm;
+}
+
+.contact-person {
+    position: relative;
+    flex: 0 1 100%;
+    display: flex;
+    //background-color: red;
+    margin-bottom: $gutter * 2;
+
+    a {
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+
+        span {
+            display: none;
+        }
+    }
+
+    @container (min-width: 850px){
+        flex: 0 1 calc(50% - #{$gutter / 2});
+    }
+}
+
+.contact-person__side {}
+
+.contact-person__side--img {
+    position: relative;
+    flex: 0 0 calc(100%/4);
+    aspect-ratio: 1;
+    padding-top: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-right: $gutter/2;
+
+    img,
+    .img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+
+    img {
+        display: block;
+        object-fit: cover;
+        object-position: center;
+
+        @supports not (object-fit: cover) {
+            display: none;
+        }
+
+    }
+
+    .img {
+        display: none;
+        background-size: cover;
+        background-position: center;
+
+        @supports not (object-fit: cover) {
+            display: block;
+        }
+    }
+
+
+    @supports (aspect-ratio: 16/9) {
+        padding-top: unset;
+        aspect-ratio: 1;
+    }
+
+    @supports not (aspect-ratio: 16/9) {
+        padding-top: 25%;
+    }
+}
+
+.contact-person__side--text {
+    >div {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.contact-person__person {
+    @include fs-lg;
+}
+
+.contact-person__role {
+    text-transform: uppercase;
+    @include fs-sm;
+}
+
+.contact-person__cta {
+    text-transform: uppercase;
+    opacity: .7;
+    @include fs-sm;
+}
+
+.event-card {
+    position: relative;
+    flex: 0 1 100%;
+    display: flex;
+    flex-direction: column;
+    @include fs-md;
+    line-height: 1.5;
+    margin-bottom: $gutter * 2;
+
+    @container (min-width: 600px){
+        flex: 0 1 calc(50% - #{$gutter / 2});
+    }
+}
+
+.event-card__availability {
+    text-transform: uppercase;
+
+    span {
+        opacity: .5;
+    }
+
+    &:before {
+        content: "";
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        margin-bottom: -0.05em;
+        margin-right: 0.25em;
+        border-radius: 50%;
+    }
+
+    &.is-available {
+        
+        &:before {
+            background-color: #10CF72;
+        }
+    }
+
+    &.is-not-available {
+        
+        &:before {
+            background-color: #10CF72;
+        }
+    }
+} 
+
+.event-card__availability--is-available {
+
+}
+
+.event-card__date {
+
+}
+
+.event-card__door {
+    display: flex;
+
+    span {
+        display: flex;
+        align-items: center;
+
+        &:first-child {
+            &:after {
+                content: "";
+                display: block;
+                width: 0;
+                height: 0;
+                margin-left: .5em;
+                margin-right: .5em;
+                border-top: 0.375em solid transparent;
+                border-left: 0.75em solid white;
+                border-bottom: 0.375em solid transparent;
+                opacity: 0.5;
+                @include transition;
+            }
+        }
+    }
+}
+
+.event-card__where {
+    display: flex;
+    align-items: center;
+    
+    &:before {
+        content: "";
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        margin-right: 0.25em;
+        border: 1px solid currentColor;
+        border-radius: 50%;
+        opacity: 0.5;
+        padding: 4px;
+        margin-right: 0.5;
+        background-color: #FFF;
+        background-clip: content-box;
+    }
+}
+
+.event-card__cta {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 1em 4em;
+    border: 2px solid #FFF;
+    border-radius: 100px;
+    text-decoration: none;
+
+    @media screen and (min-width: $lg + 1){
+        display: inline;
+        width: auto;
+        text-decoration: underline;
+        padding: 0;
+    }
 }

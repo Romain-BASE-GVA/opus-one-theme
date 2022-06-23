@@ -12,10 +12,14 @@ html {
 }
 
 body {
+    --current-bg-color: $black;
+    --current-txt-color: $white;
     font-family: "Baikal";
     // font-family: $font--primary;
-    background-color: black;
-    color: white;
+    background-color: $black;
+    background-color: var(--current-bg-color, $black);
+    color: $white;
+    color: var(--current-txt-color, $white);
     @include transition;
 }
 

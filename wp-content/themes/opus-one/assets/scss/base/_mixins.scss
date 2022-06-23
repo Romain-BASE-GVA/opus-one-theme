@@ -56,7 +56,8 @@
 // DONE
 
 @mixin fs-big {
-    @include font-size(300px, 44vw, 800px, 60);
+    @include font-size(200px, 44vw, 800px, 60);
+    //@include font-size(200px, 44vw, 800px, 60);
 } 
 
 @mixin img-cover {

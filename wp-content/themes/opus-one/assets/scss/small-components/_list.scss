@@ -39,3 +39,40 @@ ul {
     //     }
     // }
 }
+
+.list-of-list {
+    container-type: inline-size;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    a {
+
+    }
+
+}
+
+.list-of-list__item {
+    flex: 0 1 100%;
+    display: flex;
+    flex-direction: column;
+    @include fs-sm;
+    line-height: 1.5;
+    margin-bottom: $gutter * 2;
+
+    @container (min-width: 600px){
+        flex: 0 1 calc(50% - #{$gutter / 2});
+    }
+}
+
+.list-of-list__title {
+    opacity: .6;
+}
+
+.list-of-list__sub-list {
+
+}
+
+.list-of-list__sub-item {
+
+}

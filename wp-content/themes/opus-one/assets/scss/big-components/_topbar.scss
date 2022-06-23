@@ -6,8 +6,19 @@
     top: 0;
     left: 0;
     width: 100%;
-    padding: $gutter*2;
+    padding: $gutter;
+    background-color: var(--current-bg-color);
     z-index: 100;
+
+    @media screen and (min-width: $lg + 1){
+        padding: $gutter*2;
+        background-color: transparent;
+
+        &--is-scrolled {
+            background-color: var(--current-bg-color);
+        }
+
+    }
 }
 
 .logo--topbar {
@@ -17,7 +28,7 @@
 	
 	a {
 		display: flex;
-		color: white;
+		//color: white;
 		text-decoration: none;
 		font-size: 40px;
         width: 8ch;
@@ -38,7 +49,7 @@
 }
 
 .topbar__page-name {
-    display: inline-block;
+    display: none;
     margin-left: 1em;
     --wght: 500;
     --wdth: 50;
@@ -46,7 +57,7 @@
     // font-variation-settings: "wght" var(--wght), "wdth" var(--wdth), "ital" var(--ital);
     @include fs-sm;
     font-variation-settings: unset;
-    color: white;
+    //color: white;
     overflow: hidden;
 
     span {
@@ -54,15 +65,28 @@
         white-space: nowrap;
         //transform: translate3d(0, 100%, 0);
     }
+
+    @media screen and (min-width: $lg + 1){
+        display: inline-block;
+    }
+
 }
 
 .topbar--page-nav {
-    flex: 1 1 100%;
+    // flex: 1 1 100%;
+    display: none;
+    flex: auto;
+    padding: 5px 0;
     opacity: 0;
     visibility: hidden;
+    overflow: auto;
 
     span {
         @include fs-md;
+    }
+
+    @media screen and (min-width: $lg + 1){
+        display: block;
     }
 }
 
@@ -75,14 +99,14 @@
     @include fs-md;
     margin-right: 1em;
 
-    &:last-child {
-        margin-right: 0;
-    }
+    // &:last-child {
+    //     margin-right: 0;
+    // }
 }
 
 .page-nav__link {
     text-decoration: none;
-    color: $white;
+    //color: $white;
     opacity: .5;
     text-transform: capitalize;
     @include transition;
@@ -92,4 +116,21 @@
         opacity: 1;
     }
     
+}
+
+.mobile-page-nav {
+    padding: $gutter 0;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+
+    > * {
+        transform: translateZ(0px);
+    }
+
+    @media screen and (min-width: $lg + 1){
+        display: none;
+    }
 }

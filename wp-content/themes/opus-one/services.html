@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <title>Opus One</title>
   <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
   <meta property="og:title" content="">
   <meta property="og:type" content="">
@@ -33,15 +33,7 @@
         <span>Présente</span>
       </span>
     </div>
-    <div class="topbar--page-nav">
-      <!-- <ul class="page-nav">
-        <li class="page-nav__item"><a href="#concerts" class="page-nav__link" title="Concerts">Concerts</a></li>
-        <li class="page-nav__item"><a href="#spectacles" class="page-nav__link" title="Spectacles">Spectacles</a></li>
-        <li class="page-nav__item"><a href="#humour" class="page-nav__link" title="Humour">Humour</a></li>
-        <li class="page-nav__item"><a href="#famille" class="page-nav__link" title="Famille">Famille</a></li>
-        <li class="page-nav__item"><a href="#expositions" class="page-nav__link" title="Expositions">Expositions</a></li>
-      </ul> -->
-    </div>
+    <div class="topbar--page-nav"></div>
     <button class="nav-trigger" title="Ouvrir la navigation">
       <span class="burger">
         <span class="burger__bar burger__bar--top"></span>
@@ -51,6 +43,9 @@
       <span class="nav-trigger__label">Menu</span>
     </button>
   </div>
+
+  <div class="page-position"></div>
+  
   <nav class="nav nav--main nav--main--is-closed">
     <div class="nav--main__bg" style="background-color: #ee3b3b;"></div>
     <div class="nav--main__bg" style="background-color: #ff5765;"></div>
@@ -70,7 +65,7 @@
       </ul>
     </div>
   </nav>
-  <div data-barba="container" data-barba-namespace="page-special" data-bg="#6E32FF" data-logo-title="Nos services">
+  <div data-barba="container" data-barba-namespace="page-special" data-bg="#6E32FF" data-text-color="#fff" data-logo-title="Nos services">
     <header class="header header--regular">
       <h1 class="header--regular__title">Tone of voice</h1>
     </header>
@@ -234,6 +229,67 @@
                 </ul>
               </div>
 
+              <div class="block block--contact-list">
+                <ul class="contact-list">
+                  <li class="contact-person">
+                    <a href="mailto:luc@basedesign.com" title="Envoyer un mail a Luc"><span>Envoyer un mail a Luc</span></a>
+                    <div class="contact-person__side contact-person__side--img">
+                      <img src="assets/img/cat-bg-concert.jpg" alt="Luc Patrick Vega">
+                      <div class="img" style="background-image: url(assets/img/cat-bg-concert.jpg)"></div>
+                    </div>
+                    <div class="contact-person__side contact-person__side--text">
+                      <div>
+                        <h4 class="contact-person__person">Luc Patrick Vega</h4>
+                        <span class="contact-person__role">Ceo</span>
+                        <span class="contact-person__cta">Envoyer un mail</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="contact-person">
+                    <a href="mailto:luc@basedesign.com" title="Envoyer un mail a Luc"><span>Envoyer un mail a Luc</span></a>
+                    <div class="contact-person__side contact-person__side--img">
+                      <img src="assets/img/cat-bg-concert.jpg" alt="Luc Patrick Vega">
+                      <div class="img" style="background-image: url(assets/img/cat-bg-concert.jpg)"></div>
+                    </div>
+                    <div class="contact-person__side contact-person__side--text">
+                      <div>
+                        <h4 class="contact-person__person">Luc Patrick Vega</h4>
+                        <span class="contact-person__role">Ceo</span>
+                        <span class="contact-person__cta">Envoyer un mail</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="contact-person">
+                    <a href="mailto:luc@basedesign.com" title="Envoyer un mail a Luc"><span>Envoyer un mail a Luc</span></a>
+                    <div class="contact-person__side contact-person__side--img">
+                      <img src="assets/img/cat-bg-concert.jpg" alt="Luc Patrick Vega">
+                      <div class="img" style="background-image: url(assets/img/cat-bg-concert.jpg)"></div>
+                    </div>
+                    <div class="contact-person__side contact-person__side--text">
+                      <div>
+                        <h4 class="contact-person__person">Luc Patrick Vega</h4>
+                        <span class="contact-person__role">Ceo</span>
+                        <span class="contact-person__cta">Envoyer un mail</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="contact-person">
+                    <a href="mailto:luc@basedesign.com" title="Envoyer un mail a Luc"><span>Envoyer un mail a Luc</span></a>
+                    <div class="contact-person__side contact-person__side--img">
+                      <img src="assets/img/cat-bg-concert.jpg" alt="Luc Patrick Vega">
+                      <div class="img" style="background-image: url(assets/img/cat-bg-concert.jpg)"></div>
+                    </div>
+                    <div class="contact-person__side contact-person__side--text">
+                      <div>
+                        <h4 class="contact-person__person">Luc Patrick Vega</h4>
+                        <span class="contact-person__role">Ceo</span>
+                        <span class="contact-person__cta">Envoyer un mail</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
             </div>
           </div>
         </div>
@@ -250,10 +306,10 @@
         <h3 class="footer-title">Raccourcis</h3>
         <nav class="nav nav--footer nav--footer--shortcuts">
           <ul>
-            <li><a href="#" title="Agenda">Agenda</a></li>
+            <li><a href="agenda.html" title="Agenda">Agenda</a></li>
             <li><a href="#" title="Nous">Nous</a></li>
-            <li><a href="#" title="Info pratiques">Infos pratiques</a></li>
-            <li><a href="#" title="Contact">Contact</a></li>
+            <li><a href="help.html" title="Info pratiques">Infos pratiques</a></li>
+            <li><a href="contact.html" title="Contact">Contact</a></li>
           </ul>
         </nav>
       </div>

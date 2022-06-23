@@ -1,8 +1,11 @@
-.block--list {
+.block--list,
+.block--contact-list {
     .two-side__content & {
         grid-column: 1 / span 6;
     }
 }
+
+
 
 .list {
     @include clean-list;
@@ -120,4 +123,11 @@
         }
     }
 
+}
+
+.contact-list {
+    container-type: inline-size;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }

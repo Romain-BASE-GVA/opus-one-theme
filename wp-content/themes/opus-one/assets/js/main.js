@@ -6,5 +6,6 @@
 //@prepros-append vendor/scrollToPlugin.js
 //@prepros-append vendor/flickity.js
 //@prepros-append vendor/marquee3k.js
+//@prepros-append vendor/cqfill.js
 
 //@prepros-append app.js

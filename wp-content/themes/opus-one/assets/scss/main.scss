@@ -6,11 +6,15 @@
 @import "base/_typography";
 @import "base/_helper";
 
+@import "small-components/_img";
 @import "small-components/_link";
 @import "small-components/_paragraph";
 @import "small-components/_btn";
 @import "small-components/_list";
 @import "small-components/_card";
+@import "small-components/_page-position";
+@import "small-components/_screen-404";
+@import "small-components/_screen-contact";
 
 @import "big-components/_topbar";
 @import "big-components/_nav";
@@ -29,6 +33,10 @@
 @import "big-components/_block-slider";
 @import "big-components/_two-sides";
 @import "big-components/_card-grid";
+@import "big-components/_artists";
+@import "big-components/_single-event-main-content";
+@import "big-components/_filter-bar";
+@import "big-components/_header-tickets";
 
 @import "templates/_header";
 @import "templates/_main";
