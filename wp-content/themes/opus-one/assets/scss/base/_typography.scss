@@ -21,6 +21,10 @@ body {
     color: $white;
     color: var(--current-txt-color, $white);
     @include transition;
+
+    &.nav-is-open {
+        overflow: hidden;
+    }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -31,8 +35,36 @@ h1, h2, h3, h4, h5, h6 {
 p {
     @include fs-md;
 
+    &:first-child {
+        margin-top: 0
+    }
+
     .big-p & {
         @include fs-lg;
     }
 }
+
+.content-title {
+    grid-column: 1/span 6;
+    margin-bottom: 1em
+}
+
+.content-title--h1 {
+    @include fs-2xl--no-clamp;
+}
+
+.content-title--h2 {
+    @include fs-lg;
+    text-transform: uppercase;
+}
+
+.content-title--h3 {
+    @include fs-md;
+    text-transform: uppercase;
+    opacity: .6;
+}
+
+// .content--title--h4 {
+
+// } 
 

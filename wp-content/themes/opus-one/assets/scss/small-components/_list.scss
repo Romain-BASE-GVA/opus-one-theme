@@ -1,6 +1,10 @@
 ul {
     @include clean-list;
     @include fs-md;
+
+    .block & {
+        margin-bottom: 1em;
+    }
     //line-height: 1.33em;
 
     // a {

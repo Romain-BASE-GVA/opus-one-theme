@@ -5,6 +5,9 @@ $(document).ready(function () {
     var pageNav = $('.topbar--page-nav');
     var openNavTl = gsap.timeline({
         paused: true,
+        onStart: function(){
+            $('body').addClass('nav-is-open');
+        },
         onComplete: function () {
             navIsClosed = false;
             // $('body').addClass('nav-is-open');
@@ -14,6 +17,9 @@ $(document).ready(function () {
     });
     var closeNavTl = gsap.timeline({
         paused: true,
+        onStart: function(){
+            $('body').removeClass('nav-is-open');
+        },
         onComplete: function () {
             navIsClosed = true;
             // $('body').removeClass('nav-is-open');
@@ -131,11 +137,12 @@ $(document).ready(function () {
                 killAllScrollTrigger();
 
                 isOnce = false;
+
                 //ScrollTrigger.getById('footer-anim').kill(true);
                 init();
             },
             enter({ current, next, trigger }) {
-                
+
                 var pageColor = $(next.container).data('bg');
                 var textColor = $(next.container).data('text-color');
                 var nextPageTitle = $(next.container).data('logo-title');
@@ -146,6 +153,7 @@ $(document).ready(function () {
                 $('.topbar__page-name span').html(nextPageTitle);
 
                 currentPageType = next.namespace;
+                console.log(currentPageType);
 
                 preventSamePageReload();
 
@@ -304,13 +312,17 @@ $(document).ready(function () {
                 var anchorsArray = [];
 
                 anchors.each(function (e) {
-                    anchorsArray.push($(this).attr('id'))
+                    var anchor = {
+                        'name': $(this).find('.two-sides__title').html(),
+                        'hash': $(this).attr('id')
+                    }
+                    anchorsArray.push(anchor)
                 });
 
                 var pageNavTemplate = `
                 <ul class="page-nav">
                     ${anchorsArray.map((item, i) => {
-                    return `<li class="page-nav__item"><a href="#${item}" class="page-nav__link" title="${item}">${item}</a></li>`
+                    return `<li class="page-nav__item"><a href="#${item.hash}" class="page-nav__link" title="${item.name}">${item.name}</a></li>`
 
                 }).join('')
                     }
@@ -355,7 +367,7 @@ $(document).ready(function () {
             start: 'top -10%',
             //markers: true,
             onEnter: self => {
-                console.log('ENTER');
+                //console.log('ENTER');
                 $('.topbar').addClass('topbar--is-scrolled');
             },
             onLeaveBack: self => {
@@ -396,7 +408,7 @@ $(document).ready(function () {
         $('.topbar--page-nav, .mobile-page-nav').on('click', '.page-nav__link', function (e) {
             e.preventDefault();
 
-            var offset = currentPageType == 'page-special' ? $('.topbar').innerHeight() : 0;
+            var offset = currentPageType == 'page-special' ? $('.topbar').outerHeight() : 0;
             gsap.to(window, { duration: 1, scrollTo: { y: $(this).attr('href'), offsetY: offset }, ease: Power4.easeInOut });
         });
 
@@ -536,7 +548,8 @@ $(document).ready(function () {
             gsap.from(thisSeeMore, {
                 scrollTrigger: {
                     trigger: $this,
-                    start: 'bottom bottom',
+                    //start: 'bottom bottom',
+                    start: () => {return window.innerWidth > 992 ? 'bottom bottom' : '25% center'},
                     toggleActions: 'play none none reverse'
                 },
                 rotate: 10,
@@ -547,7 +560,8 @@ $(document).ready(function () {
             gsap.from(thisShortly, {
                 scrollTrigger: {
                     trigger: $this,
-                    start: 'bottom bottom',
+                    // start: 'bottom bottom',
+                    start: () => {return window.innerWidth > 992 ? 'bottom bottom' : '25% center'},
                     toggleActions: 'play none none reverse'
                 },
                 yPercent: 100,
@@ -826,6 +840,24 @@ $(document).ready(function () {
         };
 
         //// HEADER TICKETS
+
+        //SPLIT MANIFESTO
+
+        if ($('.manifesto-item').length) {
+            
+
+            $('.manifesto-item h2').each(function (e) {
+                var splitType = $(this).data('split');
+
+                console.log(splitType);
+
+                const text = new SplitType($(this), { types: splitType });
+            });
+        }
+
+
+
+        ////SPLIT MANIFESTO
 
 
     };

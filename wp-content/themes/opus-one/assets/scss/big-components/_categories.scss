@@ -5,7 +5,7 @@
 
 .category {
     position: relative;
-    //height: 80vh;
+    height: 100vh;
     padding: 126px 0 $gutter*2 0;
     overflow: hidden;
     z-index: 10;
@@ -24,6 +24,10 @@
         height: 100px;
         background: linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 100%);
         z-index: 1;
+    }
+
+    @media screen and (min-width: $lg + 1){
+        height: unset;
     }
 }
 

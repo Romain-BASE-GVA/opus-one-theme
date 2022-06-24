@@ -7,5 +7,7 @@
 //@prepros-append vendor/flickity.js
 //@prepros-append vendor/marquee3k.js
 //@prepros-append vendor/cqfill.js
+//@prepros-append vendor/cqfill.js
+//@prepros-append vendor/split-type.js
 
 //@prepros-append app.js

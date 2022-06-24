@@ -43,10 +43,20 @@
     @include font-size(30px, 2.858vw, 50px, 4);
 }
 
+@mixin fs-xl--no-clamp {
+    font-size: 30px;
+    font-size: 3rem;
+}
+
 // DONE
 
 @mixin fs-2xl {
     @include font-size(40px, 5.855vw, 100px, 8);
+}
+
+@mixin fs-2xl--no-clamp {
+    font-size: 40px;
+    font-size: 4rem;
 }
 
 @mixin fs-3xl {

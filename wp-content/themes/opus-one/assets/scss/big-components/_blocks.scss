@@ -1,8 +1,28 @@
 .block {
-    margin-bottom: $gutter*4;
+    margin-bottom: $gutter;
 
     &:last-child {
         margin-bottom: 0;
+    }
+
+    @media screen and (min-width: $lg + 1){
+        margin-bottom: $gutter*2;
+    }
+}
+
+.block--small-margin {
+    margin-bottom: $gutter*2;
+
+    @media screen and (min-width: $lg + 1){
+        margin-bottom: $gutter*4;
+    }
+} 
+
+.block--big-margin {
+    margin-bottom: $gutter*4;
+
+    @media screen and (min-width: $lg + 1){
+        margin-bottom: $gutter*8;
     }
 }
 

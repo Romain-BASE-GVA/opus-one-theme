@@ -40,6 +40,13 @@
     }
 }
 
+.nav--main__wrapper {
+    padding-top: 126px;
+    height: 100vh;
+    background-color: $black;
+
+}
+
 .nav--footer {
     ul {
         @include clean-list;

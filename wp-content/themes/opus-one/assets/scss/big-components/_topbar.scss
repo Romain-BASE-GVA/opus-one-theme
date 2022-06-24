@@ -10,6 +10,10 @@
     background-color: var(--current-bg-color);
     z-index: 100;
 
+    .nav-is-open & {
+        background-color: transparent;
+    }
+
     @media screen and (min-width: $lg + 1){
         padding: $gutter*2;
         background-color: transparent;
@@ -59,11 +63,17 @@
     font-variation-settings: unset;
     //color: white;
     overflow: hidden;
+    @include transition;
 
     span {
         display: block;
         white-space: nowrap;
         //transform: translate3d(0, 100%, 0);
+    }
+
+    .nav-is-open & {
+        opacity: 0;
+        visibility: hidden;
     }
 
     @media screen and (min-width: $lg + 1){
@@ -80,10 +90,18 @@
     opacity: 0;
     visibility: hidden;
     overflow: auto;
+    
 
     span {
         @include fs-md;
+        @include transition;
+
+        .nav-is-open & {
+            opacity: 0;
+            visibility: hidden;
+        }
     }
+
 
     @media screen and (min-width: $lg + 1){
         display: block;
@@ -93,6 +111,12 @@
 .page-nav {
     @include clean-list;
     display: flex;
+    @include transition;
+
+    .nav-is-open & {
+        opacity: 0;
+        visibility: hidden;
+    }
 }
 
 .page-nav__item {
