@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column-reverse;
     @include fs-2xl;
-    margin-bottom: 1em;
+    margin-bottom: 1.25em;
 
     &:last-child {
         margin-bottom: 0;
@@ -17,8 +17,9 @@
         color: currentColor;
     }
 
-    @media screen and (min-width: $lg + 1){
+    @media screen and (min-width: $lg + 1) {
         flex-direction: column;
+        margin-bottom: 1em;
     }
 }
 
@@ -27,6 +28,10 @@
     display: flex;
     align-items: baseline;
     justify-content: space-between;
+
+    @media screen and (min-width: $lg + 1) {
+        margin-bottom: 1.25em;
+    }
 }
 
 .event__top-info {
@@ -39,7 +44,7 @@
         margin-bottom: 10px;
     }
 
-    @media screen and (min-width: $lg + 1){
+    @media screen and (min-width: $lg + 1) {
         flex-direction: row;
 
         li {
@@ -75,7 +80,7 @@
         margin-right: 1em;
     }
 
-    @media screen and (min-width: $lg + 1){
+    @media screen and (min-width: $lg + 1) {
 
         time {
             margin-right: 0;
@@ -104,14 +109,15 @@
         border-radius: 50%;
         opacity: 0.5;
         padding: 4px;
-        margin-right: .5;
+        //margin-right: .5;
         background-color: currentColor;
         background-clip: content-box;
+        transform: translate3d(0, 0.1em, 0);
     }
 
     span {}
 
-    @media screen and (min-width: $lg + 1){
+    @media screen and (min-width: $lg + 1) {
         order: unset;
     }
 }
@@ -145,7 +151,7 @@
         background-color: $corail;
     }
 
-    @media screen and (min-width: $lg + 1){
+    @media screen and (min-width: $lg + 1) {
         order: unset;
     }
 }
@@ -186,7 +192,7 @@
         opacity: .5;
     }
 
-    @media screen and (min-width: $lg + 1){
+    @media screen and (min-width: $lg + 1) {
         flex-direction: row;
         order: unset;
     }
@@ -196,21 +202,21 @@
     @include fs-sm;
 
     &--mobile {
-        @media screen and (min-width: $lg + 1){
+        @media screen and (min-width: $lg + 1) {
             display: none;
         }
 
-        @media screen and (max-width: $lg){
+        @media screen and (max-width: $lg) {
             display: block;
         }
     }
 
     &--desktop {
-        @media screen and (min-width: $lg + 1){
+        @media screen and (min-width: $lg + 1) {
             display: block;
         }
 
-        @media screen and (max-width: $lg){
+        @media screen and (max-width: $lg) {
             display: none;
         }
     }
@@ -244,54 +250,55 @@
         // font-variation-settings: "wght" var(--wght),"wdth" var(--wdth),"ital" 0;
         display: inline-block;
 
-        .event--artist & {
-            transition: padding-left .3s ease-in-out;
+        // .event--artist & {
+        transition: padding-left .3s ease-in-out;
+
+        &:before {
+            content: "";
+            position: absolute;
+            top: calc(50% - .25em);
+            left: 0;
+            display: block;
+            width: 0;
+            height: 0;
+            border-top: .25em solid transparent;
+            border-left: .5em solid white;
+            border-bottom: .25em solid transparent;
+            transform: translate3d(.5em, 0, 0) rotate(20deg);
+            opacity: 0;
+            @include transition;
+        }
+
+        &:after {
+            content: "";
+            position: absolute;
+            display: block;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: .025em;
+            background-color: currentColor;
+            border-radius: 10px;
+            transform-origin: center left;
+            transform: scalex(0);
+            @include transition;
+        }
+
+        &:hover {
+            padding-left: .75em;
 
             &:before {
-                content: "";
-                position: absolute;
-                top: calc(50% - .25em);
-                left: 0;
-                display: block;
-                width: 0;
-                height: 0;
-                border-top: .25em solid transparent;
-                border-left: .5em solid white;
-                border-bottom: .25em solid transparent;
-                transform: translate3d(.5em, 0, 0) rotate(20deg);
-                opacity: 0;
-                @include transition;
+                transform: translate3d(0, 0, 0) rotate(0);
+                opacity: 1;
+                transition-delay: .1s;
             }
 
             &:after {
-                content: "";
-                position: absolute;
-                display: block;
-                left: 0;
-                bottom: 0;
-                width: 100%;
-                height: .025em;
-                background-color: currentColor;
-                border-radius: 10px;
-                transform-origin: center left;
-                transform: scalex(0);
-                @include transition;
-            }
-
-            &:hover {
-                padding-left: .75em;
-
-                &:before {
-                    transform: translate3d(0, 0, 0) rotate(0);
-                    opacity: 1;
-                    transition-delay: .1s;
-                }
-
-                &:after {
-                    transform: scalex(1);
-                }
+                transform: scalex(1);
             }
         }
+
+        // }
     }
 }
 
@@ -309,7 +316,7 @@
         border: 2px solid $white;
         margin-left: $gutter;
 
-        @media screen and (min-width: $lg + 1){
+        @media screen and (min-width: $lg + 1) {
             display: none;
         }
     }
@@ -319,7 +326,7 @@
         flex-direction: column-reverse;
         flex: auto;
 
-        @media screen and (min-width: $lg + 1){
+        @media screen and (min-width: $lg + 1) {
             flex-direction: column;
         }
     }
@@ -332,7 +339,7 @@
     border-radius: 50%;
     overflow: hidden;
 
-    @media screen and (min-width: $lg + 1){
+    @media screen and (min-width: $lg + 1) {
         display: none;
     }
 }
@@ -353,27 +360,29 @@
     container-type: inline-size;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;   
+    justify-content: space-between;
 }
 
 .event__call-back {
 
     &--mobile {
-        @media screen and (min-width: $lg + 1){
+        margin-top: 1em;
+
+        @media screen and (min-width: $lg + 1) {
             display: none;
         }
 
-        @media screen and (max-width: $lg){
+        @media screen and (max-width: $lg) {
             display: block;
         }
     }
 
     &--desktop {
-        @media screen and (min-width: $lg + 1){
+        @media screen and (min-width: $lg + 1) {
             display: block;
         }
 
-        @media screen and (max-width: $lg){
+        @media screen and (max-width: $lg) {
             display: none;
         }
     }

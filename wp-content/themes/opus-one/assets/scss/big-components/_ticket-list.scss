@@ -72,7 +72,8 @@
 .one-ticket__marquee {
     --gradient-color: $corail; 
     position: relative;
-    flex: 1 1 100%;
+    // flex: 1 1 100%;
+    flex: 0 1 100%;
     overflow: hidden;
 
     &:before,

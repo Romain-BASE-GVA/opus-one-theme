@@ -41,9 +41,76 @@
 }
 
 .nav--main__wrapper {
-    padding-top: 126px;
+    display: flex;
+    flex-direction: column;
+    padding: 86px $gutter $gutter*4;
     height: 100vh;
     background-color: $black;
+    overflow: auto;
+
+    @media screen and (min-width: $lg + 1){
+        padding: 126px $gutter*2 $gutter*2;
+    }
+}
+
+.nav--main__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    >li {
+        flex: 0 0 100%;
+        margin-bottom: $gutter*4;
+
+        @media screen and (min-width: $lg + 1){
+            flex: 0 0 calc(50% - #{$gutter / 2});
+        }
+
+        @media screen and (min-width: $xl + 1){
+            flex: 0 0 calc(25% - #{$gutter * 3 / 4});
+        }
+    }
+
+    a {
+        text-decoration: none;
+
+        &[href="#"] {
+            opacity: .6;
+            @include fs-sm;
+        }
+    }
+
+    li li {
+        
+    }
+
+    li li a {
+        position: relative;
+        display: block;
+        @include fs-lg;
+        padding: 1em 0;
+        border-bottom: 1px solid rgba($white, .2);
+
+        &:after {
+            content: "";
+            position: absolute;
+            display: block;
+            left: 0;
+            bottom: -1px;
+            width: 100%;
+            height: 1px;
+            background-color: $white;
+            transform-origin: left center;
+            transform: translate3d(0, 0, 0) scalex(0);
+            @include transition;
+        }
+
+        &:hover {
+            &:after {
+                transform: translate3d(0, 0, 0) scalex(1);
+            }
+        }
+    }
 
 }
 
