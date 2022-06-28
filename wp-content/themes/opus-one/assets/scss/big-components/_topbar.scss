@@ -111,16 +111,17 @@
 .page-nav {
     @include clean-list;
     display: flex;
+    @include fs-md;
     //@include transition;
 
-    .nav-is-open & {
-        opacity: 0;
-        visibility: hidden;
-    }
+    // .nav-is-open & {
+    //     opacity: 0;
+    //     visibility: hidden;
+    // }
 }
 
 .page-nav__item {
-    @include fs-md;
+    
     margin-right: 1em;
 
     // &:last-child {
@@ -171,6 +172,7 @@
     width: 100%;
     max-width: 100%;
     overflow: hidden;
+    min-height: 3.2em;
 
     // > * {
     //     transform: translateZ(0px);

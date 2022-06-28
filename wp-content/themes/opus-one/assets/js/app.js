@@ -5,8 +5,8 @@ $(document).ready(function () {
     var pageNav = $('.topbar--page-nav');
     var openNavTl = gsap.timeline({
         paused: true,
-        onStart: function(){
-            $('body').addClass('nav-is-open');
+        onStart: function () {
+            //$('body').addClass('nav-is-open');
         },
         onComplete: function () {
             navIsClosed = false;
@@ -17,8 +17,8 @@ $(document).ready(function () {
     });
     var closeNavTl = gsap.timeline({
         paused: true,
-        onStart: function(){
-            $('body').removeClass('nav-is-open');
+        onStart: function () {
+            //$('body').removeClass('nav-is-open');
         },
         onComplete: function () {
             navIsClosed = true;
@@ -72,7 +72,11 @@ $(document).ready(function () {
         } else {
             closeNavTl.play();
         }
-    })
+    });
+
+    $('.close-nav').on('click', function () {
+        closeNavTl.play();
+    });
 
     $('.logo--footer a').on('mouseenter', function () {
         logoFooterAnim.play();
@@ -134,7 +138,7 @@ $(document).ready(function () {
                 gsap.to($('.topbar--page-nav'), { autoAlpha: 0 });
                 pageNav.empty();
 
-                if(!navIsClosed){
+                if (!navIsClosed) {
                     closeNavTl.play();
                 }
 
@@ -200,10 +204,12 @@ $(document).ready(function () {
 
                 pageNav.prepend(pageNavTemplate);
 
-                gsap.to($('.topbar--page-nav'), { autoAlpha: 1, onComplete: function(){
-                    Draggable.create($(pageNav).find('.page-nav'), {type: 'x', edgeResistance: 0.65, bounds: $(pageNav)});
-                    Draggable.create($(mobilePageNav).find('.page-nav'), {type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav)});
-                } });
+                gsap.to($('.topbar--page-nav'), {
+                    autoAlpha: 1, onComplete: function () {
+                        Draggable.create($(pageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(pageNav) });
+                        Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
+                    }
+                });
 
             }
         },
@@ -239,10 +245,12 @@ $(document).ready(function () {
                 mobilePageNav.prepend(pageNavTemplate);
 
                 // gsap.to($('.topbar--page-nav'), { autoAlpha: 1 });
-                gsap.to($('.topbar--page-nav'), { autoAlpha: 1, onComplete: function(){
-                    Draggable.create($(pageNav).find('.page-nav'), {type: 'x', edgeResistance: 0.65, bounds: $(pageNav)});
-                    Draggable.create($(mobilePageNav).find('.page-nav'), {type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav)});
-                } });
+                gsap.to($('.topbar--page-nav'), {
+                    autoAlpha: 1, onComplete: function () {
+                        Draggable.create($(pageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(pageNav) });
+                        Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
+                    }
+                });
 
             },
         },
@@ -277,10 +285,12 @@ $(document).ready(function () {
                 pageNav.prepend(pageNavTemplate);
                 mobilePageNav.prepend(pageNavTemplate);
 
-                gsap.to($('.topbar--page-nav'), { autoAlpha: 1, onComplete: function(){
-                    Draggable.create($(pageNav).find('.page-nav'), {type: 'x', edgeResistance: 0.65, bounds: $(pageNav)});
-                    Draggable.create($(mobilePageNav).find('.page-nav'), {type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav)});
-                } });
+                gsap.to($('.topbar--page-nav'), {
+                    autoAlpha: 1, onComplete: function () {
+                        Draggable.create($(pageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(pageNav) });
+                        Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
+                    }
+                });
 
             },
         },
@@ -345,10 +355,12 @@ $(document).ready(function () {
 
                 pageNav.prepend(pageNavTemplate);
 
-                gsap.to($('.topbar--page-nav'), { autoAlpha: 1, onComplete: function(){
-                    Draggable.create($(pageNav).find('.page-nav'), {type: 'x', edgeResistance: 0.65, bounds: $(pageNav)});
-                    Draggable.create($(mobilePageNav).find('.page-nav'), {type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav)});
-                } });
+                gsap.to($('.topbar--page-nav'), {
+                    autoAlpha: 1, onComplete: function () {
+                        Draggable.create($(pageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(pageNav) });
+                        Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
+                    }
+                });
 
             }
         },
@@ -566,7 +578,7 @@ $(document).ready(function () {
                 scrollTrigger: {
                     trigger: $this,
                     //start: 'bottom bottom',
-                    start: () => {return window.innerWidth > 992 ? 'bottom bottom' : '25% center'},
+                    start: () => { return window.innerWidth > 992 ? 'bottom bottom' : '25% center' },
                     toggleActions: 'play none none reverse'
                 },
                 rotate: 10,
@@ -578,7 +590,7 @@ $(document).ready(function () {
                 scrollTrigger: {
                     trigger: $this,
                     // start: 'bottom bottom',
-                    start: () => {return window.innerWidth > 992 ? 'bottom bottom' : '25% center'},
+                    start: () => { return window.innerWidth > 992 ? 'bottom bottom' : '25% center' },
                     toggleActions: 'play none none reverse'
                 },
                 yPercent: 100,
@@ -666,14 +678,38 @@ $(document).ready(function () {
         // SLIDER
 
         $('.slider').each(function (e) {
+
+            $(this).on('ready.flickity', function () {
+                setSliderHeightToMax();
+            });
+
             var slider = $(this).flickity({
                 // options
                 cellAlign: 'left',
                 contain: true,
                 prevNextButtons: false,
-                pageDots: false
+                pageDots: false,
+                //setGallerySize: false
             });
+
+            window.addEventListener('resize', function(){
+                setSliderHeightToMax();
+            });
+
         });
+
+        function setSliderHeightToMax() {
+            
+            $('.slider').find('.slide').css('height', '');
+
+            setTimeout(function(){
+                $('.slider').find('.slide').css('height', '100%');
+            }, 1000);
+
+        }
+        
+
+
 
         //// SLIDER
 
@@ -779,13 +815,13 @@ $(document).ready(function () {
                 $(this).removeClass('event-cat-trigger--is-open');
 
                 gsap.to(thisList, {
-                    height: 0, duration: .5, ease: Power4.easeOut, 
-                    onStart: function(){
+                    height: 0, duration: .5, ease: Power4.easeOut,
+                    onStart: function () {
                         thisList.removeClass('event-cat-list--is-open');
                     },
                     onComplete: function () {
                         filterCatIsOpen = false;
-                        
+
                     }
                 });
 
@@ -871,7 +907,7 @@ $(document).ready(function () {
         //SPLIT MANIFESTO
 
         if ($('.manifesto-item').length) {
-            
+
 
             $('.manifesto-item h2').each(function (e) {
                 var splitType = $(this).data('split');
@@ -887,11 +923,11 @@ $(document).ready(function () {
         ////SPLIT MANIFESTO
 
         // DRAGGABLE PAGE NAV
-        
+
         // Draggable.create('.page-nav', {type: 'x', edgeResistance: 0.65, bounds: '.topbar--page-nav'});
-        if($('.page-nav').length){
-            $('.page-nav').each(function(e){
-                Draggable.create($(this), {type: 'x', edgeResistance: 0.65, bounds: $(this).parent()});
+        if ($('.page-nav').length) {
+            $('.page-nav').each(function (e) {
+                Draggable.create($(this), { type: 'x', edgeResistance: 0.65, bounds: $(this).parent() });
             });
         };
         //Draggable.create('.page-nav', {type: 'x', edgeResistance: 0.65, bounds: $('.page-nav').parent()});

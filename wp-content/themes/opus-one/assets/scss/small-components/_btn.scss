@@ -1,4 +1,5 @@
-.nav-trigger {
+.nav-trigger,
+.close-nav {
     display: flex;
     align-items: center;
     border: none;
@@ -18,6 +19,10 @@
     width: 17px;
     height: 14px;
     margin-right: .33em;
+
+    .close-nav & {
+        justify-content: center;
+    }
 }
 
 .burger__bar {
@@ -35,6 +40,17 @@
 
     &--bottom {
 
+    }
+
+    .close-nav & {
+        
+        &--top {
+            transform: translate3d(0, .5px, 0) rotate(45deg);
+        }
+
+        &--bottom {
+            transform: translate3d(0, -.5px, 0) rotate(-45deg);
+        }
     }
 }
 

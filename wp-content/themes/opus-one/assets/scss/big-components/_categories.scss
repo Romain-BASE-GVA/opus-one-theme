@@ -121,6 +121,10 @@
     position: relative;
     @include fs-md;
     overflow: hidden;
+    
+    .marquee3k__copy {
+        padding: .25em 0;
+    }
 
     // &:before,
     // &:after {
@@ -144,8 +148,32 @@
     // }
 
     a {
+        position: relative;
         text-decoration: none;
         color: currentColor;
         padding: 0 1.5em;
+
+        &:after {
+            content: "";
+            position: absolute;
+            display: block;
+            bottom: -.2em;
+            left: 1.5em;
+            height: 1px;
+            width: calc(100% - 3em);
+            transform-origin: left center;
+            transform: scaleX(0) translate3d(0, 0, 0);
+            background-color: var(--current-txt-color);
+            @include transition;
+        }
+
+    
+        &:hover {
+    
+            &:after {
+                transform: scaleX(1) translate3d(0, 0, 0);
+            }
+            
+        }
     }
 }

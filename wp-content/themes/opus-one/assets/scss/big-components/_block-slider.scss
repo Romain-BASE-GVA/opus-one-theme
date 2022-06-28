@@ -1,4 +1,5 @@
 .block--slider {
+    
     .two-side__content & {
         //grid-area: 1 / 1 / 2 / 7;
         grid-column: 1 / span 7;
@@ -6,7 +7,7 @@
 }
 
 .slider {
-    container-type: inline-size;
+    //container-type: inline-size;
     position: relative;
     width: calc(100% + #{$gutter});
 
@@ -28,32 +29,23 @@
 .slide {
     position: relative;
     width: calc(100% / 1.25);
-    border-radius: 20px;
-    margin-right: $gutter;
-    min-height: min-content;
-    //padding-top: 50%;
+    padding-right: $gutter;
+    //min-height: 100%;
 
-    @supports (aspect-ratio: 1/1.5) {
-        padding-top: unset;
-        aspect-ratio: 1/1.5;
-    }
+    // @supports (aspect-ratio: 1/1.5) {
+    //     padding-top: unset;
+    //     //height: 100%;
+    //     //aspect-ratio: 1/1.5;
 
-    @supports not (aspect-ratio: 1/1.5) {
-        padding-top: 50%;
-    }
+    // }
+
+    // @supports not (aspect-ratio: 1/1.5) {
+    //     padding-top: 50%;
+    // }
 
     // &:last-child {
     //     margin-right: $gutter*2;
     // }
-
-    &--number {
-        background-color: $white;
-        color: $black;
-    }
-
-    &--warning {
-        background-color: $red;
-    }
 
     p {
         &:first-child {
@@ -70,52 +62,62 @@
         }
     }
 
-    @container (min-width: 900px) {
-        width: calc((100% / 3) - 30px);
+    // @container (min-width: 900px) {
+        
+    // }
+
+    // @container (min-width: 600px) {
+    //     width: calc((100% / 2.5));
+    // }
+    
+    @media screen and (min-width: $sm + 1){
+        width: calc(100% / 2.25);
     }
 
-    @container (min-width: 600px) {
-        width: calc((100% / 2.5));
-        margin-right: $gutter*2;
+    @media screen and (min-width: $md + 1){
+        padding-right: $gutter*2;
+        width: calc(100% / 3.25);
     }
-}
 
-.slide--empty {
-    //width: calc((100% / 3) + 20px);
-    width: calc((100% / 3) - 20px);
-    aspect-ratio: unset;
-    height: 200px;
-    display: none;
-    //background-color: red;
-
-    @container (min-width: 600px) {
-        display: block;
-    }
 }
 
 .slide__in {
-    position: absolute;
+    //position: absolute;
     display: flex;
     flex-direction: column;
     align-items: center;
-    top: 0;
-    left: 0;
+    border-radius: 20px;
+    //top: 0;
+    //left: 0;
     width: 100%;
     height: 100%;
     padding: $gutter*2;
 
+
+    .slide--number & {
+        background-color: $white;
+        color: $black;
+    }
+
+    .slide--warning & {
+        background-color: $red;
+    }
 }
 
 .slide--number__number {
     --wght: 500;
     --wdth: 0;
     @include fs-3xl;
+    line-height: .75em;
     font-variation-settings: "wght" var(--wght), "wdth" var(--wdth), "ital" 0;
+
+    
 
 }
 
 .slide--number__text {
     @include fs-lg;
+    margin-top: 1em;
 
     p {
         font-size: inherit;
@@ -135,6 +137,7 @@
 .slide--dont__icon {
     position: relative;
     width: calc(100% - 125px);
+    min-width: 150px;
     background-color: $white;
     margin-bottom: $gutter*2;
 }
