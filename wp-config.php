@@ -65,7 +65,7 @@ define( 'WP_CACHE_KEY_SALT', 'VPT97&2jkj,H6ah.c{KTs7BSxm{g>ZDvWt9s&>ueB4D%&tlF^s
 $table_prefix = 'wp_';
 
 
-
+define( 'WP_DEBUG', true );
 
 /* That's all, stop editing! Happy publishing. */
 

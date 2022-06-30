@@ -27,6 +27,7 @@
                     </span>
                 </button>
             </header>
+            <!--
             <ul class="nav--main__list">
                 <li>
                     <a href="#">Agenda</a>
@@ -69,6 +70,11 @@
                     </ul>
                 </li>
             </ul>
+            -->
+            <?php wp_nav_menu(array(
+                'theme_location' => 'main_navigation',
+                'menu_class' => 'nav--main__list'
+                )); ?>
         </div>
     </div>
 </nav>

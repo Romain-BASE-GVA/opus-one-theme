@@ -3,51 +3,31 @@
         <div class="footer__item">
             <h3 class="footer-title">Raccourcis</h3>
             <nav class="nav nav--footer nav--footer--shortcuts">
-                <ul>
-                    <li><a href="agenda.html" title="Agenda">Agenda</a></li>
-                    <li><a href="#" title="Nous">Nous</a></li>
-                    <li><a href="help.html" title="Info pratiques">Infos pratiques</a></li>
-                    <li><a href="contact.html" title="Contact">Contact</a></li>
-                </ul>
+                <?php wp_nav_menu(array('theme_location' => 'footer_navigation')); ?>
             </nav>
         </div>
-        <div class="footer__item">
-            <h3 class="footer-title">Nos reseaux</h3>
-            <nav class="nav nav--footer nav--footer--social">
-                <ul class="socials">
-                    <li class="socials__item socials__item--ig">
-                        <a href="#" title="Instagram">
-                            <h4 class="socials_item__title">Instagram</h4>
-                            <span>IG</span>
-                        </a>
-                    </li>
-                    <li class="socials__item socials__item--fb">
-                        <a href="#" title="Facebook">
-                            <h4 class="socials_item__title">Facebook</h4>
-                            <span>FB</span>
-                        </a>
-                    </li>
-                    <li class="socials__item socials__item--tw">
-                        <a href="#" title="Twitter">
-                            <h4 class="socials_item__title">Twitter</h4>
-                            <span>TT</span>
-                        </a>
-                    </li>
-                    <li class="socials__item socials__item--yt">
-                        <a href="#" title="Youtube">
-                            <h4 class="socials_item__title">Youtube</h4>
-                            <span>YT</span>
-                        </a>
-                    </li>
-                    <li class="socials__item  socials__item--li">
-                        <a href="#" title="LinkedIn">
-                            <h4 class="socials_item__title">LinkedIn</h4>
-                            <span>LI</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+        <?php if (have_rows('reseaux_sociaux', 'option')) : ?>
+            <div class="footer__item">
+                <h3 class="footer-title">Nos réseaux</h3>
+                <nav class="nav nav--footer nav--footer--social">
+                    <ul class="socials">
+                        <?php while (have_rows('reseaux_sociaux', 'option')) : the_row();
+                            $nom = get_sub_field('nom');
+                            $lien = get_sub_field('lien');
+                            $couleur = get_sub_field('couleur');
+                            $lettres = get_sub_field('lettres');
+                        ?>
+                            <li class="socials__item socials__item--ig" style="--color: ">
+                                <a href="<?php echo $lien; ?>" target="_blank" title="<?php echo $nom ?>">
+                                    <h4 class="socials_item__title"><?php echo $nom ?></h4>
+                                    <span><?php echo $lettres; ?></span>
+                                </a>
+                            </li>
+                        <?php endwhile; ?>
+                    </ul>
+                </nav>
+            </div>
+        <?php endif; ?>
         <div class="footer__bottom">
             <div class="logo logo--footer">
                 <img src="https://c.tenor.com/tlceri6zsQMAAAAC/concert.gif" class="logo--footer__img" alt="">
@@ -62,8 +42,12 @@
                 </a>
             </div>
             <div class="footer__footer">
-                <p class="footer__strapline">Depuis 1993, Opus One réunit une équipe multidisciplinaire, passionnée par la musique, le spectacle et la production de concerts et d’événements.</p>
-                <p class="footer__copyright">©2022 – Website <a href="https://www.basedesign.com" target="_blank" title="Base Design">Basedesign.com</a></p>
+                <?php if (get_field('strapline', 'option')) : ?>
+                    <p class="footer__strapline"><?php echo get_field('strapline', 'option'); ?></p>
+                <?php endif; ?>
+                <?php if (get_field('copyright', 'option')) : ?>
+                    <p class="footer__copyright"><?php echo get_field('copyright', 'option'); ?></p>
+                <?php endif; ?>
             </div>
         </div>
     </div>

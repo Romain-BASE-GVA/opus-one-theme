@@ -1,16 +1,25 @@
 <?php get_header(); ?>
 <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
-    <div data-barba="container" data-barba-namespace="page-special" data-bg="#6E32FF" data-text-color="#fff" data-logo-title="Nos services">
+    <div data-barba="container" data-barba-namespace="page-special" data-bg="#6E32FF" data-text-color="#fff" data-logo-title="<?php the_title(); ?>">
+    
+        <?php if(get_field('titre_header')): ?>
         <header class="header header--regular">
-            <h1 class="header--regular__title">All in one</h1>
+            <h1 class="header--regular__title"><?php echo get_field('titre_header'); ?></h1>
+            <?php if(get_field('sous-titre_header')): ?>
+            <span class="header--regular__sub-title"><?php echo get_field('sous-titre_header'); ?></span>
+            <?php endif; ?>
         </header>
+        <?php endif; ?>
+
         <main class="main main--page">
 
+            <?php if(get_field('introduction')): ?>
+                
             <div class="block block--text-full-width">
-                <div class="text-full-width">
-                    <p>Chez Opus One, nous offrons un lieu unique pour la production, l’organisation, le booking et la distribution d’expériences culturelles. </p>
-                </div>
+                <div class="text-full-width"><?php echo get_field('introduction'); ?></div>
             </div>
+
+            <?php endif; ?>
 
             <div class="block block--one-img">
                 <div class="one-img one-img--16-9">
