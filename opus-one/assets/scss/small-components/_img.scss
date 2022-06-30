@@ -1,0 +1,129 @@
+.represented-artist-img {
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    opacity: 0;
+    visibility: hidden;
+    // filter: grayscale(1);
+    // mix-blend-mode: lighten;
+    transition: all .3s cubic-bezier(0.25, 0.46, 0, 1) .5s;
+    z-index: -1;
+    //background: red;
+
+    &--is-visible {
+
+        // filter: grayscale(0);
+    }
+}
+
+.represented-artist-img__img {
+    position: relative;
+    width: 70%;
+    background-color: $purple;
+    overflow: hidden;
+    border-radius: $gutter;
+    //transition: background-color .3s ease-in-out;
+
+    &:before,
+    &:after {
+        content: "";
+        position: absolute;
+        display: block;
+        top: 0;
+        width: 50%;
+        height: 100%;
+        background-color: $purple;
+        z-index: 10;
+        transition: transform .5s cubic-bezier(0.68, 0.69, 0, 1) 0s;
+        transition: transform .5s cubic-bezier(1, 0.67, 0, 1) .25s;
+    }
+
+    &:before {
+        left: 0;
+    }
+
+    &:after {
+        right: 0;
+    }
+
+    img,
+    .img {
+        //--scale: 1.2
+        position: absolute;
+        width: calc(100% + 10vh);
+        height: calc(100% + 10vh);
+        top: -5vh;
+        left: -5vh;
+        //transform: scale(var(--scale));
+        // filter: grayscale(1);
+        // mix-blend-mode: lighten;
+        // transition: filter .3s ease-in-out 0s;
+    }
+
+    img {
+        display: block;
+        object-fit: cover;
+        object-position: center;
+
+        @supports not (object-fit: cover) {
+            display: none;
+        }
+
+    }
+
+    .img {
+        display: none;
+        background-size: cover;
+        background-position: center;
+
+        @supports not (object-fit: cover) {
+            display: block;
+        }
+    }
+
+    @supports (aspect-ratio: 16/9) {
+        padding-top: unset;
+        aspect-ratio: 16/9;
+    }
+
+    @supports not (aspect-ratio: 16/9) {
+        padding-top: 56.25%;
+    }
+}
+
+.represented-artist-img--is-visible {
+    opacity: 1;
+    visibility: visible;
+    transition: all .3s cubic-bezier(0.25, 0.46, 0, 1) 0s;
+
+
+    .represented-artist-img__img {
+        // background-color: $black;
+        // transition: background-color .3s ease-in-out .15s;
+
+        &:before,
+        &:after {
+            transition: transform .5s cubic-bezier(0.68, 0.69, 0, 1) 0s;
+            transition: transform .6s cubic-bezier(0.68, 0.69, 0, 1) 0s;
+        }
+
+        &:before {
+            transform: translate3d(-100%, 0, 0);
+        }
+
+        &:after {
+            transform: translate3d(100%, 0, 0);
+        }
+    }
+
+    // img,
+    // .img {
+    //     filter: grayscale(0);
+    //     transition: filter .3s ease-in-out .15s;
+    // }
+}

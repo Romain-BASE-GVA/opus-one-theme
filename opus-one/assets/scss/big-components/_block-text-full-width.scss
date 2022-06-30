@@ -1,0 +1,24 @@
+.block--text-full-width {
+
+}
+
+.text-full-width {
+    @include fs-xl;
+
+    p {
+        font-size: inherit;
+    }
+
+    p:only-child {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
+
+    p:first-child {
+        margin-top: 0;
+    }
+}

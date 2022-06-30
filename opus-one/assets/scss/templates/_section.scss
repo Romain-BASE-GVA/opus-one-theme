@@ -1,0 +1,31 @@
+.section {
+    // --section-color: $white;
+    // --section--bg-color: $black;
+    color: var(--section-color, $white);
+    background-color: var(--current-bg-color, $purple);
+    padding: $gutter*5 $gutter*2 $gutter*10;
+}
+
+.section--no-padding-x {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.section--highlights {
+    color: var(--section-color);
+    background: var(--current-bg-color);
+}
+
+.section--agenda-cta {
+    padding: $gutter*5 $gutter*2 $gutter*5;
+}
+
+.section--two-sides {
+    background-color: transparent;
+    padding: 0;
+}
+
+.section__title {
+    @include fs-xl;
+    margin-bottom: $gutter*5;
+}

@@ -1,0 +1,10 @@
+.block--text {
+    .two-side__content & {
+        //grid-area: 1 / 1 / 2 / 7;
+        grid-column: 1 / span 6;
+    }
+
+    // h3 {
+    //     @include fs-md;
+    // }
+}

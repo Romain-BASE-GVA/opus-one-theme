@@ -1,0 +1,11 @@
+.main {
+    padding: 0 $gutter;
+    
+    @media screen and (min-width: $lg + 1){
+        padding: 0 $gutter*2;
+    }
+
+    &--top-padding {
+        padding-top: 25vh;
+    }
+}

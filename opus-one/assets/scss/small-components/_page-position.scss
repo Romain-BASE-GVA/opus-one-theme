@@ -1,0 +1,50 @@
+.page-position {
+    --position: .0;
+
+    position: fixed;
+    display: block;
+    top: 88px;
+    left: $gutter;
+    width: calc(100% - #{$gutter * 2});
+    height: 4px;
+    margin-top: -4px;
+    z-index: 100;
+    @include transition;
+
+    &:before,
+    &:after {
+        content: "";
+        position: absolute;
+        display: block;
+        left: 0;
+        width: 100%;
+        //background-color: $white;
+        background-color: currentColor;
+        
+    }
+
+    &:before {
+        opacity: .5;
+        top: 1px;
+        height: 2px;
+    }
+
+    &:after {
+        top: 0;
+        height: 4px;
+        border-radius: 10px;
+        transform-origin: center left;
+        width: calc(100% * var(--position));
+        // transform: scaleX(var(--position));
+    }
+
+    .nav-is-open & {
+        opacity: 0;
+    }
+
+    @media screen and (min-width: $lg + 1){
+        top: 128px;
+        left: $gutter * 2;
+        width: calc(100% - #{$gutter * 4});
+    }
+}

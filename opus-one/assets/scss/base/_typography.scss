@@ -1,0 +1,70 @@
+@font-face {
+  font-family: "Baikal";
+  src: url("../fonts/baikal.ttf") format("truetype-variations");
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    --current-bg-color: $black;
+    --current-txt-color: $white;
+    font-family: "Baikal";
+    // font-family: $font--primary;
+    background-color: $black;
+    background-color: var(--current-bg-color, $black);
+    color: $white;
+    color: var(--current-txt-color, $white);
+    @include transition;
+
+    &.nav-is-open {
+        overflow: hidden;
+    }
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    margin: 0;
+}
+
+p {
+    @include fs-md;
+
+    &:first-child {
+        margin-top: 0
+    }
+
+    .big-p & {
+        @include fs-lg;
+    }
+}
+
+.content-title {
+    grid-column: 1/span 6;
+    margin-bottom: 1em
+}
+
+.content-title--h1 {
+    @include fs-2xl--no-clamp;
+}
+
+.content-title--h2 {
+    @include fs-lg;
+    text-transform: uppercase;
+}
+
+.content-title--h3 {
+    @include fs-md;
+    text-transform: uppercase;
+    opacity: .6;
+}
+
+// .content--title--h4 {
+
+// } 
+

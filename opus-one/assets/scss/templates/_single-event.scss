@@ -1,0 +1,43 @@
+.single-event {
+    display: flex;
+    flex-direction: column;
+    padding: $space-xl 0;
+
+    @media screen and (min-width: $lg + 1){
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-column-gap: $gutter*2;
+        padding: $space-3xl 0;
+    }
+
+}
+
+.single-event__side {
+
+}
+
+.single-event__side--main {
+    grid-area: 1 / 2 / 2 / 8;
+}
+
+.single-event__side--ticket {
+    position: sticky;
+    top: 0;
+    grid-area: 1 / 8 / 2 / 12;
+    max-width: 100%;
+
+    >div {
+        position: sticky;
+        top: 166px;
+    }
+}
+
+.single-event__poster {
+    display: flex;
+    justify-content: center;
+    padding: 0 100px;
+
+    img {
+        width: 100%;
+    }
+}

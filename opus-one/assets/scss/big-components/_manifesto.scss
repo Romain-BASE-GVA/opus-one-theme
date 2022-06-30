@@ -1,0 +1,132 @@
+.manifesto-item {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+    @media screen and (min-width: $lg + 1) {
+        height: unset;
+    }
+}
+
+.manifesto-item__header {
+    --wdth: 0;
+    --wght: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex: auto;
+    @include fs-3xl;
+    text-align: center;
+    text-transform: uppercase;
+    line-height: .75;
+    font-variation-settings: "wght" var(--wght), "wdth" var(--wdth), "ital" 0;
+
+    br {
+        display: block;
+
+        @media screen and (min-width: $lg + 1) {
+            display: none;
+        }
+    }
+
+    @media screen and (min-width: $lg + 1) {
+        height: 90vh;
+    }
+}
+
+.manifesto-item__content {}
+
+.manifesto-item__title {
+    display: flex;
+    justify-content: space-between;
+    text-transform: uppercase;
+    @include fs-lg;
+    margin-bottom: 1em;
+}
+
+.manifesto-item__index {}
+
+.manifesto-item__text {}
+
+[data-anim="heartbeat"] {
+    >div {
+        //animation: left-right 1.5s steps(10) infinite;
+    }
+
+    @for $i from 1 through 50 {
+
+        >div:nth-child(#{$i}) {
+            
+            animation-delay: $i * -.05s;
+        }
+    }
+}
+
+[data-anim="jump"] {
+    >div {
+        //animation: jump 1s infinite;
+    }
+
+    @for $i from 1 through 50 {
+
+        >div:nth-child(#{$i}) {
+            
+            animation-delay: -$i * -.025s;
+        }
+    }
+}
+
+@keyframes var {
+    0% {
+        font-variation-settings: "wght" 100,"wdth" 0,"ital" 0;
+    }
+
+    50% {
+        font-variation-settings: "wght" 500,"wdth" 0,"ital" 0;
+    }
+
+    100% {
+        font-variation-settings: "wght" 100,"wdth" 0,"ital" 0;
+    }
+}
+
+@keyframes jump {
+    0% {
+        // transform: translate3d(20%, -40%, 0);
+        transform: translate3d(0, -40%, 0);
+        //font-variation-settings: "wght" 300,"wdth" 0,"ital" 0;
+    }
+
+    50% {
+        // transform: translate3d(-20%, 40%, 0);
+        transform: translate3d(0, 40%, 0);
+        //font-variation-settings: "wght" 500,"wdth" 0,"ital" 0;
+    }
+
+    100% {
+        // transform: translate3d(20%, -40%, 0);
+        transform: translate3d(0, -40%, 0);
+        //font-variation-settings: "wght" 300,"wdth" 0,"ital" 0;
+    }
+}
+
+@keyframes left-right {
+    0% {
+        // transform: translate3d(20%, -40%, 0);
+        transform: translate3d(-100px, 0, 0);
+        //font-variation-settings: "wght" 300,"wdth" 0,"ital" 0;
+    }
+
+    50% {
+        // transform: translate3d(-20%, 40%, 0);
+        transform: translate3d(100px, 0, 0);
+        //font-variation-settings: "wght" 500,"wdth" 0,"ital" 0;
+    }
+
+    100% {
+        // transform: translate3d(20%, -40%, 0);
+        transform: translate3d(-100px, 0, 0);
+        //font-variation-settings: "wght" 300,"wdth" 0,"ital" 0;
+    }
+}

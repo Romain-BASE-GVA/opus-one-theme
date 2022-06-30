@@ -1,0 +1,88 @@
+@mixin font-size($min, $valVW, $max, $size) {
+    font-size: ($size * 10px);
+    font-size: ($size * 1rem);
+    font-size: min(max(#{$min}, #{$valVW}), #{$max});
+    font-size: clamp(#{$min}, #{$valVW}, #{$max});
+}
+
+// @mixin big-title {
+//     @include font-size($min, 10vw, $max, 9);
+// }
+
+@mixin fs-xs {
+    //@include font-size(12px, .715vw, 20px, 1);
+    font-size: 12px;
+    font-size: 1.2rem;
+}
+
+@mixin fs-sm {
+    //@include font-size(14px, 1.0715vw, 30px, 1.5);
+    font-size: 15px;
+    font-size: 1.5rem;
+}
+
+@mixin fs-md {
+    //@include font-size(15px, 1.0715vw, 35px, 2);
+    font-size: 20px;
+    font-size: 2rem;
+}
+
+@mixin fs-lg {
+    //@include font-size(17px, 1.785vw, 40px, 2.5);
+    font-size: 25px;
+    font-size: 2.5rem;
+}
+
+// @mixin fs-xl {
+//     // @include font-size(20px, 2.858vw, 80px, 4);
+//     font-size: 40px;
+//     font-size: 4rem;
+// }
+
+@mixin fs-xl {
+    @include font-size(30px, 2.858vw, 50px, 4);
+}
+
+@mixin fs-xl--no-clamp {
+    font-size: 30px;
+    font-size: 3rem;
+}
+
+// DONE
+
+@mixin fs-2xl {
+    @include font-size(40px, 5.855vw, 100px, 8);
+}
+
+@mixin fs-2xl--no-clamp {
+    font-size: 40px;
+    font-size: 4rem;
+}
+
+@mixin fs-3xl {
+    @include font-size(160px, 14.645vw, 350px, 20);
+}
+
+// DONE
+
+@mixin fs-big {
+    @include font-size(200px, 44vw, 800px, 60);
+    //@include font-size(200px, 44vw, 800px, 60);
+} 
+
+@mixin img-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+@mixin clean-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+@mixin transition($properties: all, $duration: .3s, $timing-function: ease-in-out){
+    transition: $properties $duration $timing-function;
+}

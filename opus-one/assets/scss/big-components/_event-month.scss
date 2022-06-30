@@ -1,0 +1,61 @@
+.event-month {
+
+    .filter-bar + & {
+        padding-top: 100px;
+    }
+}
+
+// .filter-bar + .event-month {
+//     padding-top: 2000px;
+// }
+
+.event-month__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% + #{$gutter * 2});
+    margin-left: - $gutter;
+    height: auto;
+    //height: 90vh;
+    // overflow: hidden;
+    @include fs-big;
+    line-height: 1;
+    text-transform: uppercase;
+    overflow: hidden;
+
+    @media screen and (min-width: $lg + 1){
+        height: 90vh;
+        width: calc(100% + #{$gutter * 4});
+        margin-left: - $gutter*2;
+    }
+}
+
+.event-month__word {
+    display: flex;
+}
+
+.event-month__letter {
+    --wght: 500;
+    --wdth: 0;
+    font-variation-settings: "wght" var(--wght),"wdth" var(--wdth),"ital" 0;
+}
+
+.event-month__word--desktop {
+
+    @media screen and (max-width: $sm){
+        display: none;
+    }
+}
+
+.event-month__word--mobile {
+    --wght: 500;
+    --wdth: 0;
+    text-align: center;
+    line-height: .75em;
+    padding: .25em 0;
+    font-variation-settings: "wght" var(--wght),"wdth" var(--wdth),"ital" 0;
+
+    @media screen and (min-width: $sm + 1){
+        display: none;
+    }
+}

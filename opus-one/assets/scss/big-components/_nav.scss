@@ -1,0 +1,330 @@
+.nav {
+
+} 
+
+.nav--main {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: white;
+	overflow: hidden;
+	clip-path: circle(0% at 95% 5%);
+	z-index: 125;
+}
+
+.nav--main__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    clip-path: circle(0% at 95% 5%);
+}
+
+.nav--main__bg__circle {
+    position: absolute;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    left: 0;
+    bottom: 0;
+
+    @media (orientation: landscape) {
+        width: 200vw;
+        
+    }
+
+    @media (orientation: portrait) {
+        height: 200vh;
+    }
+}
+
+.nav--main__wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 86px $gutter $gutter*4;
+    height: 100vh;
+    background-color: $black;
+    overflow: auto;
+
+    @media screen and (min-width: $lg + 1){
+        padding: 126px $gutter*2 $gutter*2;
+    }
+}
+
+.nav--main__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    >li {
+        flex: 0 0 100%;
+        margin-bottom: $gutter*4;
+
+        @media screen and (min-width: $lg + 1){
+            flex: 0 0 calc(50% - #{$gutter / 2});
+        }
+
+        @media screen and (min-width: $xl + 1){
+            flex: 0 0 calc(25% - #{$gutter * 3 / 4});
+        }
+    }
+
+    a {
+        text-decoration: none;
+
+        &[href="#"] {
+            opacity: .6;
+            @include fs-sm;
+            pointer-events: none;
+        }
+    }
+
+    li li {
+        
+    }
+
+    li li a {
+        position: relative;
+        display: block;
+        @include fs-lg;
+        padding: 1em 0;
+        border-bottom: 1px solid rgba($white, .2);
+
+        &:after {
+            content: "";
+            position: absolute;
+            display: block;
+            left: 0;
+            bottom: -1px;
+            width: 100%;
+            height: 1px;
+            background-color: $white;
+            transform-origin: left center;
+            transform: translate3d(0, 0, 0) scalex(0);
+            @include transition;
+        }
+
+        &:hover {
+            &:after {
+                transform: translate3d(0, 0, 0) scalex(1);
+            }
+        }
+    }
+
+}
+
+.nav--footer {
+    ul {
+        @include clean-list;
+        display: flex;
+        justify-content: center;
+    }
+
+    a {
+        text-decoration: none;
+        color: currentColor;
+    }
+} 
+
+.nav--footer--shortcuts {
+    ul {
+        flex-direction: column;
+    }
+
+    li {
+        
+        overflow: hidden;
+        border-bottom: 1px solid rgba($white, .6);
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    a {
+        @include fs-lg;
+        display: inline-block;
+        width: 100%;
+        padding: 1em 0;
+        // &:hover {
+        //     animation: rainbow 1s ease-out;
+        //     animation-iteration-count: 1;
+        // }
+    }
+
+    @media screen and (min-width: $lg + 1){
+        ul {
+            flex-direction: row;
+        }
+
+        li {
+            border: none;
+            margin-right: 60px;
+        }
+
+        a {
+            padding: 0;
+            width: auto;
+        }
+    }
+}
+
+.nav--footer--social {
+
+}
+
+.socials {
+
+}
+
+.socials__item {
+    margin-right: $gutter/2;
+
+    a {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+
+    span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        @include fs-md;
+        border: 2px solid $white;
+        border-radius: 50%;
+        @include transition('background-color');
+    }
+
+    &:last-child {
+        margin-right: 0;
+    }
+
+    &--ig {
+        
+        span {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+
+            &:after {
+                content: "";
+                position: absolute;
+                display: block;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(87.1deg, rgba(#FFD522, 1) -10.92%, rgba(#F1000B, 1) 48.02%, rgba(#B900B3, 1) 106.81%);
+                opacity: 0;
+                @include transition;
+                z-index: -1;
+            }
+        }
+
+        a:hover span {
+            &:after {
+                opacity: 1;
+            }
+        }
+
+    }
+
+    &--fb {
+        a:hover span {
+            background-color: $color-fb;
+        }
+    }
+
+    &--tw {
+        a:hover span {
+            background-color: $color-tw;
+        }
+    }
+
+    &--yt {
+        a:hover span {
+            background-color: $color-yt;
+        }
+    }
+
+    &--li {
+        a:hover span {
+            background-color: $color-li;
+        }
+    }
+
+    @media screen and (min-width: $md + 1){
+        margin-right: $gutter;
+    }
+
+    @media screen and (min-width: $lg + 1){
+        margin-right: 60px;
+    }
+
+}
+
+.socials_item__title {
+    @include fs-xs;
+    margin-top: 1em;
+}
+
+@keyframes rainbow{
+    100%,0%{
+        color: rgb(255, 255, 255);
+    }
+    8%{
+        color: rgb(255,127,0);
+    }
+    16%{
+        color: rgb(255,255,0);
+    }
+    25%{
+        color: rgb(127,255,0);
+    }
+    33%{
+        color: rgb(0,255,0);
+    }
+    41%{
+        color: rgb(0,255,127);
+    }
+    50%{
+        color: rgb(0,255,255);
+    }
+    58%{
+        color: rgb(0,127,255);
+    }
+    66%{
+        color: rgb(0,0,255);
+    }
+    75%{
+        color: rgb(127,0,255);
+    }
+    83%{
+        color: rgb(255,0,255);
+    }
+    91%{
+        color: rgb(255,0,127);
+    }
+}
+
+.nav-header {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: $gutter;
+    background-color: $black;
+    z-index: 100;
+
+    @media screen and (min-width: $lg + 1){
+        padding: $gutter*2;
+    }
+}

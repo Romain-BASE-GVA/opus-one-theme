@@ -1,0 +1,22 @@
+a {
+    color: inherit;
+}
+
+.link-arrow {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+
+    svg {
+        width: 15px;
+    }
+
+    polygon {
+        fill: currentColor;
+    }
+}

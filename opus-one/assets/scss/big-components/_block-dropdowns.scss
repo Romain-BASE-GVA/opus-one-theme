@@ -1,0 +1,123 @@
+.block--dropdowns {
+    .two-side__content & {
+        grid-column: 1 / span 6;
+    }
+}
+
+.dropdowns {
+    @include clean-list;
+}
+
+.dropdown {
+    @include fs-md;
+    border-bottom: 1px solid $white;
+}
+
+.dropdown--is-closed {
+
+}
+
+.dropdown__top {
+
+}
+
+.dropdown__trigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1em 0;
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    color: $white;
+    cursor: pointer;
+    font-variation-settings: "wght" 500, "wdth" 100,"ital" 0;
+    @include transition;
+
+    &:hover,
+    .dropdown--is-open & {
+        font-variation-settings: "wght" 800, "wdth" 100,"ital" 0;
+    }
+
+    &:before {
+        content: "";
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $white;
+        transform-origin: center left;
+        transform: scalex(.25);
+        opacity: 0;
+        z-index: -1;
+        @include transition;
+    }
+
+    &:hover {
+        color: $black;
+        padding-right: 1em;
+        padding-left: 1em;
+        font-variation-settings: "wght" 800, "wdth" 100,"ital" 0;
+    
+        &:before {
+            opacity: 1;
+            transform: scalex(1);
+        }
+    }
+}
+
+
+.dropdown__plus {
+    position: relative;
+    width: 1em;
+    height: 1em;
+    //background-color: red;
+
+    &:before,
+    &:after {
+        content: "";
+        position: absolute;
+        display: block;
+        top: calc(50% - 1px);
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: $white;
+        border-radius: 5px;
+        @include transition;
+    }
+
+    &:after {
+        transform: translate3d(0, -50%, 0) rotate(-90deg);
+    }
+
+    .dropdown--is-open & {
+
+        &:after {
+            transform: translate3d(0, -50%, 0) rotate(-90deg) scale(0);
+        }
+        
+    }
+
+    .dropdown__trigger:hover & {
+        &:before,
+        &:after {
+            background-color: $black;
+        }
+    }
+}
+
+.dropdown__content {
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+
+    div {
+        padding: $gutter 0;
+    }
+}
