@@ -2,11 +2,7 @@
 <?php get_header(); ?>
 <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
   <div data-barba="container" data-barba-namespace="agenda" data-bg="#6E32FF" data-text-color="#fff" data-logo-title="Agenda">
-      <!--
-        data-bg= Couleur de fond / different pour chaque taxo (humour, spectacle, ....)
-        data-text-color= blanc
-        data-logo-title= le nom de la taxo (humour, spectacle, ....) ou Agenda si page de l aganda en entier
-    -->
+
     <main class="main main--agenda">
       <div class="filter-bar">
         <div class="filter-events">
@@ -18,17 +14,27 @@
 
           <!-- la liste des autres taxo, la taxo actuelle a la class="is-active" -->
             <ul>
-              <li><a href="#" title="Tout" class="is-active">Tout</a></li>
-              <li><a href="#" title="Concert">Concert</a></li>
-              <li><a href="#" title="Spectacle">Spectacle</a></li>
-              <li><a href="agenda-humour.html" title="Humour">Humour</a></li>
-              <li><a href="#" title="Famille">Famille</a></li>
-              <li><a href="#" title="Exposition">Exposition</a></li>
-            </ul>
 
-        
+                <?php
+                    $tmp_post = $post;
+                    $taxonomies = array('taxonomy-representation');
+                    $args = array(
+                        'orderby' => 'name',
+                        'order' => 'ASC',
+                        'exclude' => 99
+                    );
+                    $terms = get_terms( $taxonomies, $args );
+                    foreach($terms as $term){
+                        $next_shows = get_show_from_category($term->term_id);
+                        if(count($next_shows) != 0){ ?>
+                            <li><a href="<?= get_term_link($term,"taxonomy-representation"); ?>" title="Concert"><?= $term->name; ?></a></li><?php
+                        }
+                    }
+                ?>
+            </ul>
           </div>
         </div>
+
         <div class="search-events">
             <!-- Search input statique, la recherceh se fait sur tous les evenement donc le resulktat de la page rehcerche est la page agenda global, (sans taxonomie)  -->
           <div class="search-events__input-wrapper">
@@ -52,1565 +58,362 @@
             </span>
           </button>
         </div>
+
         <div class="mobile-page-nav"></div>
       </div>
-      <!-- chaque mois est encapsuler dans un div -->
-      <div class="event-month" data-month-name="Janvier" id="janvier-2022">
-        <!-- 
-                    data-month-name="Janvier" - nom du mois en capital
-                    id="janvier-2022" - mois et annee - lowercase, utiliser pour les ancres
-    -->
-        <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Jan<br>vier</span><!--MOBILE-->
-          <span class="event-month__word event-month__word--desktop"><!-- DESKTOP -->
-            <span class="event-month__letter">J</span>
-            <span class="event-month__letter">a</span>
-            <span class="event-month__letter">n</span>
-            <span class="event-month__letter">v</span>
-            <span class="event-month__letter">i</span>
-            <span class="event-month__letter">e</span>
-            <span class="event-month__letter">r</span>
-          </span>
-        </h3>
+
+        <?php
+            $today = date("Y-m-01");
+            $first_show = get_first_show();
+            $date_first_show = $first_show['meta_value'];
+            $year_to_show =  substr($date_first_show,0,4);
+            $month_to_show =  substr($date_first_show,4,2);
+            $next_shows = get_next_show_of_year($year_to_show, $month_to_show);
+            $date_show = $year_to_show.$month_to_show;
+            $now = date_i18n( 'Y-m-d H:i');
+            $array_show_multidate = array();
+            $next =  date( "Ym", strtotime($year_to_show."-".$month_to_show." +2 month"));
+            $last_show = get_last_show();
+
+            $yearShows = [];
+            for($i = 1; $i < 13; $i++){
+                $shows = get_next_show_of_month(substr($date_first_show,0,6));
+
+                if(!empty($shows)) {
+                    $yearShows[date_i18n("F", strtotime($date_first_show."01"))] = $shows;
+                }
+
+                $addMonth = " +".$i." month";
+                $date_first_show = date( "Ym", strtotime($date_first_show. $addMonth));
+            }
+
+            foreach ($yearShows as $month => $shows) { ?>
+                <div class="event-month" data-month-name="<?php echo ucfirst($month); ?>" id="<?= $month ?>-<?= $year_to_show ?>">
+                    <h3 class="event-month__title">
+                        <!-- @TODO : JS pour adpater le responsive (?) -->
+                        <span class="event-month__word event-month__word--mobile">Jan<br>vier</span><!--MOBILE-->
+                        <!-- @END -->
+                        <span class="event-month__word event-month__word--desktop"><!-- DESKTOP -->
+                                    <?php
+                                    $monthLetters = str_split(ucfirst($month));
+
+                                    foreach ($monthLetters as $monthLetter){
+                                        echo '<span class="event-month__letter">'.$monthLetter.'</span>';
+                                    }
+                                    ?>
+                              </span>
+                    </h3>
+                    <ul class="event-list">
+                        <?php
+                        foreach ($shows as $show){
+                            $the_id = $show['ID'];
+                            $date = $show['meta_value'];
+                            $next_date = substr($date,0,6);
+                            $type = get_field("type",$post->ID);
+                            $post = get_post( $show['ID']);
+                            $terms = wp_get_post_terms($post->ID, "taxonomy-representation");
+
+                            if($type == "plusieurs_dates"){
+                                $dates = get_field("date_unique_ou_separee", $post->ID);
+                                $representation_info = search_representation($dates, $date);
+                                if(!$representation_info){
+                                    $representation_info = search_representation_report($dates, $date);
+                                }
+                                $date_sale = $representation_info['date_de_la_mise_en_vente'];
+                                $time_sale = $representation_info['heure_de_la_mise_en_vente'];
+                                $date_sale_formated = date_i18n( 'Y-m-d H:i', strtotime($date_sale." ".$time_sale));
+                                $avaibility =	$representation_info['etat'];
+                                $nb_futur_show = get_nb_representation_in_future($post->ID);
+
+                                if($nb_futur_show > 1){
+                                    if($representation_info['etat'] == "postponed"){
+                                        $url = get_permalink($post->ID).$representation_info['date_de_report']."/";
+                                    }else{
+                                        $url = get_permalink($post->ID).$representation_info['date_de_la_representation']."/";
+                                    }
+                                }elseif($representation_info['date_de_report'] == $date){
+                                    $url = get_permalink($post->ID).$representation_info['date_de_report']."/";
+                                }elseif($representation_info['date_de_report'] != $date && $representation_info['etat'] == "postponed"){
+                                    $url = get_permalink($post->ID).$representation_info['date_de_la_representation']."/";
+                                }else{
+                                    $url = get_permalink($post->ID);
+                                }?>
+
+                                <!-- Et Ensuite la liste des evenements, certaine info sont la 2x la version mobile et desktop sont legerement different et ne permettaient pas de faire un seul template -->
+                                <li class="event">
+                                    <div class="event__call-back event__call-back--mobile">
+                                        <div class="double-buttons">
+                                            <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
+                                               title=""><?= __('Informations') ?></a>
+                                            <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title=""><?php __('Tickets') ?></a>
+                                        </div>
+                                    </div>
+                                    <div class="event__top">
+                                        <ul class="event__top-info">
+                                            <li class="event__top-info__item event__top-info__item--when">
+                                                <time>
+                                                    <?php
+                                                        if($representation_info['etat'] != "postponed"){
+                                                            echo ucfirst(date_i18n('d.m.y', strtotime($representation_info['date_de_la_representation'])));
+                                                        }else{
+                                                            if($representation_info['date_de_report'] == $date){
+                                                                echo ucfirst(date_i18n('d.m.y', strtotime($representation_info['date_de_report'])));
+                                                            }else{
+                                                                echo "<span class='line-through'>".ucfirst(date_i18n( 'd.m.y', strtotime($representation_info['date_de_la_representation']))).'</span>';
+                                                            }
+                                                        }
+                                                    ?>
+                                                </time> <!-- date de l'event -->
+                                                <span class="event__hashtag event__hashtag--mobile">
+                                                    <?php
+                                                        foreach ($terms as $term){
+                                                            echo '#'.$term->name;
+                                                        }
+                                                    ?>
+                                                </span> <!-- categorie de l event -->
+                                            </li>
+                                            <li class="event__top-info__item event__top-info__item--where">
+                                                <?php $location_type = $representation_info['choisir_un_lieu_existant'];
+                                                if($location_type == "oui"){
+                                                    $location_id = $representation_info['lieux'];
+                                                    $location = get_term($location_id, "taxonomy-lieu");
+                                                    $location_name = $location->name;
+                                                    $location_href = get_term_link($location_id, "taxonomy-lieu");
+                                                }else{
+                                                    $location_name = $representation_info['nom_du_lieu'];
+                                                    $location_href = $representation_info['url_du_lieu'];
+                                                }
+                                                $new_location_id = $representation_info['nouveau_lieu'];
+                                                if($new_location_id != ""){
+                                                    $new_location = get_term($new_location_id, "taxonomy-lieu");
+                                                    $new_location_name = $new_location->name;
+                                                    $new_location_href = get_term_link($new_location_id, "taxonomy-lieu");
+                                                    $location_name = $new_location_name;
+                                                    $location_href = $new_location_href;
+                                                }?>
+                                                <span>
+                                                    <?php if(!empty($location_href) && is_string($location_href)){ ?>
+                                                        <a href="<?php if(!empty($location_href)){ echo $location_href; }?>" <?php if($location_type != "oui"){echo 'target="_blank"';} ?>>
+                                                    <?php }
+                                                    echo $location_name;
+                                                    if(!empty($location_href) && is_string($location_href)){ ?>
+                                                        </a>
+                                                    <?php } ?>
+                                                </span>
+                                            </li> <!-- le lieux -->
+                                            <?php
+                                                if($representation_info['etat'] != "postponed"){
+                                                    get_avaibility_txt($avaibility, $representation_info['date_de_report'], $post->ID, $representation_info);
+                                                }else{
+                                                    get_avaibility_txt($avaibility, $representation_info['date_de_report'], $post->ID, $representation_info);
+                                                } ?><!-- avaibality -->
+
+                                            <!-- la liste des reports -->
+                                            <ul class="event__top-info__item event__postpone">
+                                                <?php if($representation_info['etat'] == "postponed" && $representation_info['date_de_report'] == $date){ ?>
+                                                    <li class="event__postpone__item">
+                                                        <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
+                                                             viewBox="0 0 164.24 128.77">
+                                                            <path
+                                                                    d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
+                                                        </svg>
+                                                        <span><?php echo __(" Report du "). ucfirst(date_i18n(get_option('date_format' ), strtotime($representation_info['date_de_la_representation']))); ?></span>
+                                                    </li>
+                                                <?php } ?>
+                                            </ul>
+                                        </ul>
+                                        <span class="event__hashtag event__hashtag--desktop">
+                                             <?php
+                                                 foreach ($terms as $term){
+                                                     echo '#'.$term->name.' ';
+                                                 }
+                                             ?>
+                                        </span>
+                                    </div>
+                                    <div class="event__bottom">
+                                        <h3 class="event__title">
+                                            <?php
+                                            if($representation_info['etat'] != "postponed" || ($representation_info['etat'] == "postponed" && $representation_info['date_de_report'] == $date)){ ?>
+                                                <a href="<?php echo $url; ?>" title="<?= get_the_title($post->ID) ?>"> <?php echo get_the_title($post->ID); ?> </a> <?php
+                                            }else{ ?>
+                                                <div><?php echo get_the_title($post->ID); ?></div><?php
+                                            } ?>
+                                        </h3>
+                                        <div class="event__call-back event__call-back--desktop">
+                                            <div class="double-buttons">
+                                                <a href="<?= $url ?>" class="double-bouttons__btn double-bouttons__btn--info"
+                                                   title="">
+                                                    <?php
+                                                        if($nb_futur_show <= 1){
+                                                            _e("Informations", "opus-one");
+                                                        }else{
+                                                            _e("Informations tournée", "opus-one");
+                                                        }
+                                                    ?>
+                                                </a>
+                                                <!---- @TODO : Ajouter lien reservation et sidebar // voir pour multidates -->
+                                                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            <?php
+                            }
+                        }
+            }   ?>
 
         <ul class="event-list">
-        <!-- Et Ensuite la liste des evenements, certaine info sont la 2x la version mobile et desktop sont legerement different et ne permettaient pas de faire un seul template -->
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time> <!-- date de l'event -->
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span> <!-- categorie de l event -->
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li> <!-- le lieux -->
-                <li class="event__top-info__item event__top-info__item--availability is-not-available"> <!-- class="is-not-available si pas disponible, is-available si dispo -->
-                  <span>Disponible</span> <!-- Dispo, reporte ou annule -->
-                </li>
-                <!-- la liste des reports -->
-                <ul class="event__top-info__item event__postpone">
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                </ul>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
+            <?php
+                foreach($next_shows as $show){
+                    $the_id = $show['ID'];
+                    $date = $show['meta_value'];
+                    $next_date = substr($date,0,6);
+                    $type = get_field("type",$post->ID);
+                    $post = get_post( $show['ID']);
+                    $terms = wp_get_post_terms($post->ID, "taxonomy-representation");
 
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Zurich</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Zaz">Zaz</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
+                    if($type == "plusieurs_dates"){
+                        $dates = get_field("date_unique_ou_separee", $post->ID);
+                        $representation_info = search_representation($dates, $date);
+                        if(!$representation_info){
+                            $representation_info = search_representation_report($dates, $date);
+                        }
+                        $date_sale = $representation_info['date_de_la_mise_en_vente'];
+                        $time_sale = $representation_info['heure_de_la_mise_en_vente'];
+                        $date_sale_formated = date_i18n( 'Y-m-d H:i', strtotime($date_sale." ".$time_sale));
+                        $avaibility =	$representation_info['etat'];
+                        $image = get_field('banner', $post->ID);
+                        $image_url_xs = $image['sizes']['home-1-xs'];
+                        $nb_futur_show = get_nb_representation_in_future($post->ID);
+                        if($nb_futur_show > 1){
+                            if($representation_info['etat'] == "postponed"){
+                                $url = get_permalink($post->ID).$representation_info['date_de_report']."/";
+                            }else{
+                                $url = get_permalink($post->ID).$representation_info['date_de_la_representation']."/";
+                            }
+                        }elseif($representation_info['date_de_report'] == $date){
+                            $url = get_permalink($post->ID).$representation_info['date_de_report']."/";
+                        }elseif($representation_info['date_de_report'] != $date && $representation_info['etat'] == "postponed"){
+                            $url = get_permalink($post->ID).$representation_info['date_de_la_representation']."/";
+                        }else{
+                            $url = get_permalink($post->ID);
+                        } ?>
 
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Zurich</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Pogo Car Crash Control">Pogo Car Crash Control</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
 
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneve</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Angele">Angele</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
 
-        </ul>
-
-      </div>
-      <div class="event-month" data-month-name="Mars" id="mars-2022">
-
-        <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Mars</span>
-          <span class="event-month__word event-month__word--desktop">
-            <span class="event-month__letter">M</span>
-            <span class="event-month__letter">a</span>
-            <span class="event-month__letter">r</span>
-            <span class="event-month__letter">s</span>
-          </span>
-        </h3>
-
-        <ul class="event-list">
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Sold-out</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Red Hot Chili Peppers">Red Hot Chili Peppers</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Sold-out</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Red Hot Chili Peppers">Red Hot Chili Peppers</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-
-      </div>
-      <div class="event-month" data-month-name="Avril" id="avril-2022">
-
-        <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Avril</span>
-          <span class="event-month__word event-month__word--desktop">
-            <span class="event-month__letter">A</span>
-            <span class="event-month__letter">v</span>
-            <span class="event-month__letter">r</span>
-            <span class="event-month__letter">i</span>
-            <span class="event-month__letter">l</span>
-          </span>
-        </h3>
-
-        <ul class="event-list">
-
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Disponible</span>
-                </li>
-                <ul class="event__top-info__item event__postpone">
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                </ul>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Zurich</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Zaz">Zaz</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Zurich</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Pogo Car Crash Control">Pogo Car Crash Control</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneve</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Angele">Angele</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-
-        </ul>
-
-      </div>
-      <div class="event-month" data-month-name="Mai" id="mai-2022">
-
-        <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Mai</span>
-          <span class="event-month__word event-month__word--desktop">
-            <span class="event-month__letter">M</span>
-            <span class="event-month__letter">a</span>
-            <span class="event-month__letter">i</span>
-          </span>
-        </h3>
-
-        <ul class="event-list">
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Sold-out</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Red Hot Chili Peppers">Red Hot Chili Peppers</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Sold-out</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Red Hot Chili Peppers">Red Hot Chili Peppers</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-
-      </div>
-      <div class="event-month" data-month-name="Juin" id="juin-2022">
-
-        <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Juin</span>
-          <span class="event-month__word event-month__word--desktop">
-            <span class="event-month__letter">J</span>
-            <span class="event-month__letter">u</span>
-            <span class="event-month__letter">i</span>
-            <span class="event-month__letter">n</span>
-          </span>
-        </h3>
-
-        <ul class="event-list">
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Disponible</span>
-                </li>
-                <ul class="event__top-info__item event__postpone">
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                </ul>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Red Hot Chili Peppers">Red Hot Chili Peppers</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-
-      </div>
-      <div class="event-month" data-month-name="Juillet" id="juillet-2022">
-
-        <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Juil<br>let</span>
-          <span class="event-month__word event-month__word--desktop">
-            <span class="event-month__letter">J</span>
-            <span class="event-month__letter">u</span>
-            <span class="event-month__letter">i</span>
-            <span class="event-month__letter">l</span>
-            <span class="event-month__letter">l</span>
-            <span class="event-month__letter">e</span>
-            <span class="event-month__letter">t</span>
-          </span>
-        </h3>
-
-        <ul class="event-list">
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Sold-out</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Red Hot Chili Peppers">Red Hot Chili Peppers</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Sold-out</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Red Hot Chili Peppers">Red Hot Chili Peppers</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-
-      </div>
-      <div class="event-month" data-month-name="Aout" id="aout-2022">
-
-        <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Aout</span>
-          <span class="event-month__word event-month__word--desktop">
-            <span class="event-month__letter">A</span>
-            <span class="event-month__letter">o</span>
-            <span class="event-month__letter">u</span>
-            <span class="event-month__letter">t</span>
-          </span>
-        </h3>
-
-        <ul class="event-list">
-
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Disponible</span>
-                </li>
-                <ul class="event__top-info__item event__postpone">
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                </ul>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Zurich</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Zaz">Zaz</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Zurich</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Pogo Car Crash Control">Pogo Car Crash Control</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneve</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Angele">Angele</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-
-        </ul>
-
-      </div>
-      <div class="event-month" data-month-name="Septembre" id="septembre-2022">
-
-        <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Sept<br>embre</span>
-          <span class="event-month__word event-month__word--desktop">
-            <span class="event-month__letter">S</span>
-            <span class="event-month__letter">e</span>
-            <span class="event-month__letter">p</span>
-            <span class="event-month__letter">t</span>
-            <span class="event-month__letter">e</span>
-            <span class="event-month__letter">m</span>
-            <span class="event-month__letter">b</span>
-            <span class="event-month__letter">r</span>
-            <span class="event-month__letter">e</span>
-          </span>
-        </h3>
-
-        <ul class="event-list">
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Sold-out</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Red Hot Chili Peppers">Red Hot Chili Peppers</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Sold-out</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Red Hot Chili Peppers">Red Hot Chili Peppers</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-
-      </div>
-      <div class="event-month" data-month-name="Octobre" id="octobre-2022">
-
-        <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Oct<br>obre</span>
-          <span class="event-month__word event-month__word--desktop">
-            <span class="event-month__letter">O</span>
-            <span class="event-month__letter">c</span>
-            <span class="event-month__letter">t</span>
-            <span class="event-month__letter">o</span>
-            <span class="event-month__letter">b</span>
-            <span class="event-month__letter">r</span>
-            <span class="event-month__letter">e</span>
-          </span>
-        </h3>
-
-        <ul class="event-list">
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Disponible</span>
-                </li>
-                <ul class="event__top-info__item event__postpone">
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                </ul>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Red Hot Chili Peppers">Red Hot Chili Peppers</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-
-      </div>
-      <div class="event-month" data-month-name="Décembre" id="decembre-2022">
-
-        <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Décem<br>bre</span>
-          <span class="event-month__word event-month__word--desktop">
-            <span class="event-month__letter">D</span>
-            <span class="event-month__letter">é</span>
-            <span class="event-month__letter">c</span>
-            <span class="event-month__letter">e</span>
-            <span class="event-month__letter">m</span>
-            <span class="event-month__letter">b</span>
-            <span class="event-month__letter">r</span>
-            <span class="event-month__letter">e</span>
-          </span>
-        </h3>
-
-        <ul class="event-list">
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Disponible</span>
-                </li>
-                <ul class="event__top-info__item event__postpone">
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                </ul>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Red Hot Chili Peppers">Red Hot Chili Peppers</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-
-      </div>
-      <div class="event-month" data-month-name="Janvier" id="janvier-2023">
-
-        <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Janv<br>ier</span>
-          <span class="event-month__word event-month__word--desktop">
-            <span class="event-month__letter">J</span>
-            <span class="event-month__letter">a</span>
-            <span class="event-month__letter">n</span>
-            <span class="event-month__letter">v</span>
-            <span class="event-month__letter">i</span>
-            <span class="event-month__letter">e</span>
-            <span class="event-month__letter">r</span>
-          </span>
-        </h3>
-
-        <ul class="event-list">
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-not-available">
-                  <span>Disponible</span>
-                </li>
-                <ul class="event__top-info__item event__postpone">
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                  <li class="event__postpone__item">
-                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164.24 128.77">
-                      <path
-                        d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                    </svg>
-                    <span>Report du Jeu 14 janvier 2021</span>
-                  </li>
-                </ul>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Wejdene">Wejdene</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="event">
-            <div class="event__call-back event__call-back--mobile">
-              <div class="double-buttons">
-                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                  title="">Informations</a>
-                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-              </div>
-            </div>
-            <div class="event__top">
-              <ul class="event__top-info">
-                <li class="event__top-info__item event__top-info__item--when">
-                  <time>02.03.22</time>
-                  <span class="event__hashtag event__hashtag--mobile">#concert</span>
-                </li>
-                <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
-                <li class="event__top-info__item event__top-info__item--availability is-available">
-                  <span>Disponible</span>
-                </li>
-              </ul>
-              <span class="event__hashtag event__hashtag--desktop">#concert</span>
-            </div>
-            <div class="event__bottom">
-              <h3 class="event__title">
-                <a href="single-event.html" title="Red Hot Chili Peppers">Red Hot Chili Peppers</a>
-              </h3>
-              <div class="event__call-back event__call-back--desktop">
-                <div class="double-buttons">
-                  <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                    title="">Informations</a>
-                  <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
+                            <!--------- ICI LE DEBUT DU SHOW -------------->
+                            <!--------- ICI LE DEBUT DU SHOW -------------->
+                            <!--------- ICI LE DEBUT DU SHOW -------------->
+                        <div class="show <?php if($terms){foreach($terms as $term){echo $term->slug." ";}} if(get_field("vip",$post->ID) == "oui"){echo " vip";} ?>"><?php
+                            if($representation_info['etat'] != "postponed" || ($representation_info['etat'] == "postponed" && $representation_info['date_de_report'] == $date)){ ?>
+                                <a class="col-md-3 col-sm-2 col-xs-3 npl agenda-item img-agenda <?php echo $representation_info['etat']; ?>" style="background-image: url(<?php echo $image['sizes']['agenda']; ?>);" href="<?php echo $url; ?>">
+                                    <div class="caption-day"></div>
+                                    <div class="day"><div class="table"><div class="table-cell"><?php echo substr($date,6,2); ?></div></div></div>
+                                </a><!-- .col-md-3 col-sm-2 col-xs-3 npl agenda-item img-agenda <?php echo $representation_info['etat']; ?> --><?php
+                            }else{ ?>
+                                <div class="col-md-3 col-sm-2 col-xs-3 npl agenda-item img-agenda <?php echo $representation_info['etat']; ?>" style="background-image: url(<?php echo $image['sizes']['agenda']; ?>);">
+                                    <div class="caption-day"></div>
+                                    <div class="day"><div class="table"><div class="table-cell"><?php echo substr($date,6,2); ?></div></div></div>
+                                </div><!-- .col-md-3 col-sm-2 col-xs-3 npl agenda-item img-agenda <?php echo $representation_info['etat']; ?> -->
+                                <?php
+                            } ?>
+                            <div class="col-md-9 col-sm-10 col-xs-9 agenda-item agenda-content <?php echo $representation_info['etat']; ?>">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="avaibility"><?php
+                                            if($representation_info['etat'] != "postponed"){
+                                                get_avaibility_txt($avaibility, $representation_info['date_de_report'], $post->ID, $representation_info);
+                                            }else{
+                                                if($representation_info['date_de_report'] == $date){
+                                                    echo '<span class="icon-postponement"></span><span class="txt-postponed">'.__(" Report du "). ucfirst(date_i18n(get_option('date_format' ), strtotime($representation_info['date_de_la_representation']))).'</span>';
+                                                }else{
+                                                    get_avaibility_txt($avaibility, $representation_info['date_de_report'], $post->ID, $representation_info);
+                                                }
+                                            } ?>
+                                        </div><!-- .avaibility --><?php
+                                        if($representation_info['etat'] != "postponed" || ($representation_info['etat'] == "postponed" && $representation_info['date_de_report'] == $date)){ ?>
+                                            <a class="h2" href="<?php echo $url; ?>"><?php echo get_the_title($post->ID); ?></a>
+                                            <div class="tour"><?php the_field("nom_de_la_tournee", $post->ID); ?></div><?php
+                                        }else{ ?>
+                                            <div class="h2"><?php echo get_the_title($post->ID); ?></div>
+                                            <div class="tour"><?php the_field("nom_de_la_tournee", $post->ID); ?></div><?php
+                                        } ?>
+                                    </div><!-- .col-sm-7 -->
+                                    <div class="col-sm-6">
+                                        <div class="date">
+                                            <?php
+                                            if($representation_info['etat'] != "postponed"){
+                                                echo ucfirst(date_i18n(get_option('date_format' ), strtotime($representation_info['date_de_la_representation'])));
+                                            }else{
+                                                if($representation_info['date_de_report'] == $date){
+                                                    echo ucfirst(date_i18n(get_option('date_format' ), strtotime($representation_info['date_de_report'])));
+                                                }else{
+                                                    echo "<span class='line-through'>".ucfirst(date_i18n(get_option('date_format' ), strtotime($representation_info['date_de_la_representation']))).'</span>';
+                                                }
+                                            }
+                                            ?>
+                                        </div><!-- .date --><?php
+                                        $location_type = $representation_info['choisir_un_lieu_existant'];
+                                        if($location_type == "oui"){
+                                            $location_id = $representation_info['lieux'];
+                                            $location = get_term($location_id, "taxonomy-lieu");
+                                            $location_name = $location->name;
+                                            $location_href = get_term_link($location_id, "taxonomy-lieu");
+                                        }else{
+                                            $location_name = $representation_info['nom_du_lieu'];
+                                            $location_href = $representation_info['url_du_lieu'];
+                                        }
+                                        $new_location_id = $representation_info['nouveau_lieu'];
+                                        if($new_location_id != ""){
+                                            $new_location = get_term($new_location_id, "taxonomy-lieu");
+                                            $new_location_name = $new_location->name;
+                                            $new_location_href = get_term_link($new_location_id, "taxonomy-lieu"); ?>
+                                            <div class="location" style="text-decoration: line-through;margin-bottom:0;"><?php echo $location_name; ?></div>
+                                            <div class="location"><?php _e("Déplacé: ", "ergopix"); ?><a href="<?php echo $new_location_href; ?>" target="_blank"><?php echo $new_location_name; ?><span class="icon-location"></span></a></div><?php
+                                        }else{ ?>
+                                            <div class="location">
+                                                <a href="<?php echo $location_href; ?>" <?php if($location_type != "oui"){echo 'target="_blank"';} ?>><?php echo $location_name; ?><span class="icon-location"></span></a>
+                                            </div><!-- location --><?php
+                                        } ?>
+                                        <div class="agenda-btns">
+                                            <a class="infos-btn" href="<?php echo $url; ?>">
+                                                <?php
+                                                if($nb_futur_show <= 1){
+                                                    _e("Infos", "opus-one");
+                                                }else{
+                                                    _e("Infos tournée", "opus-one");
+                                                }
+                                                ?>
+                                            </a><?php
+                                            if($representation_info['etat'] != "postponed" || ($representation_info['etat'] == "postponed" && $representation_info['date_de_report'] == $date)){
+                                                if($now >= $date_sale_formated){
+                                                    if(($avaibility == 'available' && $date >= $today) || ($avaibility == 'postponed' && $date >= $today)){
+                                                        if(!$representation_info['fnac_ch'] && !$representation_info['autre_billeterie'] && $representation_info['vip'] == "non"){ ?>
+                                                            <a class="reservation-btn-agenda" href="<?php echo $representation_info['ticketcorner']; ?>" target="_blank">
+                                                                <?php _e("Réservation", "opus-one"); ?>
+                                                            </a><!-- .reservation-btn-agenda --><?php
+                                                        }else{ ?>
+                                                            <div class="reservation-btn-agenda tooltip-sidebar" data-date="<?php echo $representation_info['date_de_la_representation']; ?>" data-id="<?php echo $post->ID; ?>" data-hour="<?php echo $representation_info['heure_debut_de_la_representation']; ?>">
+                                                                <?php _e("Réservation", "opus-one"); ?>
+                                                            </div><!-- .reservation-btn-agenda tooltip-sidebar --><?php
+                                                        }
+                                                    }
+                                                }elseif($avaibility == 'available'){ ?>
+                                                    <div class="reservation-btn-agenda grayscale">
+                                                        <span class="hidden-xs"><?php _e("En vente le ", "opus-one"); ?><?php echo date_i18n('d.m à H:i', strtotime($date_sale_formated)); ?></span>
+                                                        <span class="visible-xs"><?php _e("En vente le ", "opus-one"); ?><?php echo date_i18n('d.m', strtotime($date_sale_formated)); ?></span>
+                                                    </div><!-- .reservation-btn-agenda grayscale --><?php
+                                                }
+                                            } ?>
+                                        </div><!-- .agenda-btns -->
+                                    </div><!-- .col-sm-5 -->
+                                </div><!-- .row -->
+                            </div><!-- .col-md-9 col-sm-10 col-xs-9 agenda-item agenda-content <?php echo $representation_info['etat']; ?> -->
+                            <div class="clearfix"></div>
+                        </div><!-- show --><?php
+                    }
+                }
+            ?>
 
       </div>
     </main>

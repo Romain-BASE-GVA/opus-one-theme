@@ -1,3 +1,1252 @@
-<?php
-
+<?php get_header();
+while ( have_posts() ) : the_post();
+    $show_in_sidebar = false;
+    $today = date_i18n("Ymd");
+    $date = get_query_var('date');
+    $type = get_field("type");
+    $tournee = get_field("nom_de_la_tournee");
+    if($type == "plusieurs_dates"){
+        $dates = get_field("date_unique_ou_separee");
+    }elseif($type == "multidates"){
+        $dates = get_field("date_de_la_representation_multidate");
+    }
+    if(!$date){
+        $representation_info = get_next_show($post->ID);
+        if($representation_info['etat'] == "postponed"){
+            $date = $representation_info['date_de_report'];
+        }else{
+            $date = $representation_info['date_de_la_representation'];
+        }
+        if(!$representation_info){
+            $terms = wp_get_post_terms($post->ID, "taxonomy-artistes");
+            if($terms){
+                $args_post_artists = array(
+                    'posts_per_page' => -1,
+                    'taxonomy-artistes' => $terms[0]->slug,
+                    'post_type' => 'representation'
+                );
+                $post_artists = get_posts($args_post_artists);
+                $dates = get_artists_show($post_artists, $date);
+                foreach($dates as $representation){
+                    if($representation['date_de_la_representation'] >= $today){
+                        $representation_info = $representation;
+                        break;
+                    }
+                }
+            }
+        }
+    }else{
+        $representation_info = search_representation($dates, $date);
+        if(!$representation_info){
+            $representation_info = get_next_show($post->ID);
+        }
+    }
+    if($type == "plusieurs_dates"){
+        $location_type =  isset($representation_info['choisir_un_lieu_existant'] ) ? $representation_info['choisir_un_lieu_existant'] : NULL;
+        if($location_type == "oui"){
+            $location_id = $representation_info['lieux'];
+            $location = get_term($location_id, "taxonomy-lieu");
+            $location_name = $location->name;
+            $location_href = get_term_link($location_id, "taxonomy-lieu");
+        }else{
+            $location_name = isset($representation_info['nom_du_lieu']) ? $representation_info['nom_du_lieu'] : NULL;
+            $location_href = isset($representation_info['url_du_lieu']) ? $representation_info['url_du_lieu'] : NULL;
+        }
+    }elseif($type == "multidates"){
+        $location_type = get_field("choisir_un_lieu_existant");
+        if($location_type == "oui"){
+            $location_id = get_field("lieu");
+            $location = get_term($location_id, "taxonomy-lieu");
+            if($location){
+                $location_name = isset($location->name) ? $location->name : NULL;
+                $location_href = get_term_link($location_id, "taxonomy-lieu");
+            }
+        }else{
+            $location_name = get_field("nom_du_lieu");
+            $location_href = get_field("url_du_lieu");
+        }
+    }
+    $avaibility = $representation_info['etat'];
+    if(!$date){
+        $date = $representation_info['date_de_la_representation'];
+    }
+    $date_sale = $representation_info['date_de_la_mise_en_vente'];
+    $time_sale = $representation_info['heure_de_la_mise_en_vente'];
+    $date_sale_formated = date_i18n( 'Y-m-d H:i', strtotime($date_sale." ".$time_sale));
+    $now = date_i18n( 'Y-m-d H:i');
+    $date_de_report =  isset($representation_info['date_de_report'] ) ? $representation_info['date_de_report'] : NULL;
 ?>
+
+<body data-barba="wrapper">
+<div class="topbar">
+    <div class="logo logo--topbar">
+        <a href="index.html" title="OPUS ONE">
+            <span class="logo__letter">O</span>
+            <span class="logo__letter">P</span>
+            <span class="logo__letter">U</span>
+            <span class="logo__letter">S</span>
+            <span class="logo__letter">O</span>
+            <span class="logo__letter">N</span>
+            <span class="logo__letter">E</span>
+        </a>
+        <span class="topbar__page-name">
+        <span>Présente</span>
+      </span>
+    </div>
+    <div class="topbar--page-nav"></div>
+    <button class="nav-trigger" title="Ouvrir la navigation">
+      <span class="burger">
+        <span class="burger__bar burger__bar--top"></span>
+        <span class="burger__bar burger__bar--middle"></span>
+        <span class="burger__bar burger__bar--bottom"></span>
+      </span>
+        <span class="nav-trigger__label">Menu</span>
+    </button>
+</div>
+
+<div class="page-position"></div>
+
+<nav class="nav nav--main nav--main--is-closed">
+    <div class="nav--main__bg" style="background-color: #ee3b3b;"></div>
+    <div class="nav--main__bg" style="background-color: #ff5765;"></div>
+    <div class="nav--main__bg" style="background-color: #ebb335;"></div>
+    <div class="nav--main__bg" style="background-color: #2d7949;"></div>
+    <div class="nav--main__bg" style="background-color: #0C557F;"></div>
+    <div class="nav--main__bg" style="background-color: #190549;"></div>
+    <div class="nav--main__bg" style="background-color: #7b6ca0;"></div>
+    <div class="nav--main__bg" style="background-color: #e07df4;">
+        <div class="nav--main__wrapper">
+            <header class="nav-header">
+                <div class="logo logo--topbar">
+                    <a href="index.html" title="OPUS ONE">
+                        <span class="logo__letter">O</span>
+                        <span class="logo__letter">P</span>
+                        <span class="logo__letter">U</span>
+                        <span class="logo__letter">S</span>
+                        <span class="logo__letter">O</span>
+                        <span class="logo__letter">N</span>
+                        <span class="logo__letter">E</span>
+                    </a>
+                </div>
+                <button class="close-nav" title="Fermer la navigation">
+            <span class="burger">
+              <span class="burger__bar burger__bar--top"></span>
+              <span class="burger__bar burger__bar--bottom"></span>
+            </span>
+                </button>
+            </header>
+            <ul class="nav--main__list">
+                <li>
+                    <a href="#">Agenda</a>
+                    <ul>
+                        <li><a href="agenda.html" title="Tous nos événements">Tous nos événements</a></li>
+                        <li><a href="agenda-humour.html" title="Concerts">Concerts</a></li>
+                        <li><a href="agenda-humour.html" title="Spectacles">Spectacles</a></li>
+                        <li><a href="agenda-humour.html" title="Humour">Humour</a></li>
+                        <li><a href="agenda-humour.html" title="Famille">Famille</a></li>
+                        <li><a href="agenda-humour.html" title="Exposition">Exposition</a></li>
+                        <li><a href="archives.html" title="Historique">Historique</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Opus One</a>
+                    <ul>
+                        <li><a href="manifesto.html" title="Manifesto">Manifesto</a></li>
+                        <li><a href="artists.html" title="Nos Artistes">Nos Artistes</a></li>
+                        <li><a href="services.html" title="Services">Services</a></li>
+                        <li><a href="nous.html" title="Nous!">Nous!</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Infos pratiques</a>
+                    <ul>
+                        <li><a href="help.html" title="Toutes les infos">Toutes les infos</a></li>
+                        <li><a href="help.html" title="Covid">Covid</a></li>
+                        <li><a href="help.html" title="Billeterie">Billeterie</a></li>
+                        <li><a href="help.html" title="PMR">PMR</a></li>
+                        <li><a href="help.html" title="Sécurité">Sécurité</a></li>
+                        <li><a href="help.html" title="VIP">VIP</a></li>
+                        <li><a href="help.html" title="Lieux">Lieux</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                    <ul>
+                        <li><a href="contact.html" title="Nous contacter">Nous contacter</a></li>
+                        <li><a href="help.html" title="Press">Covid</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div data-barba="container" data-barba-namespace="single-event" data-bg="#FF5765" data-text-color="#fff" data-logo-title="Présente" data-event-title="<?php the_title(); ?>">
+    <header class="header header--single-event">
+        <div class="header-tickets">
+            <div class="one-ticket">
+                <a href="" title="Angele : Geneve - Palexpo"><span>Angele : Geneve - Palexpo</span></a>
+                <time datetime="" class="one-ticket__date">10.02.22</time>
+                <div class="">
+                    <div><span>Angele : Geneve - Palexpo</span></div>
+                </div>
+                <div class="one-ticket__price">
+                    Dès 49.-
+                    <span class="one-ticket__icon">
+              <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 100">
+                <defs>
+                  <style>
+                    .cls-1 {
+                        fill: #fff;
+                        fill-rule: evenodd;
+                    }
+                  </style>
+                </defs>
+                <path class="cls-1"
+                      d="M210,0h-70.04V22.82h-13.05V0H0V100H126.91v-22.82h13.05v22.82h70.04V0ZM127.39,38.61v22.77h12.94v-22.77h-12.94Z" />
+              </svg>
+            </span>
+                </div>
+            </div>
+            <button class="header-tickets__trigger" title="Voir les autres dates">Voir les autres dates</button>
+            <div class="header-tickets__list">
+                <ul class="ticket-list">
+                    <li class="one-ticket">
+                        <a href="" title="Angele : Geneve - Palexpo"><span>Angele : Geneve - Palexpo</span></a>
+                        <time datetime="" class="one-ticket__date">10.02.22</time>
+                        <div class="">
+                            <div><span>Angele : Geneve - Palexpo</span></div>
+                        </div>
+                        <div class="one-ticket__price">
+                            Dès 49.-
+                            <span class="one-ticket__icon">
+                  <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 100">
+                    <defs>
+                      <style>
+                        .cls-1 {
+                            fill: #fff;
+                            fill-rule: evenodd;
+                        }
+                      </style>
+                    </defs>
+                    <path class="cls-1"
+                          d="M210,0h-70.04V22.82h-13.05V0H0V100H126.91v-22.82h13.05v22.82h70.04V0ZM127.39,38.61v22.77h12.94v-22.77h-12.94Z" />
+                  </svg>
+                </span>
+                        </div>
+                    </li>
+                    <li class="one-ticket">
+                        <a href="" title="Angele : Geneve - Palexpo"><span>Angele : Geneve - Palexpo</span></a>
+                        <time datetime="" class="one-ticket__date">10.02.22</time>
+                        <div class="">
+                            <div><span>Angele : Geneve - Palexpo</span></div>
+                        </div>
+                        <div class="one-ticket__price">
+                            Dès 49.-
+                            <span class="one-ticket__icon">
+                  <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 100">
+                    <defs>
+                      <style>
+                        .cls-1 {
+                            fill: #fff;
+                            fill-rule: evenodd;
+                        }
+                      </style>
+                    </defs>
+                    <path class="cls-1"
+                          d="M210,0h-70.04V22.82h-13.05V0H0V100H126.91v-22.82h13.05v22.82h70.04V0ZM127.39,38.61v22.77h12.94v-22.77h-12.94Z" />
+                  </svg>
+                </span>
+                        </div>
+                    </li>
+                    <li class="one-ticket">
+                        <a href="" title="Angele : Geneve - Palexpo"><span>Angele : Geneve - Palexpo</span></a>
+                        <time datetime="" class="one-ticket__date">10.02.22</time>
+                        <div class="">
+                            <div><span>Angele : Geneve - Palexpo</span></div>
+                        </div>
+                        <div class="one-ticket__price">
+                            Dès 49.-
+                            <span class="one-ticket__icon">
+                  <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 100">
+                    <defs>
+                      <style>
+                        .cls-1 {
+                            fill: #fff;
+                            fill-rule: evenodd;
+                        }
+                      </style>
+                    </defs>
+                    <path class="cls-1"
+                          d="M210,0h-70.04V22.82h-13.05V0H0V100H126.91v-22.82h13.05v22.82h70.04V0ZM127.39,38.61v22.77h12.94v-22.77h-12.94Z" />
+                  </svg>
+                </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="header-carousel">
+            <div class="header-carousel__item">
+                <img class="header-carousel__img" src="assets/img/nj.jpg" alt="">
+            </div>
+            <div class="header-carousel__item">
+                <img class="header-carousel__img" src="assets/img/cat-bg-concert.jpg" alt="">
+            </div>
+            <div class="header-carousel__item">
+                <img class="header-carousel__img" src="assets/img/cat-bg-exposition.jpg" alt="">
+            </div>
+        </div>
+    </header>
+    <main class="main main--single-event">
+        <div class="single-event">
+            <div class="single-event__side single-event__side--main">
+                <div class="single-event__main-content">
+                    <header class="single-event__header">
+                        <h1 class="single-event__title"><?php the_title(); ?></h1>
+                        <?php if(!empty($tournee)) { ?>
+                            <div class="single-event__tour"><?= $tournee ?></div>
+                        <?php } ?>
+                        <div class="single-event__style">
+                            <span><?= __('Style', 'opus-one') ?></span>
+                            <?php
+                                $terms = wp_get_post_terms($post->ID, "taxonomy-representation");
+                                foreach($terms as $key => $value){
+                                    if($value->name != "VIP"){
+                                        echo '<span class="single-event__hashtag">#'.$value->name.'</span>';
+                                        $term = isset($terms[intval($key)+1] ) ? $terms[intval($key)+1]  : NULL;
+                                        if($term != ""){
+                                            echo "<br/>";
+                                        }
+                                    }
+                                }
+                            ?>
+                        </div>
+                    </header>
+
+                    <ul class="event-card-list">
+
+                        <li class="event-card">
+                            <?php if($representation_info['etat'] != "postponed"){
+                                $date_de_report = isset($representation_info['date_de_report'] ) ? $representation_info['date_de_report']  : NULL;
+                                get_avaibility_txt($avaibility, $date_de_report, $post->ID, $representation_info, true);
+                            }else{
+                                if($representation_info['date_de_report'] == $date){
+                                    echo '<span class="icon-postponement" style="color:#FFF;"></span><span style="color:#FFF;" class="txt-postponed">'.__(" Report du "). ucfirst(date_i18n(get_option('date_format' ), strtotime($representation_info['date_de_la_representation']))).'</span>';
+                                }else{
+                                    get_avaibility_txt($avaibility, $representation_info['date_de_report'], $post->ID, $representation_info, true);
+                                }
+                            } ?>
+                            <time class="event-card__date">
+                                <?php
+                                if($representation_info['etat'] == "postponed"){
+                                    if($representation_info['date_de_report'] == $date){
+                                        echo ucfirst(date_i18n('D d M Y', strtotime($representation_info['date_de_report'])));
+                                    }else{
+                                        echo "<span class='line-through'>".ucfirst(date_i18n('D d M Y', strtotime($representation_info['date_de_la_representation']))).'</span>';
+                                    }
+                                }else{
+                                    $post_id = isset($representation_info['post_id'] ) ? $representation_info['post_id'] : NULL;
+                                    if(get_field("nom_de_la_tournee") == get_field("nom_de_la_tournee", $post_id)){
+                                        echo ucfirst(date_i18n('D d M Y', strtotime($representation_info['date_de_la_representation'])));
+                                    }else{ ?>
+                                        <span class="start"><?php echo __(" Aucune représentation prévue pour l'instant");?></span><?php
+                                    }
+                                }
+                                ?>
+                            </time>
+                            <div class="event-card__door">
+                                <?php
+                                if($representation_info['etat'] != "postponed" || $representation_info['date_de_report'] == $date){
+                                    if($representation_info['heure_douverture_des_portes']){
+                                        $hour_door = $representation_info['heure_douverture_des_portes'];
+                                        echo '<span>'.__("Portes ").$hour_door."</span>";
+                                    }
+                                    if($representation_info['heure_debut_de_la_representation']){
+                                        echo '<span>'.__("Début ").$representation_info['heure_debut_de_la_representation'].'</span>';
+                                    }
+                                }
+                                ?>
+                            </div>
+
+                            <!-- @TODO : Le lieux est un lien, il est donc maintenant surligné à enlever dans le CSS --->
+                            <?php if(is_string($location_name)){ ?>
+                                <a class="event-card__where" href="<?= $location_href ?>"><?= $location_name ?></a>
+                            <?php } ?>
+
+                            <?php
+                            if(($avaibility == 'available' && $date >= $today) || ($avaibility == 'postponed' && $date >= $today)){
+                                if(!$representation_info['fnac_ch'] && !$representation_info['autre_billeterie'] && $representation_info['vip'] == "non"){
+                                    if($representation_info['prix_le_plus_eleve']){
+                                        echo '<a href="'.$representation_info['ticketcorner'].'" target="_blank" class="event-card__cta">'.__("Réserver Dès ", "opus-one").$representation_info['prix_le_plus_bas'].'.-</a>';
+                                    }else{
+                                        if($representation_info['prix_le_plus_bas']){
+                                            echo '<a href="'.$representation_info['ticketcorner'].'" target="_blank" class="event-card__cta">'.__("Réserver Dès ", "opus-one").$representation_info['prix_le_plus_bas'].'.-</a>';
+                                        }else{
+                                            _e("à venir", "opus-one");
+                                        }
+                                    }
+                                }else{
+                                    /** @TODO : Ajouter moyen de payement autre billeterie Tooltip */
+                                }
+                            }
+                            ?>
+                        </li>
+
+                    </ul>
+
+                    <!--- @TODO : Cette partie ne correspond pas à des champs, et n'est pas configuré pour fonctionner avec un WYSIWYG --->
+
+                    <div class="block block--text">
+                        <div>
+                            <div class="big-p">
+                                <p>Éclat pop</p>
+                            </div>
+                            <p>Angèle ou l’autre nom de la pop toute puissante. Une fois qu’on y a goûté, impossible d’arrêter. Et
+                                dans ce cas, pas de syndrome de la dernière part, tout le monde se l’arrache.</p>
+                        </div>
+                    </div>
+
+                    <div class="block block--dropdowns">
+
+                        <ul class="dropdowns">
+
+                            <li class="dropdown dropdown--is-closed">
+                                <div class="dropdown__top">
+                                    <button class="dropdown__trigger">Dropdown Title <span class="dropdown__plus"></span></button>
+                                </div>
+                                <div class="dropdown__content">
+                                    <div>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum sequi mollitia nisi illum
+                                            quaerat vel aspernatur unde repellendus iusto beatae dolores excepturi deserunt dignissimos
+                                            inventore dicta, optio, blanditiis saepe cumque.</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="dropdown dropdown--is-closed">
+                                <div class="dropdown__top">
+                                    <button class="dropdown__trigger">Dropdown Title <span class="dropdown__plus"></span></button>
+                                </div>
+                                <div class="dropdown__content">
+                                    <div>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum sequi mollitia nisi illum
+                                            quaerat vel aspernatur unde repellendus iusto beatae dolores excepturi deserunt dignissimos
+                                            inventore dicta, optio, blanditiis saepe cumque.</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="dropdown dropdown--is-closed">
+                                <div class="dropdown__top">
+                                    <button class="dropdown__trigger">Dropdown Title <span class="dropdown__plus"></span></button>
+                                </div>
+                                <div class="dropdown__content">
+                                    <div>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum sequi mollitia nisi illum
+                                            quaerat vel aspernatur unde repellendus iusto beatae dolores excepturi deserunt dignissimos
+                                            inventore dicta, optio, blanditiis saepe cumque.</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <!--- @TODO END : END PART-->
+
+                    <div class="block block--list-of-list">
+                        <ul class="list-of-list">
+
+                            <?php
+                            $prod = get_field("production");
+                            if($prod){ ?>
+                                <li class="list-of-list__item">
+                                    <span class="list-of-list__title"></span>
+                                    <ul class="list-of-list__sub-list"><?php
+                                        foreach($prod as $key => $value){
+                                            echo '<li class="list-of-list__sub-item"><span>'.$value['nom_prod'].'</span></li>';
+                                            $nom_prod = isset($prod[intval($key)+1] ) ? $prod[intval($key)+1]  : NULL;
+                                            if($nom_prod != ""){
+                                                echo "<br/>";
+                                            }
+                                        } ?>
+                                    </ul>
+                                </li>
+                            <?php } ?>
+
+                            <?php
+                            $partners = get_field("partenaire");
+                            if($partners && !empty($partners[0]['nom'])){ ?>
+                                <li class="list-of-list__item">
+                                    <span class="list-of-list__title"><?= __('Partenaires', 'opus-one') ?></span>
+                                    <ul class="list-of-list__sub-list"><?php
+                                        foreach($partners as $key => $value){
+                                            echo '<li class="list-of-list__sub-item"><span>'.$value['nom'].'</span></li>';
+                                            $partner = isset($partners[intval($key)+1] ) ? $partners[intval($key)+1]  : NULL;
+                                            if($partner != ""){
+                                                echo "<br/>";
+                                            }
+                                        } ?>
+                                    </ul>
+                                </li>
+                            <?php } ?>
+
+                            <?php
+                            $website = get_field("url_artist");
+                            if($website){ ?>
+                                <li class="list-of-list__item">
+                                    <span class="list-of-list__title"><?= __('Site Officiel', 'opus-one') ?></span>
+                                    <ul class="list-of-list__sub-list">
+                                        <li class="list-of-list__sub-item"><a href="<?= $website ?>" target="_blank "><?= $website ?></a></li>
+                                    </ul>
+                                </li>
+                            <?php }
+                                $my_artist_id = get_field("artistes");
+                                $my_artist = get_term_by("id", $my_artist_id, 'taxonomy-artistes');
+                                $facebook_artist = get_field("facebook", $my_artist);
+                                $youtube_artist = get_field("youtube", $my_artist);
+                                $instagram_artist = get_field("instagram", $my_artist);
+                                $google_artist = get_field("google+", $my_artist);
+                                $twitter_artist = get_field("twitter", $my_artist);
+                                $snapchat_artist = get_field("snapchat", $my_artist);
+                                $spotify_artist = get_field("spotify", $my_artist);
+
+                                if($facebook_artist || $youtube_artist || $instagram_artist || $google_artist || $twitter_artist || $snapchat_artist || $spotify_artist){ ?>
+                                    <li class="list-of-list__item">
+                                        <span class="list-of-list__title"><?= __('Réseaux Sociaux', 'opus-one') ?></span>
+                                        <ul class="list-of-list__sub-list">
+                                            <?php if($facebook_artist){ ?>
+                                                <li class="list-of-list__sub-item"><a href="<?php echo $facebook_artist; ?>">Facebook</a></li><?php
+											} ?>
+                                            <?php if($youtube_artist){ ?>
+                                                <li class="list-of-list__sub-item"><a href="<?php echo $youtube_artist; ?>">Youtube</a></li><?php
+											} ?>
+                                            <?php if($instagram_artist){ ?>
+                                                <li class="list-of-list__sub-item"><a href="<?php echo $instagram_artist; ?>">Instagram</a></li><?php
+											} ?>
+                                            <?php if($google_artist){ ?>
+                                                <li class="list-of-list__sub-item"><a href="<?php echo $google_artist; ?>">Google</a></li><?php
+											} ?>
+                                            <?php if($twitter_artist){ ?>
+                                                <li class="list-of-list__sub-item"><a href="<?php echo $twitter_artist; ?>">Twitter</a></li><?php
+											} ?>
+                                            <?php if($snapchat_artist){ ?>
+                                                <li class="list-of-list__sub-item"><a href="<?php echo $snapchat_artist; ?>">Snapchat</a></li><?php
+											} ?>
+                                            <?php if($spotify_artist){ ?>
+                                                <li class="list-of-list__sub-item"><a href="<?php echo $spotify_artist; ?>">Spotify</a></li><?php
+											} ?>
+                                        </ul>
+                                    </li>
+                                <?php } ?>
+
+
+                        </ul>
+                    </div>
+                    <div class="block block--other-dates">
+                        <span><?php
+                        $first_date = array();
+                        if($type == "plusieurs_dates"){
+                            _e("Autres dates disponibles");
+                        }elseif($type == "multidates"){
+                            $nb_representation = count($dates);
+                            $today = date("Ymd");
+                            foreach($dates as $date){
+                                if($date['date_de_la_representation'] >= $today){
+                                    $first_date = $date['date_de_la_representation'];
+                                    break;
+                                }
+                            };
+                            $index = 0;
+                            foreach($dates as $date){
+                                if($date['date_de_la_representation'] <= $today && $date['date_de_report'] <= $today){
+                                    unset($dates[$index]);
+                                }
+                                $index++;
+                            };
+                            $dates = array_values($dates);
+                            $last_element = count($dates);
+                            $last_date = isset($dates[$last_element-1]['date_de_la_representation'] ) ? $dates[$last_element-1]['date_de_la_representation']  : NULL;
+                            if(!$first_date){
+                                $first_date = isset($dates[0]['date_de_la_representation'] ) ? $dates[0]['date_de_la_representation']  : NULL;
+                            }
+                            $month_first_date = date_i18n('M', strtotime($first_date));
+                            $month_last_date = date_i18n('M', strtotime($last_date));
+                            $year_first_date = date_i18n('Y', strtotime($first_date));
+                            $year_last_date = date_i18n('Y', strtotime($last_date));
+                            if($first_date != $last_date){
+                                if(count($post_artists) > 1){
+                                    if($month_first_date == $month_last_date && $year_first_date == $year_last_date){
+                                        echo __("Du ","ergopix").date_i18n('j', strtotime($first_date)).__(" au ").date_i18n('j F Y', strtotime($last_date));
+                                    }
+                                    if($month_first_date != $month_last_date && $year_first_date == $year_last_date){
+                                        echo __("Du ","ergopix").date_i18n('j M', strtotime($first_date)).__(" au ").date_i18n('j M Y', strtotime($last_date));
+                                    }
+                                    if($month_first_date != $month_last_date && $year_first_date != $year_last_date){
+                                        echo __("Du ","ergopix").date_i18n('j M Y', strtotime($first_date)).__(" au ").date_i18n('j M Y', strtotime($last_date));
+                                    }
+                                }else{
+                                    if($month_first_date == $month_last_date && $year_first_date == $year_last_date){
+                                        echo __("Du ","ergopix").date_i18n('j', strtotime($first_date)).__(" au ").date_i18n('j F Y', strtotime($last_date));
+                                    }
+                                    if($month_first_date != $month_last_date && $year_first_date == $year_last_date){
+                                        echo __("Du ","ergopix").date_i18n('j M', strtotime($first_date)).__(" au ").date_i18n('j M Y', strtotime($last_date));
+                                    }
+                                    if($month_first_date != $month_last_date && $year_first_date != $year_last_date){
+                                        echo __("Du ","ergopix").date_i18n('j M Y', strtotime($first_date)).__(" au ").date_i18n('j M Y', strtotime($last_date));
+                                    }
+                                }
+                            }else{
+                                _e("Autres dates disponibles");
+                            }
+                        }
+                        $index = 0;
+                        $datestotestarray = $dates; ?>
+                        </span>
+
+                            <ul class="event-card-list">
+
+                                    <?php
+									$tmp_post = $post;
+									$location_href_tmp = $location_href;
+									// SUPPRESSION DE DOUBLONS
+									$array_for_test = array();
+									$index = 0;
+									foreach($dates as $date1){
+										$array_for_test[$index] = $date1['date_de_la_representation'].$date1['heure_debut_de_la_representation'];
+										$index++;
+									}
+									$new_array_date = array();
+									$array_to_unset = array();
+									$index = 0;
+									foreach($array_for_test as $value){
+										if(!in_array($value,$new_array_date)){
+											$new_array_date[] = $value;
+										}else{
+											$array_to_unset[] = $index;
+										}
+										$index++;
+									}
+									foreach($array_to_unset as $index_to_unset){
+										unset($dates[$index_to_unset]);
+									}
+									// END
+									foreach($dates as $key => $value){
+										$today = date("Ymd");
+										if($value['date_de_la_representation'] >= $today || ($value['heure_debut_de_la_representation'] != $representation_info['heure_debut_de_la_representation'] && $value['date_de_la_representation'] >= $today) || $value['date_de_report'] >= $today){
+											$avaibility = $value['etat']; ?>
+											<li class="event-card">
+												<div class="avaibility"><?php
+													$date_de_report= isset($value['date_de_report'] ) ? $value['date_de_report'] : NULL;
+													get_avaibility_txt($avaibility, $date_de_report, $post->ID, $value, true); ?>
+												</div><!-- .avaibility -->
+
+                                                <time class="event-card__date"><?php
+													if(count($post_artists) > 1){
+														$post_id = isset($value['post_id'] ) ? $value['post_id'] : NULL;
+														$post = get_post($post_id);
+														setup_postdata($post);
+														if($value['etat'] == "postponed"){ ?>
+															<?php echo ucfirst(date_i18n('D d M Y', strtotime($value['date_de_la_representation'])));
+														}else{ ?>
+															<?php echo ucfirst(date_i18n('D d M Y', strtotime($value['date_de_la_representation'])));
+														}
+														$post = $tmp_post;
+														setup_postdata($post);
+													}else{ ?>
+														<a href="<?php echo get_permalink($post->ID).$value['date_de_la_representation']."/"?>"><?php echo ucfirst(date_i18n(get_option('date_format' ), strtotime($value['date_de_la_representation']))); ?></a><?php
+													} ?>
+												</time><!-- .date -->
+
+												<div class="event-card__door">
+													<?php
+														if(count($post_artists) > 1){
+															$post_id = isset($value['post_id'] ) ? $value['post_id'] : NULL;
+															$post = get_post($post_id);
+															setup_postdata($post);
+															if($value['heure_douverture_des_portes']){
+																$hour_door = $value['heure_douverture_des_portes'];
+																echo '<span>'.__("Portes ").$hour_door.'</span>';
+															}
+															if($value['heure_debut_de_la_representation']){
+																echo '<span>'.__("Début ").$value['heure_debut_de_la_representation'].'</span>';
+															}
+															$post = $tmp_post;
+															setup_postdata($post);
+														}else{
+															if($value['heure_douverture_des_portes']){
+																$hour_door = $value['heure_douverture_des_portes'];
+																echo '<span>'.__("Portes ").$hour_door."</span>";
+															}
+															if($value['heure_debut_de_la_representation']){
+																echo '<span>'.__("Début ").$value['heure_debut_de_la_representation'].'</span>';
+															}
+														}
+													?>
+												</div><!-- .start -->
+												<div class="location"><?php
+													if(count($post_artists) > 1){
+														$post_id = isset($value['post_id'] ) ? $value['post_id'] : NULL;
+														$post = get_post($post_id);
+														setup_postdata($post);
+														$type = get_field("type");
+														$location_name_tmp = $location_name;
+														if($type == "plusieurs_dates"){
+															$location_type = $value['choisir_un_lieu_existant'];
+															if($location_type == "oui"){
+																$nouveau_lieu = $value['nouveau_lieu'];
+																if($nouveau_lieu){
+																	$location_id_new = $value['nouveau_lieu'];
+																	$location_new = get_term($location_id_new, "taxonomy-lieu");
+																	$location_name_new = $location_new->name;
+																	$location_href_new = get_term_link($location_id_new, "taxonomy-lieu");
+																}
+																$location_id = $value['lieux'];
+																$location = get_term($location_id, "taxonomy-lieu");
+																$location_name = $location->name;
+																$location_href = get_term_link($location_id, "taxonomy-lieu");
+															}else{
+																$location_name = $value['nom_du_lieu'];
+																$location_href = $value['url_du_lieu'];
+															}
+														}elseif($type == "multidates"){
+															$location_type = get_field("choisir_un_lieu_existant");
+															if($location_type == "oui"){
+																$location_id = get_field("lieu");
+																$location = get_term($location_id, "taxonomy-lieu");
+																$location_name = $location->name;
+																$location_href = get_term_link($location_id, "taxonomy-lieu");
+															}else{
+																$location_name = get_field("nom_du_lieu");
+																$location_href = get_field("url_du_lieu");
+															}
+														}
+														$post = $tmp_post;
+														setup_postdata($post);
+													}else{
+														$location_name_tmp = $location_name;
+														if($type == "plusieurs_dates"){
+															$location_type = $value['choisir_un_lieu_existant'];
+															if($location_type == "oui"){
+																$location_id = $value['lieux'];
+																$location = get_term($location_id, "taxonomy-lieu");
+																$location_name = $location->name;
+																$location_href = get_term_link($location_id, "taxonomy-lieu");
+															}else{
+																$location_name = $value['nom_du_lieu'];
+																$location_href = $value['url_du_lieu'];
+															}
+														}elseif($type == "multidates"){
+															$location_type = get_field("choisir_un_lieu_existant");
+															if($location_type == "oui"){
+																$location_id = get_field("lieu");
+																$location = get_term($location_id, "taxonomy-lieu");
+																$location_name = $location->name;
+																$location_href = get_term_link($location_id, "taxonomy-lieu");
+															}else{
+																$location_name = get_field("nom_du_lieu");
+																$location_href = get_field("url_du_lieu");
+															}
+														}
+														}
+													if($nouveau_lieu && is_string($location_name_new)){ ?>
+                                                        <div class="event-card__where"><a href="<?php echo $location_href_new; ?>"><?php echo $location_name_new; $location_name = $location_name_new; ?></a></div> <?php
+													}elseif(is_string($location_name)){ ?>
+                                                        <div class="event-card__where"><a href="<?= $location_href ?>" <?php if($location_type != "oui"){echo 'target="_blank"';}?>><?php echo $location_name_new; $location_name = $location_name_tmp; ?></a></div> <?php
+													} ?>
+												</div><!-- .location --><?php
+												$date_sale = $value['date_de_la_mise_en_vente'];
+												$time_sale = $value['heure_de_la_mise_en_vente'];
+												$date_sale_formated = date_i18n( 'Y-m-d H:i', strtotime($date_sale." ".$time_sale));
+												if($now >= $date_sale_formated){
+													if($avaibility == 'available' || $avaibility == 'postponed'){
+														if(!$value['fnac_ch'] && !$value['autre_billeterie'] && $value['vip'] == "non"){ ?>
+															<a class="reservation-btn" href="<?php echo $value['ticketcorner']; ?>" target="_blank">
+																<span class="btn-reservation-sidebar <?php if(!$value['prix_le_plus_bas']){echo "no-price";} if($post->ID == 22663 && $value["date_de_report"] == "20200509"){echo " hidden";} ?>"><?php
+																	if($value['prix_le_plus_eleve']){
+																		echo __("Réserver")." <span class='from'>".__("Dès ")."</span><span class='price'>".$value['prix_le_plus_bas'];
+																		if(!is_float($value['prix_le_plus_bas'])){
+																			echo ".-";
+																		}
+																		echo "</span>";
+																	}else{
+																		if($value['prix_le_plus_bas']){
+																			echo __("Réserver")." / <span class='price'>".$value['prix_le_plus_bas'];
+																			if(!is_float($value['prix_le_plus_bas'])){
+																				echo ".-";
+																			}
+																		}else{
+																			_e("à venir", "opus-one");
+																		}
+																	} ?>
+																</span><!-- .btn-reservation-sidebar tooltip-sidebar -->
+															</a><?php
+														}else{ ?>
+															<div class="reservation-btn"><?php
+																$post_id = isset($value['post_id'] ) ? $value['post_id'] : NULL;
+																if($post_id){
+																	$the_id_for_buy = $value['post_id'];
+																}else{
+																	$the_id_for_buy = $post->ID;
+																} ?>
+																<span class="btn-reservation-sidebar tooltip-sidebar <?php if(!$value['prix_le_plus_bas']){echo "no-price";} ?>" data-date="<?php echo $value['date_de_la_representation']; ?>" data-id="<?php echo $the_id_for_buy; ?>" data-hour="<?php echo $value['heure_debut_de_la_representation']; ?>"><?php
+																	if($value['prix_le_plus_eleve']){
+																		echo __("Réserver")." <span class='from'>".__("Dès ")."</span><span class='price'>".$value['prix_le_plus_bas'];
+																		if(!is_float($value['prix_le_plus_bas'])){
+																			echo ".-";
+																		}
+																		echo "</span>";
+																	}else{
+																		if($value['prix_le_plus_bas']){
+																			echo __("Réserver")." / <span class='price'>".$value['prix_le_plus_bas'];
+																			if(!is_float($value['prix_le_plus_bas'])){
+																				echo ".-";
+																			}
+																		}else{
+																			_e("à venir", "opus-one");
+																		}
+																	} ?>
+																</span><!-- .btn-reservation-sidebar tooltip-sidebar -->
+															</div><!-- .reservation-btn --><?php
+														}
+													}
+												}else{ ?>
+													<div class="reservation-btn grayscale">
+														<span class="btn-reservation-sidebar">
+															<?php _e("En vente le "); echo date_i18n('j F Y à H:i', strtotime($date_sale_formated)); ?>
+														</span>
+													</div><!-- .reservation-btn grayscale --><?php
+												} ?>
+											</li><!-- .sidebar-block --><?php
+										}
+									}
+									$post = $tmp_post;
+									setup_postdata($post);?>
+                            </ul>
+                    </div>
+
+                    <div class="block block--other-dates">
+                        <span>Autres dates</span>
+                        <ul class="event-card-list">
+
+                            <li class="event-card">
+                                <span class="event-card__availability is-available"><span>Disponible</span></span>
+                                <time class="event-card__date">Jeudi 21 Juillet 2022</time>
+                                <div class="event-card__door"><span>Portes 18:30</span><span>Début 20:00</span></div>
+                                <div class="event-card__where">ARENA – Genève</div>
+                                <a href="#" class="event-card__cta">Réserver Dès 48.-</a>
+                            </li>
+
+                            <li class="event-card">
+                                <span class="event-card__availability is-not-available"><span>Disponible</span></span>
+                                <time class="event-card__date">Jeudi 21 Juillet 2022</time>
+                                <div class="event-card__door"><span>Portes 18:30</span><span>Début 20:00</span></div>
+                                <div class="event-card__where">ARENA – Genève</div>
+                                <a href="#" class="event-card__cta">Réserver Dès 48.-</a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+
+                </div>
+            </div>
+            <aside class="single-event__side single-event__side--ticket">
+                <div>
+                    <ul class="ticket-list">
+                        <li class="one-ticket">
+                            <a href="" title="Angele : Geneve - Palexpo"><span>Angele : Geneve - Palexpo</span></a>
+                            <time datetime="" class="one-ticket__date">10.02.22</time>
+                            <div class="marquee3k one-ticket__marquee" data-speed="1">
+                                <div><span>Angele : Geneve - Palexpo -&nbsp;</span></div>
+                            </div>
+                            <div class="one-ticket__price">
+                                Dès 49.-
+                                <span class="one-ticket__icon">
+                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 100">
+                      <defs>
+                        <style>
+                          .cls-1 {
+                              fill: #fff;
+                              fill-rule: evenodd;
+                          }
+                        </style>
+                      </defs>
+                      <path class="cls-1"
+                            d="M210,0h-70.04V22.82h-13.05V0H0V100H126.91v-22.82h13.05v22.82h70.04V0ZM127.39,38.61v22.77h12.94v-22.77h-12.94Z" />
+                    </svg>
+                  </span>
+                            </div>
+                        </li>
+                        <li class="one-ticket">
+                            <a href="" title="Angele : Geneve - Palexpo"><span>Angele : Geneve - Palexpo</span></a>
+                            <time datetime="" class="one-ticket__date">10.02.22</time>
+                            <div class="marquee3k one-ticket__marquee" data-speed="1">
+                                <div><span>Angele : Geneve - Palexpo -&nbsp;</span></div>
+                            </div>
+                            <div class="one-ticket__price">
+                                Dès 49.-
+                                <span class="one-ticket__icon">
+                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 100">
+                      <defs>
+                        <style>
+                          .cls-1 {
+                              fill: #fff;
+                              fill-rule: evenodd;
+                          }
+                        </style>
+                      </defs>
+                      <path class="cls-1"
+                            d="M210,0h-70.04V22.82h-13.05V0H0V100H126.91v-22.82h13.05v22.82h70.04V0ZM127.39,38.61v22.77h12.94v-22.77h-12.94Z" />
+                    </svg>
+                  </span>
+                            </div>
+                        </li>
+                        <li class="one-ticket">
+                            <a href="" title="Angele : Geneve - Palexpo"><span>Angele : Geneve - Palexpo</span></a>
+                            <time datetime="" class="one-ticket__date">10.02.22</time>
+                            <div class="marquee3k one-ticket__marquee" data-speed="1">
+                                <div><span>Angele : Geneve - Palexpo -&nbsp;</span></div>
+                            </div>
+                            <div class="one-ticket__price">
+                                Dès 49.-
+                                <span class="one-ticket__icon">
+                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 100">
+                      <defs>
+                        <style>
+                          .cls-1 {
+                              fill: #fff;
+                              fill-rule: evenodd;
+                          }
+                        </style>
+                      </defs>
+                      <path class="cls-1"
+                            d="M210,0h-70.04V22.82h-13.05V0H0V100H126.91v-22.82h13.05v22.82h70.04V0ZM127.39,38.61v22.77h12.94v-22.77h-12.94Z" />
+                    </svg>
+                  </span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="single-event__poster">
+                        <img src="assets/img/kev.jpg" alt="">
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+    <section class="section section--highlights" style="--section-color: #fff; --current-bg-color: #000;">
+        <h3 class="section__title">Si vous aimez Angèle vous aimerez aussi :</h3>
+        <div class="highlights">
+            <ul class="event-list">
+
+                <li class="event">
+                    <div class="event__call-back event__call-back--mobile">
+                        <div class="double-buttons">
+                            <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
+                               title="">Informations</a>
+                            <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                        </div>
+                    </div>
+                    <div class="event__top">
+                        <ul class="event__top-info">
+                            <li class="event__top-info__item event__top-info__item--when">
+                                <time>02.03.22</time>
+                                <span class="event__hashtag event__hashtag--mobile">#concert</span>
+                            </li>
+                            <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
+                            <li class="event__top-info__item event__top-info__item--availability is-not-available">
+                                <span>Disponible</span>
+                            </li>
+                            <ul class="event__top-info__item event__postpone">
+                                <li class="event__postpone__item">
+                                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
+                                                                               viewBox="0 0 164.24 128.77">
+                                        <path
+                                            d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
+                                    </svg>
+                                    <span>Report du Jeu 14 janvier 2021</span>
+                                </li>
+                                <li class="event__postpone__item">
+                                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
+                                                                               viewBox="0 0 164.24 128.77">
+                                        <path
+                                            d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
+                                    </svg>
+                                    <span>Report du Jeu 14 janvier 2021</span>
+                                </li>
+                            </ul>
+                        </ul>
+                        <span class="event__hashtag event__hashtag--desktop">#concert</span>
+                    </div>
+                    <div class="event__bottom">
+                        <h3 class="event__title">
+                            <a href="single-event.html" title="Wejdene">Wejdene</a>
+                        </h3>
+                        <div class="event__call-back event__call-back--desktop">
+                            <div class="double-buttons">
+                                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
+                                   title="">Informations</a>
+                                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="event">
+                    <div class="event__call-back event__call-back--mobile">
+                        <div class="double-buttons">
+                            <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
+                               title="">Informations</a>
+                            <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                        </div>
+                    </div>
+                    <div class="event__top">
+                        <ul class="event__top-info">
+                            <li class="event__top-info__item event__top-info__item--when">
+                                <time>02.03.22</time>
+                                <span class="event__hashtag event__hashtag--mobile">#concert</span>
+                            </li>
+                            <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
+                            <li class="event__top-info__item event__top-info__item--availability is-not-available">
+                                <span>Disponible</span>
+                            </li>
+                            <ul class="event__top-info__item event__postpone">
+                                <li class="event__postpone__item">
+                                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
+                                                                               viewBox="0 0 164.24 128.77">
+                                        <path
+                                            d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
+                                    </svg>
+                                    <span>Report du Jeu 14 janvier 2021</span>
+                                </li>
+                                <li class="event__postpone__item">
+                                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
+                                                                               viewBox="0 0 164.24 128.77">
+                                        <path
+                                            d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
+                                    </svg>
+                                    <span>Report du Jeu 14 janvier 2021</span>
+                                </li>
+                            </ul>
+                        </ul>
+                        <span class="event__hashtag event__hashtag--desktop">#concert</span>
+                    </div>
+                    <div class="event__bottom">
+                        <h3 class="event__title">
+                            <a href="single-event.html" title="Wejdene">Wejdene</a>
+                        </h3>
+                        <div class="event__call-back event__call-back--desktop">
+                            <div class="double-buttons">
+                                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
+                                   title="">Informations</a>
+                                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="event">
+                    <div class="event__call-back event__call-back--mobile">
+                        <div class="double-buttons">
+                            <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
+                               title="">Informations</a>
+                            <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                        </div>
+                    </div>
+                    <div class="event__top">
+                        <ul class="event__top-info">
+                            <li class="event__top-info__item event__top-info__item--when">
+                                <time>02.03.22</time>
+                                <span class="event__hashtag event__hashtag--mobile">#concert</span>
+                            </li>
+                            <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
+                            <li class="event__top-info__item event__top-info__item--availability is-not-available">
+                                <span>Disponible</span>
+                            </li>
+                            <ul class="event__top-info__item event__postpone">
+                                <li class="event__postpone__item">
+                                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
+                                                                               viewBox="0 0 164.24 128.77">
+                                        <path
+                                            d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
+                                    </svg>
+                                    <span>Report du Jeu 14 janvier 2021</span>
+                                </li>
+                                <li class="event__postpone__item">
+                                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
+                                                                               viewBox="0 0 164.24 128.77">
+                                        <path
+                                            d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
+                                    </svg>
+                                    <span>Report du Jeu 14 janvier 2021</span>
+                                </li>
+                            </ul>
+                        </ul>
+                        <span class="event__hashtag event__hashtag--desktop">#concert</span>
+                    </div>
+                    <div class="event__bottom">
+                        <h3 class="event__title">
+                            <a href="single-event.html" title="Wejdene">Wejdene</a>
+                        </h3>
+                        <div class="event__call-back event__call-back--desktop">
+                            <div class="double-buttons">
+                                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
+                                   title="">Informations</a>
+                                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="event">
+                    <div class="event__call-back event__call-back--mobile">
+                        <div class="double-buttons">
+                            <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
+                               title="">Informations</a>
+                            <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                        </div>
+                    </div>
+                    <div class="event__top">
+                        <ul class="event__top-info">
+                            <li class="event__top-info__item event__top-info__item--when">
+                                <time>02.03.22</time>
+                                <span class="event__hashtag event__hashtag--mobile">#concert</span>
+                            </li>
+                            <li class="event__top-info__item event__top-info__item--where"><span>Geneva</span></li>
+                            <li class="event__top-info__item event__top-info__item--availability is-not-available">
+                                <span>Disponible</span>
+                            </li>
+                            <ul class="event__top-info__item event__postpone">
+                                <li class="event__postpone__item">
+                                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
+                                                                               viewBox="0 0 164.24 128.77">
+                                        <path
+                                            d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
+                                    </svg>
+                                    <span>Report du Jeu 14 janvier 2021</span>
+                                </li>
+                                <li class="event__postpone__item">
+                                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
+                                                                               viewBox="0 0 164.24 128.77">
+                                        <path
+                                            d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
+                                    </svg>
+                                    <span>Report du Jeu 14 janvier 2021</span>
+                                </li>
+                            </ul>
+                        </ul>
+                        <span class="event__hashtag event__hashtag--desktop">#concert</span>
+                    </div>
+                    <div class="event__bottom">
+                        <h3 class="event__title">
+                            <a href="single-event.html" title="Wejdene">Wejdene</a>
+                        </h3>
+                        <div class="event__call-back event__call-back--desktop">
+                            <div class="double-buttons">
+                                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
+                                   title="">Informations</a>
+                                <a href="#" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </section>
+    <section class="section section--agenda-cta" style="--section-color: #fff; --current-bg-color: #10CF72;">
+        <h3 class="section__title">Émotions, vibrations, révélations</h3>
+        <div class="agenda-cta">
+            <h4>Agenda</h4>
+            <a href="agenda.html" class="see-more" title="Découvrir toute notre programmation">Découvrir toute notre
+                programmation</a>
+        </div>
+    </section>
+</div>
+<footer class="footer">
+    <div class="footer__container">
+        <div class="footer__item">
+            <h3 class="footer-title">Raccourcis</h3>
+            <nav class="nav nav--footer nav--footer--shortcuts">
+                <ul>
+                    <li><a href="agenda.html" title="Agenda">Agenda</a></li>
+                    <li><a href="#" title="Nous">Nous</a></li>
+                    <li><a href="help.html" title="Info pratiques">Infos pratiques</a></li>
+                    <li><a href="contact.html" title="Contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="footer__item">
+            <h3 class="footer-title">Nos reseaux</h3>
+            <nav class="nav nav--footer nav--footer--social">
+                <ul class="socials">
+                    <li class="socials__item socials__item--ig">
+                        <a href="#" title="Instagram">
+                            <h4 class="socials_item__title">Instagram</h4>
+                            <span>IG</span>
+                        </a>
+                    </li>
+                    <li class="socials__item socials__item--fb">
+                        <a href="#" title="Facebook">
+                            <h4 class="socials_item__title">Facebook</h4>
+                            <span>FB</span>
+                        </a>
+                    </li>
+                    <li class="socials__item socials__item--tw">
+                        <a href="#" title="Twitter">
+                            <h4 class="socials_item__title">Twitter</h4>
+                            <span>TT</span>
+                        </a>
+                    </li>
+                    <li class="socials__item socials__item--yt">
+                        <a href="#" title="Youtube">
+                            <h4 class="socials_item__title">Youtube</h4>
+                            <span>YT</span>
+                        </a>
+                    </li>
+                    <li class="socials__item  socials__item--li">
+                        <a href="#" title="LinkedIn">
+                            <h4 class="socials_item__title">LinkedIn</h4>
+                            <span>LI</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="footer__bottom">
+            <div class="logo logo--footer">
+                <img src="https://c.tenor.com/tlceri6zsQMAAAAC/concert.gif" class="logo--footer__img" alt="">
+                <a href="index.html" title="OPUS ONE">
+                    <span class="logo__letter">O</span>
+                    <span class="logo__letter">P</span>
+                    <span class="logo__letter">U</span>
+                    <span class="logo__letter">S</span>
+                    <span class="logo__letter">O</span>
+                    <span class="logo__letter">N</span>
+                    <span class="logo__letter">E</span>
+                </a>
+            </div>
+            <div class="footer__footer">
+                <p class="footer__strapline">Depuis 1993, Opus One réunit une équipe multidisciplinaire, passionnée par la
+                    musique, le spectacle et la production de concerts et d’événements.</p>
+                <p class="footer__copyright">©2022 – Website <a href="https://www.basedesign.com" target="_blank"
+                                                                title="Base Design">Basedesign.com</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+<div class="page-transition">
+    <div class="page-transition__line"></div>
+    <div class="page-transition__line"></div>
+    <div class="page-transition__line"></div>
+    <div class="page-transition__line"></div>
+    <div class="page-transition__line"></div>
+    <div class="page-transition__line"></div>
+    <div class="page-transition__line"></div>
+    <div class="page-transition__line"></div>
+    <div class="page-transition__line"></div>
+    <div class="page-transition__line"></div>
+</div>
+<script src="assets/js/main.min.js"></script>
+
+</body>
+
+<?php
+endwhile;
+get_footer();
