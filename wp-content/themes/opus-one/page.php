@@ -99,7 +99,7 @@
                                                                                         <path d="M0,0V330.15H330.15V0H0ZM1.82,165.08c0-37.53,12.67-72.1,33.97-99.68l228.97,228.97c-27.58,21.29-62.14,33.97-99.68,33.97C74.91,328.33,1.82,255.24,1.82,165.08Zm292.55,99.68L65.4,35.79C92.97,14.5,127.54,1.82,165.08,1.82c90.16,0,163.26,73.09,163.26,163.26,0,37.53-12.67,72.1-33.97,99.68Z" />
                                                                                     </svg>
                                                                                     <div class="slide--dont__picto">
-                                                                                    <img src="<?php echo esc_url($icone['url']); ?>" alt="<?php echo esc_attr($icone['alt']); ?>" />
+                                                                                        <img src="<?php echo esc_url($icone['url']); ?>" alt="<?php echo esc_attr($icone['alt']); ?>" />
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="slide--dont__text"><?php echo $texte; ?></div>
@@ -121,48 +121,82 @@
                                                         <?php endif; ?>
                                                     </div>
 
-                                                <?php elseif (get_row_layout() == 'personne_de_contact') : 
-                                                    $contacts = get_sub_field('membre_de_lequipe');    
+                                                <?php elseif (get_row_layout() == 'slider_evenement') : ?>
+
+                                                    <div class="block block--slider">
+                                                        <?php if (have_rows('slide')) : ?>
+                                                            <div class="slider">
+                                                                <?php while (have_rows('slide')) : the_row();
+                                                                    $nomEvenement = get_sub_field('nom_de_levenement');
+                                                                    $image = get_sub_field('image');
+                                                                    $date = get_sub_field('date');
+                                                                    $lien = get_sub_field('lien');
+                                                                ?>
+
+                                                                    <div class="slide slide--event">
+                                                                        <div class="slide__in">
+                                                                            <div class="slide--event__img">
+                                                                                <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['alt']); ?>" />
+                                                                            </div>
+                                                                            <div class="slide--event__bottom">
+                                                                                <?php if($date): ?>
+                                                                                <span class="slide__date">2009 et 2013</span>
+                                                                                <?php endif; ?>
+                                                                                <div class="slide__titre"><?php echo $nomEvenement; ?></div>
+                                                                                <?php if( $lien ): ?>
+                                                                                    <a class="slide__cta" href="<?php echo esc_url( $link ); ?>">En savoir plus</a>
+                                                                                <?php endif; ?>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                <?php endwhile; ?>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                    </div>
+
+                                                <?php elseif (get_row_layout() == 'personne_de_contact') :
+                                                    $contacts = get_sub_field('membre_de_lequipe');
                                                 ?>
                                                     <div class="block block--contact-list">
-                                                    <?php if( $contacts ): ?>
-                                                    <ul class="contact-list">
-                                                    <?php foreach( $contacts as $contact ): 
-                                                        //$permalink = get_permalink( $featured_post->ID );
-                                                        $nom = get_the_title( $contact->ID );
-                                                        $photo = get_field('photo', $contact->ID);
-                                                        $role = get_field( 'role', $contact->ID );
-                                                        $mail = get_field('adresse_e_mail', $contact->ID );
-                                                        $telephone = get_field( 'telephone', $contact->ID );
-                                                    ?>
-                                                        <li class="contact-person">
-                                                            <a href="mailto:<?php echo $mail; ?>" title="Envoyer un mail a <?php echo $nom ?>"><span>Envoyer un mail a <?php echo $nom ?></span></a>
-                                                            <div class="contact-person__side contact-person__side--img">
-                                                                <?php if($photo): ?>
-                                                                <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['alt']); ?>" />
-                                                                <div class="img" style="background-image: url(<?php echo esc_url($image['url']); ?>)"></div>
-                                                                <?php endif; ?>
-                                                            </div>
-                                                            <div class="contact-person__side contact-person__side--text">
-                                                                <div>
-                                                                    <h4 class="contact-person__person"><?php echo $nom; ?></h4>
-                                                                    <span class="contact-person__role"><?php echo $role; ?></span>
-                                                                    <?php if($telephone): ?>
-                                                                        <span class="contact-person__cta"><?php echo $telephone; ?></span>
-                                                                    <?php endif; ?>
-                                                                    <span class="contact-person__cta">Envoyer un mail</span>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    <?php endforeach; ?>
-                                                    </ul>
-                                                    <?php endif; ?>
-                                                </div>
+                                                        <?php if ($contacts) : ?>
+                                                            <ul class="contact-list">
+                                                                <?php foreach ($contacts as $contact) :
+                                                                    //$permalink = get_permalink( $featured_post->ID );
+                                                                    $nom = get_the_title($contact->ID);
+                                                                    $photo = get_field('photo', $contact->ID);
+                                                                    $role = get_field('role', $contact->ID);
+                                                                    $mail = get_field('adresse_e_mail', $contact->ID);
+                                                                    $telephone = get_field('telephone', $contact->ID);
+                                                                ?>
+                                                                    <li class="contact-person">
+                                                                        <a href="mailto:<?php echo $mail; ?>" title="Envoyer un mail a <?php echo $nom ?>"><span>Envoyer un mail a <?php echo $nom ?></span></a>
+                                                                        <div class="contact-person__side contact-person__side--img">
+                                                                            <?php if ($photo) : ?>
+                                                                                <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['alt']); ?>" />
+                                                                                <div class="img" style="background-image: url(<?php echo esc_url($image['url']); ?>)"></div>
+                                                                            <?php endif; ?>
+                                                                        </div>
+                                                                        <div class="contact-person__side contact-person__side--text">
+                                                                            <div>
+                                                                                <h4 class="contact-person__person"><?php echo $nom; ?></h4>
+                                                                                <span class="contact-person__role"><?php echo $role; ?></span>
+                                                                                <?php if ($telephone) : ?>
+                                                                                    <span class="contact-person__cta"><?php echo $telephone; ?></span>
+                                                                                <?php endif; ?>
+                                                                                <span class="contact-person__cta">Envoyer un mail</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                <?php endforeach; ?>
+                                                            </ul>
+                                                        <?php endif; ?>
+                                                    </div>
                                                 <?php endif; ?>
                                             <?php endwhile; ?>
                                         <?php endif; ?>
 
-                                        
+
 
                                     </div>
                                 </div>
