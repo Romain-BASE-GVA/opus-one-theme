@@ -1,7 +1,15 @@
 .manifesto-item {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
+
+    &:first-child {
+        margin-top: $gutter*3;
+    }
+
+    &:last-child {
+        margin-bottom: $gutter*3;
+    }
 
     @media screen and (min-width: $lg + 1) {
         height: unset;
@@ -17,22 +25,41 @@
     width: 100%;
     flex: auto;
     @include fs-3xl;
+    padding: 1em 0 .75em 0;
     text-align: center;
     text-transform: uppercase;
     line-height: .75;
     font-variation-settings: "wght" var(--wght), "wdth" var(--wdth), "ital" 0;
 
-    br {
-        display: block;
+    h2 {    
+        display: none;
+    }
 
-        @media screen and (min-width: $lg + 1) {
+    .manifesto-title-mobile {
+        display: block;
+    }
+
+    // br {
+    //     display: block;
+
+    //     @media screen and (min-width: $lg + 1) {
+    //         display: none;
+    //     }
+    // }
+    
+    @media screen and (min-width: $lg + 1) {
+        height: 90vh;
+
+        h2 {
+            display: block;
+        }
+        
+        .manifesto-title-mobile {
             display: none;
         }
     }
 
-    @media screen and (min-width: $lg + 1) {
-        height: 90vh;
-    }
+
 }
 
 .manifesto-item__content {}

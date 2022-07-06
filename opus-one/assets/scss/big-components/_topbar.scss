@@ -10,9 +10,9 @@
     background-color: var(--current-bg-color);
     z-index: 100;
 
-    .nav-is-open & {
-        background-color: transparent;
-    }
+    // .nav-is-open & {
+    //     background-color: transparent;
+    // }
 
     @media screen and (min-width: $lg + 1){
         padding: $gutter*2;

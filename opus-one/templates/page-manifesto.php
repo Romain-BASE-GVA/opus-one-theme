@@ -13,6 +13,7 @@
       <div class="manifesto-item" id="manifesto-0<?php echo get_row_index(); ?>" data-index="0<?php echo get_row_index(); ?>">
         <div class="manifesto-item__header">
           <h2 data-split="<?php echo $typeAnimation; ?>" data-anim="<?php echo $nomAnimation; ?>"><?php echo $titre; ?></h2>
+          <span class="manifesto-title-mobile"><?php echo $titre; ?></span>
         </div>
         <div class="manifesto-item__content">
           <div class="manifesto-item__title">

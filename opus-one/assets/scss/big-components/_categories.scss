@@ -5,8 +5,9 @@
 
 .category {
     position: relative;
-    height: 100vh;
-    padding: 126px 0 $gutter*2 0;
+    //height: 100vh;
+    min-height: min-content;
+    padding: $gutter*2 0 $gutter 0;
     overflow: hidden;
     z-index: 10;
 
@@ -28,6 +29,7 @@
 
     @media screen and (min-width: $lg + 1){
         height: unset;
+        padding: 126px 0 $gutter*2 0;
     }
 }
 
@@ -61,6 +63,7 @@
     flex: 1 1 100%;
     align-items: center;
     justify-content: center;
+    padding: $gutter;
     // width: 100%;
     //height: 85vh;
     // overflow: hidden;
@@ -74,6 +77,26 @@
     // span {
         
     // }
+}
+
+.category__word--desktop {
+
+    @media screen and (max-width: $sm){
+        display: none;
+    }
+}
+
+.category__word--mobile {
+    --wght: 500;
+    --wdth: 0;
+    text-align: center;
+    line-height: .75em;
+    padding: .25em $gutter*2;
+    font-variation-settings: "wght" var(--wght),"wdth" var(--wdth),"ital" 0;
+
+    @media screen and (min-width: $sm + 1){
+        display: none;
+    }
 }
 
 .category__letter {
@@ -93,6 +116,7 @@
     color: var(--current-txt-color, $white);
     border: 2px solid var(--current-txt-color, $white);
     border-radius: 100px;
+    text-align: center;
     text-decoration: none;
     @include fs-md;
     transition: background-color .3s ease-in-out, color .3s ease-in-out;

@@ -306,15 +306,8 @@
     flex-direction: row;
     align-items: center;
 
-    &:after {
-        content: "";
-        display: block;
-        width: 30px;
-        min-width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border: 2px solid $white;
-        margin-left: $gutter;
+    .link-arrow {
+        flex-shrink: 0;
 
         @media screen and (min-width: $lg + 1) {
             display: none;

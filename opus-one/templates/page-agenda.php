@@ -61,7 +61,7 @@
                     id="janvier-2022" - mois et annee - lowercase, utiliser pour les ancres
     -->
         <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Jan<br>vier</span><!--MOBILE-->
+          <span class="event-month__word event-month__word--mobile">Jan&shy;vier</span><!--MOBILE-->
           <span class="event-month__word event-month__word--desktop"><!-- DESKTOP -->
             <span class="event-month__letter">J</span>
             <span class="event-month__letter">a</span>
@@ -819,7 +819,7 @@
       <div class="event-month" data-month-name="Juillet" id="juillet-2022">
 
         <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Juil<br>let</span>
+          <span class="event-month__word event-month__word--mobile">Juil&shy;let</span>
           <span class="event-month__word event-month__word--desktop">
             <span class="event-month__letter">J</span>
             <span class="event-month__letter">u</span>
@@ -1149,7 +1149,7 @@
       <div class="event-month" data-month-name="Septembre" id="septembre-2022">
 
         <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Sept<br>embre</span>
+          <span class="event-month__word event-month__word--mobile">Sept&shy;embre</span>
           <span class="event-month__word event-month__word--desktop">
             <span class="event-month__letter">S</span>
             <span class="event-month__letter">e</span>
@@ -1306,7 +1306,7 @@
       <div class="event-month" data-month-name="Octobre" id="octobre-2022">
 
         <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Oct<br>obre</span>
+          <span class="event-month__word event-month__word--mobile">Oct&shy;obre</span>
           <span class="event-month__word event-month__word--desktop">
             <span class="event-month__letter">O</span>
             <span class="event-month__letter">c</span>
@@ -1409,7 +1409,7 @@
       <div class="event-month" data-month-name="Décembre" id="decembre-2022">
 
         <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Décem<br>bre</span>
+          <span class="event-month__word event-month__word--mobile">Décem&shy;bre</span>
           <span class="event-month__word event-month__word--desktop">
             <span class="event-month__letter">D</span>
             <span class="event-month__letter">é</span>
@@ -1513,7 +1513,7 @@
       <div class="event-month" data-month-name="Janvier" id="janvier-2023">
 
         <h3 class="event-month__title">
-          <span class="event-month__word event-month__word--mobile">Janv<br>ier</span>
+          <span class="event-month__word event-month__word--mobile">Janv&shy;ier</span>
           <span class="event-month__word event-month__word--desktop">
             <span class="event-month__letter">J</span>
             <span class="event-month__letter">a</span>

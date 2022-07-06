@@ -52,7 +52,7 @@
     --wdth: 0;
     text-align: center;
     line-height: .75em;
-    padding: .25em 0;
+    padding: .25em $gutter*2;
     font-variation-settings: "wght" var(--wght),"wdth" var(--wdth),"ital" 0;
 
     @media screen and (min-width: $sm + 1){
