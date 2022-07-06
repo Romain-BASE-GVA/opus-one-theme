@@ -1,11 +1,12 @@
 .screen-404 {
     position: relative;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: calc(100% + 80px);
+    width: 100%;
     height: 100vh;
-    margin-left: -40px;
+    //margin-left: -40px;
     // background-image: url(../img/bg-404.svg);
     // background-size: 100% 100%;
     // background-repeat: no-repeat;
@@ -26,6 +27,31 @@
     color: $white;
     padding: .5em;
     @include fs-xl;
+    margin-bottom: $gutter;
+}
+
+.screen-404__cta {
+  display: flex;
+  flex-direction: column;
+  padding: 0 $gutter;
+
+  > a {
+    &:first-child {
+      margin-right: 0;
+      margin-bottom: $gutter;
+    }
+  }
+
+  @media screen and (min-width: $md + 1){
+    flex-direction: row;
+
+    > a {
+      &:first-child {
+        margin-right: $gutter;
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 .flickering {

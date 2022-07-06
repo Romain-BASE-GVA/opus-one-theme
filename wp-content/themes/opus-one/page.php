@@ -72,7 +72,7 @@
                                                                             <button class="dropdown__trigger"><?php echo $titre; ?><span class="dropdown__plus"></span></button>
                                                                         </div>
                                                                         <div class="dropdown__content">
-                                                                            <div><?php echo $contenu; ?></div>
+                                                                            <?php echo $contenu; ?>
                                                                         </div>
                                                                     </li>
                                                                 <?php endwhile; ?>
@@ -139,12 +139,12 @@
                                                                                 <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['alt']); ?>" />
                                                                             </div>
                                                                             <div class="slide--event__bottom">
-                                                                                <?php if($date): ?>
-                                                                                <span class="slide__date"><?php echo $date; ?></span>
+                                                                                <?php if ($date) : ?>
+                                                                                    <span class="slide__date"><?php echo $date; ?></span>
                                                                                 <?php endif; ?>
                                                                                 <div class="slide__titre"><?php echo $nomEvenement; ?></div>
-                                                                                <?php if( $lien ): ?>
-                                                                                    <a class="slide__cta" href="<?php echo esc_url( $link ); ?>">En savoir plus</a>
+                                                                                <?php if ($lien) : ?>
+                                                                                    <a class="slide__cta" href="<?php echo esc_url($link); ?>">En savoir plus</a>
                                                                                 <?php endif; ?>
                                                                             </div>
                                                                         </div>
@@ -182,7 +182,9 @@
                                                                                 <h4 class="contact-person__person"><?php echo $nom; ?></h4>
                                                                                 <span class="contact-person__role"><?php echo $role; ?></span>
                                                                                 <?php if ($telephone) : ?>
+                                                                                    <!--
                                                                                     <span class="contact-person__cta"><?php echo $telephone; ?></span>
+                                                                                -->
                                                                                 <?php endif; ?>
                                                                                 <span class="contact-person__cta">Envoyer un mail</span>
                                                                             </div>
@@ -192,6 +194,20 @@
                                                             </ul>
                                                         <?php endif; ?>
                                                     </div>
+                                                <?php elseif (get_row_layout() == 'liste_de_lieux') : ?>
+                                                    <div class="block block--list">
+                                                        <?php if (have_rows('lieux')) : ?>
+                                                            <ul class="list">
+                                                                <?php while (have_rows('lieux')) : the_row();
+                                                                    $nom = get_sub_field('nom');
+                                                                    $url = get_sub_field('lien_google_map');
+                                                                ?>
+                                                                    <li class="list__item list__item--area"><a href="<?php echo $url; ?>" class="list__link" target="_blank"><span><?php echo $nom; ?></span></a></li>
+                                                                <?php endwhile; ?>
+                                                            </ul>
+                                                        <?php endif; ?>
+                                                    </div>
+
                                                 <?php endif; ?>
                                             <?php endwhile; ?>
                                         <?php endif; ?>

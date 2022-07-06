@@ -14,10 +14,20 @@
 .section--highlights {
     color: var(--section-color);
     background: var(--current-bg-color);
+
+    padding: $gutter*3 $gutter $gutter*3;
+
+    @media screen and (min-width: $lg + 1){
+        padding: $gutter*5 $gutter*2 $gutter*5;
+    }
 }
 
 .section--agenda-cta {
-    padding: $gutter*5 $gutter*2 $gutter*5;
+    padding: $gutter*3 $gutter $gutter*3;
+
+    @media screen and (min-width: $lg + 1){
+        padding: $gutter*5 $gutter*2 $gutter*5;
+    }
 }
 
 .section--two-sides {
@@ -28,4 +38,9 @@
 .section__title {
     @include fs-xl;
     margin-bottom: $gutter*5;
+    text-align: center;
+
+    @media screen and (min-width: $lg + 1){
+        text-align: unset;
+    }
 }

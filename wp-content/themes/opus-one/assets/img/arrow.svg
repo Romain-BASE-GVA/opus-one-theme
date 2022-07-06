@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="16px" viewBox="0 0 18 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Arrow Copy</title>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="BTN-Arrow" transform="translate(-11.000000, -12.000000)" fill="#FFFFFF">
+            <g id="Group" transform="translate(11.000000, 12.000000)">
+                <polygon id="Fill-1" points="9.6 0 9.6 7.99990762 9.6 16 13.6 11.9999538 17.6 7.99990762 13.6 3.99986144"></polygon>
+                <rect id="Rectangle" x="0" y="6.4" width="11.2" height="3.2"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

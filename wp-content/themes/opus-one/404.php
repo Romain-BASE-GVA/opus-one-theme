@@ -1,6 +1,6 @@
 <?php get_header(); ?>
   <div data-barba="container" data-barba-namespace="404" data-bg="#000" data-text-color="#fff" data-logo-title="404 ERROR">
-    <main class="main">
+    <main class="main main--no-padding">
       <div class="screen-404">
         <svg class="screen-404__svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
           xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1366 768">
@@ -139,6 +139,11 @@
 
         </svg>
         <h1 class="screen-404__messsage">404 error</h1>
+        <div class="screen-404__cta">
+          <a href="<?php echo get_home_url(); ?>" class="btn" title="Retour à la page d'acceuil">Retour à la page d'acceuil</a>
+          <?php $pageAgenda = get_field('page_agenda', 'option'); ?></p>
+          <a href="<?php echo esc_url( $pageAgenda['url'] ); ?>" class="btn" title="Retour à l'agenda'">Retour à l'agenda</a>
+        </div>
       </div>
     </main>
   </div>

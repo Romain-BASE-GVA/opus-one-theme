@@ -8,4 +8,12 @@
     &--top-padding {
         padding-top: 25vh;
     }
+
+    &--no-padding {
+        padding: 0;
+    }
+}
+
+.main--agenda {
+    padding-bottom: $gutter*3;
 }

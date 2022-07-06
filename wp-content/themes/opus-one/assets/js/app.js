@@ -116,7 +116,8 @@ $(document).ready(function () {
 
                 $('.topbar__page-name span').html(nextPageTitle);
 
-                currentPageType = next.namespace;
+                // currentPageType = next.namespace;
+                $('body').addClass(next.namespace);
 
             },
             leave({ current, next, trigger }) {
@@ -164,8 +165,9 @@ $(document).ready(function () {
 
                 $('.topbar__page-name span').html(nextPageTitle);
 
-                currentPageType = next.namespace;
-                console.log(currentPageType);
+                // currentPageType = next.namespace;
+                // console.log(currentPageType);
+                $('body').addClass(next.namespace);
 
                 preventSamePageReload();
 
@@ -482,7 +484,10 @@ $(document).ready(function () {
         $('.topbar--page-nav, .mobile-page-nav').on('click', '.page-nav__link', function (e) {
             e.preventDefault();
 
-            var offset = currentPageType == 'page-special' ? $('.topbar').outerHeight() : 0;
+            var isSpecialPage  = $('body').hasClass('page-special');
+
+            var offset = isSpecialPage ? $('.topbar').outerHeight() + 40 : 0;
+            // var offset = $('.topbar').outerHeight() + 42;
             gsap.to(window, { duration: 1, scrollTo: { y: $(this).attr('href'), offsetY: offset }, ease: Power4.easeInOut });
         });
 
@@ -528,7 +533,7 @@ $(document).ready(function () {
             var $this = $(this);
             var word = $this.find('.event-month__word--desktop');
             var letters = $this.find('.event-month__letter');
-            var mobileWord = $this.find('.event-month__word--mobile');
+            //var mobileWord = $this.find('.event-month__word--mobile');
 
             gsap.from(letters, {
                 scrollTrigger: {
@@ -548,18 +553,18 @@ $(document).ready(function () {
                 ease: Elastic.easeOut.config(1, .5)
             });
 
-            gsap.from(mobileWord, {
-                scrollTrigger: {
-                    trigger: mobileWord,
-                    start: 'top 75%',
-                },
-                autoAlpha: 0,
-                '--wght': 0,
-                '--wdth': 50,
-                yPercent: '20',
-                duration: 1.75,
-                ease: Elastic.easeOut.config(1, .5)
-            });
+            // gsap.from(mobileWord, {
+            //     scrollTrigger: {
+            //         trigger: mobileWord,
+            //         start: 'top 75%',
+            //     },
+            //     autoAlpha: 0,
+            //     '--wght': 0,
+            //     '--wdth': 50,
+            //     yPercent: '20',
+            //     duration: 1.75,
+            //     ease: Elastic.easeOut.config(1, .5)
+            // });
 
         });
 
@@ -588,6 +593,7 @@ $(document).ready(function () {
             var $this = $(this);
             var thisbg = $this.find('.category__bg');
             var thisTitleLetters = $this.find('.category__letter');
+            //var mobileWord = $this.find('.category__word--mobile');
             var thisMarquee = $this.find('.shortly__marquee');
             var thisSeeMore = $this.find('.see-more');
             var thisShortly = $this.find('.shortly__title');
@@ -618,6 +624,19 @@ $(document).ready(function () {
                 duration: 1.75,
                 ease: Elastic.easeOut.config(1, .5)
             });
+
+            // gsap.from(mobileWord, {
+            //     scrollTrigger: {
+            //         trigger: mobileWord,
+            //         start: 'top 75%',
+            //     },
+            //     autoAlpha: 0,
+            //     '--wght': 0,
+            //     '--wdth': 50,
+            //     yPercent: '20',
+            //     duration: 1.75,
+            //     ease: Elastic.easeOut.config(1, .5)
+            // });
 
             gsap.from(thisSeeMore, {
                 scrollTrigger: {
@@ -977,7 +996,6 @@ $(document).ready(function () {
         };
         //Draggable.create('.page-nav', {type: 'x', edgeResistance: 0.65, bounds: $('.page-nav').parent()});
 
-        //// DRAGGABLE PAGE NAV
 
 
     };
@@ -1004,6 +1022,10 @@ $(document).ready(function () {
             if (e.currentTarget.href === window.location.href) {
                 e.preventDefault();
                 e.stopPropagation();
+
+                if(!navIsClosed){
+                    closeNavTl.play();
+                }
             }
         };
 

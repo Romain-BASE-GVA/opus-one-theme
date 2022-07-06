@@ -17,7 +17,7 @@
                             $couleur = get_sub_field('couleur');
                             $lettres = get_sub_field('lettres');
                         ?>
-                            <li class="socials__item socials__item--ig" style="--color: ">
+                            <li class="socials__item socials__item--ig" style="--color: <?php echo $couleur;?>">
                                 <a href="<?php echo $lien; ?>" target="_blank" title="<?php echo $nom ?>">
                                     <h4 class="socials_item__title"><?php echo $nom ?></h4>
                                     <span><?php echo $lettres; ?></span>
