@@ -1,5 +1,6 @@
 .block--list,
-.block--contact-list {
+.block--contact-list,
+.block--equipe {
     .two-side__content & {
         grid-column: 1 / span 6;
     }
@@ -130,4 +131,73 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+}
+
+.team-list {
+    container-type: inline-size;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+
+}
+
+.member {
+    flex: 0 0 100%;
+    margin-bottom: $gutter*2;
+
+    a {
+        text-decoration: none;
+    }
+
+    @container (min-width: 350px){
+        flex: 0 0 calc((100% / 2) - #{$gutter / 2});
+    }
+
+    @container (min-width: 700px){
+        flex: 0 0 calc((100% / 3) - #{$gutter / 3 * 2});
+    }
+}
+
+.member__img {
+    position: relative;
+    width: 100%;
+    aspect-ratio: .75;
+    border-radius: $gutter;
+    overflow: hidden;
+    margin-bottom: $gutter/2;
+
+    img {
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        @include transition;
+
+        a:hover & {
+            transform: translate3d(0,0,0) scale(1.05);
+        }
+    }
+}
+
+.member__info {
+    display: flex;
+    flex-direction: column;
+}
+
+.member__role {
+    @include fs-md;
+}
+
+.member__name {
+    @include fs-lg;
+    margin: .25em 0;
+}
+
+.member__tag {
+    @include fs-sm;
 }

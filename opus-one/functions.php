@@ -9,4 +9,5 @@
     require_once('functions/base/init.php');
     require_once('functions/base/menu.php');
     require_once('functions/base/custom-post-type.php');
+    require_once('functions/base/shortcodes.php');
 ?>
