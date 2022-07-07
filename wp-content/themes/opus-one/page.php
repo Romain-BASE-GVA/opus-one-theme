@@ -207,6 +207,51 @@
                                                             </ul>
                                                         <?php endif; ?>
                                                     </div>
+                                                <?php elseif (get_row_layout() == 'equipe') : ?>
+                                                    <div class="block block--equipe">
+                                                        <?php
+                                                        $team = new WP_Query(
+                                                            array(
+                                                                'post_type' => 'equipe',
+                                                                'posts_per_page' => -1
+                                                            )
+                                                        );
+                                                        ?>
+                                                        <?php if ($team->have_posts()) : ?>
+                                                            <div>
+                                                                <ul class="team-list">
+                                                                    <?php while ($team->have_posts()) : $team->the_post();
+                                                                        $memberImg = get_field('photo');
+                                                                        $memberRole = get_field('role');
+                                                                        $memberTag = get_field('equipe');
+                                                                        $memberEmail = get_field('adresse_e_mail');
+                                                                    ?>
+                                                                        <li class="member">
+                                                                            <?php if ($memberEmail) : ?>
+                                                                                <a href="mailto:<?php echo $mail; ?>" title="Envoyer un mail a <?php the_title(); ?>">
+                                                                                <?php endif; ?>
+                                                                                <div class="member__img">
+                                                                                    <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['alt']); ?>" />
+                                                                                </div>
+                                                                                <div class="member__info">
+                                                                                    <?php if ($memberRole) : ?>
+                                                                                        <span class="member__role"><?php echo $memberRole; ?></span>
+                                                                                    <?php endif; ?>
+                                                                                    <span class="member__name"><?php the_title(); ?></span>
+                                                                                    <?php if ($memberTag) : ?>
+                                                                                        <span class="member__tag">#<?php echo $memberTag; ?></span>
+                                                                                    <?php endif; ?>
+                                                                                </div>
+                                                                                <?php if ($memberEmail) : ?>
+                                                                                </a>
+                                                                            <?php endif; ?>
+                                                                        </li>
+                                                                    <?php endwhile; ?>
+                                                                </ul>
+                                                            </div>
+                                                        <?php endif;
+                                                        wp_reset_postdata(); ?>
+                                                    </div>
 
                                                 <?php endif; ?>
                                             <?php endwhile; ?>
