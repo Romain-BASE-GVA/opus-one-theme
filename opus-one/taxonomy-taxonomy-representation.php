@@ -1,21 +1,21 @@
-<?php /* Template Name: Agenda */ ?>
-<?php get_header(); ?>
-<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+<?php get_header();
+$term = get_queried_object();
+$the_term = $term;
+?>
     <div data-barba="container" data-barba-namespace="agenda" data-bg="#6E32FF" data-text-color="#fff"
          data-logo-title="Agenda">
-
-        <main class="main main--agenda page-template-page-agenda">
+        <main class="main main--agenda">
             <div class="filter-bar">
                 <div class="filter-events">
                     <button class="event-cat-trigger">
                         <span class="event-cat-trigger__label"><?= __('Catégories', 'opus-one') ?></span>
-                        <span class="event-cat-trigger__current-cat"><?= __('Tout', 'opus-one') ?></span>
+                        <span class="event-cat-trigger__current-cat"><?= $the_term->name ?></span>
                     </button>
                     <div class="event-cat-list">
-
-                        <!-- la liste des autres taxo, la taxo actuelle a la class="is-active" -->
                         <ul>
-
+                            <?php $agenda_link = get_field('agenda_link', 'option'); ?>
+                            <li><a href="<?= $agenda_link['url'] ?>"
+                                   title="<?= __('Tout', 'opus-one') ?>"><?= __('Tout', 'opus-one') ?></a></li>
                             <?php
                             $tmp_post = $post;
                             $taxonomies = array('taxonomy-representation');
@@ -29,7 +29,9 @@
                                 $next_shows = get_show_from_category($term->term_id);
                                 if (count($next_shows) != 0) { ?>
                                     <li><a href="<?= get_term_link($term, "taxonomy-representation"); ?>"
-                                           title="<?= $term->name; ?>"><?= $term->name; ?></a></li><?php
+                                           title="<?= $term->name; ?>" <?php if ($term == $the_term) {
+                                        echo 'class="is-active"';
+                                    } ?>><?= $term->name; ?></a></li><?php
                                 }
                             }
                             ?>
@@ -65,11 +67,12 @@
             </div>
 
             <?php
+            $next_shows = get_show_from_category($the_term->term_id);
+            $today = date("Y-m-01");
             $first_show = get_first_show();
             $date_first_show = $first_show['meta_value'];
             $year_to_show = substr($date_first_show, 0, 4);
             $month_to_show = substr($date_first_show, 4, 2);
-            $next_shows = get_next_show_two_months($year_to_show, $month_to_show);
             $date_show = $year_to_show . $month_to_show;
             $now = date_i18n('Y-m-d H:i');
             $array_show_multidate = array();
@@ -81,8 +84,8 @@
                  data-next-month="<?php echo substr($next, 4, 2); ?>"
                  data-last-date="<?php echo substr($last_show, 0, 6); ?>"></div>
 
-            <ul class="event-month" data-month-name="<?php echo ucfirst($month); ?>"
-                id="<?= $month ?>-<?= $year_to_show ?>">
+            <div class="event-month" data-month-name="<?php echo ucfirst($month); ?>"
+                 id="<?= $month ?>-<?= $year_to_show ?>">
                 <h3 class="event-month__title">
                     <!-- @TODO : JS pour adpater le responsive (?) -->
                     <span class="event-month__word event-month__word--mobile">Jan<br>vier</span><!--MOBILE-->
@@ -96,45 +99,17 @@
                         }
                         ?>
                     </span>
-                </h3>
-                <ul class="event-list">
+                </h3><?php
 
-                    <?php
+                foreach ($next_shows
 
+                as $show){
+                $the_id = $show['ID'];
+                $date = $show['meta_value'];
+                $next_date = substr($date, 0, 6);
+                $post = get_post($show['ID']); ?>
 
-                    foreach ($next_shows
-
-                    as $show){
-                    $the_id = $show['ID'];
-                    $date = $show['meta_value'];
-                    $next_date = substr($date, 0, 6);
-                    $post = get_post($show['ID']);
-                    $month = date_i18n("F", strtotime($next_date . "01"));
-                    if ($date_show != $next_date){
-                    $month_focus_id = get_month_focus_id($next_date);
-                    $banner = get_field('banner', $month_focus_id);
-                    $image_bg_url = $banner['sizes']['banner-992']; ?>
-                </ul><!-- event-list -->
-            </ul><!-- one-month -->
-            <ul class="event-month" data-month-name="<?php echo ucfirst($month); ?>"
-                id="<?= $month ?>-<?= $year_to_show ?>">
-                <h3 class="event-month__title">
-                    <!-- @TODO : JS pour adpater le responsive (?) -->
-                    <span class="event-month__word event-month__word--mobile">Jan<br>vier</span><!--MOBILE-->
-                    <!-- @TODO : END -->
-                    <span class="event-month__word event-month__word--desktop"><!-- DESKTOP -->
-                                <?php
-                                $monthLetters = str_split(ucfirst(stripAccents($month)));
-
-                                foreach ($monthLetters as $monthLetter) {
-                                    echo '<span class="event-month__letter">' . $monthLetter . '</span>';
-                                }
-                                ?>
-                            </span>
-                </h3>
-                <ul class="event-list"><?php
-                    $date_show = $next_date;
-                    }
+                <ul class="event-list"> <?php
 
                     if ($post) {
 
@@ -177,7 +152,7 @@
                             <li class="event">
                                 <div class="event__call-back event__call-back--mobile">
                                     <div class="double-buttons">
-                                        <a href="single-event.html"
+                                        <a href="<?= $url ?>"
                                            class="double-bouttons__btn double-bouttons__btn--info"
                                            title=""><?= __('Informations') ?></a>
                                         <?php if (!empty($ticket_url)) { ?>
@@ -449,8 +424,8 @@
                         }
                     }
                     } ?>
-        </div>
-    </main>
-</div>
-<?php endwhile; endif; ?>
+
+            </div>
+        </main>
+    </div>
 <?php get_footer(); ?>
