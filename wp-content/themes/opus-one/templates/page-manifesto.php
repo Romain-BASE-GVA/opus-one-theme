@@ -7,7 +7,7 @@
     <?php while (have_rows('manifesto')) : the_row();
       $titre = get_sub_field('titre');
       $contenu = get_sub_field('contenu');
-      $typeAnimation = get_sub_field('type_danimation') == 'lettre' ? 'chars' : 'words';
+      $typeAnimation = get_sub_field('type_danimation');
       $nomAnimation = get_sub_field('nom_de_lanimation');
     ?>
       <div class="manifesto-item" id="manifesto-0<?php echo get_row_index(); ?>" data-index="0<?php echo get_row_index(); ?>">
