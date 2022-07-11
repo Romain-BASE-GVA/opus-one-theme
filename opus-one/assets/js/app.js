@@ -980,6 +980,12 @@ $(document).ready(function () {
 
                 const text = new SplitType($(this), { types: splitType });
             });
+
+            // var manifestoAnim1 = gsap.timeline({repeat: -1, paused: true});
+
+            // manifestoAnim1  .to('.manifesto-item h2>div', {yPercent: -50, duration: .2, stagger: .025})
+            //                 .to('.manifesto-item h2>div', {yPercent: 0, duration: .2, stagger: .025, delay: -1.75});
+            // manifestoAnim1.play();
         }
 
 
