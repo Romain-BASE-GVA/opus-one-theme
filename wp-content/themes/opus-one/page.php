@@ -279,8 +279,8 @@
 
                         ?>
                             <li class="see-more-item">
-                                <a class="our-sevices-link" href="<?php echo esc_url($lienUrl); ?>" target="<?php echo esc_attr($lienTarget); ?>">
-                                    <?php echo esc_html($linkTitle); ?>
+                                <a class="our-sevices-link" href="<?php echo esc_url($lienUrl); ?>" title="<?php echo esc_html($lienTitle); ?>" target="<?php echo esc_attr($lienTarget); ?>">
+                                    <?php echo esc_html($lienTitle); ?>
                                     <span class="link-arrow">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 199.81 181.64">
                                             <polygon points="154.4 45.41 108.98 0 108.98 72.66 0 72.66 0 108.98 108.98 108.98 108.98 181.64 154.4 136.23 199.81 90.82 154.4 45.41" />
