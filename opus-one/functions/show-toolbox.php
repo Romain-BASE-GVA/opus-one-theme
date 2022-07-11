@@ -263,41 +263,6 @@ function get_avaibility_txt($avaibility, $report, $id, $representation_info, $ev
 }
 
 
-function get_representation_by_terms($post)
-{
-    //wp_die(var_dump(get_post_meta($post->ID)));
-    $terms = get_the_terms($post, 'taxonomy-representation');
-
-    $args = [
-        'numberpost' => 5,
-        'post_type' => 'representation',
-        'orderby' => '__date_de_la_representation',
-        'order' => 'ASC',
-
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'taxonomy-representation',
-                'field' => 'term_id',
-                'terms' => $terms[0],
-            )
-        ),
-    ];
-    $posts = get_posts($args);
-
-    foreach ($posts as $post)
-    {
-        $dates = get_field('date_unique_ou_separee');
-
-        foreach ($dates as $date)
-        {
-
-        }
-        wp_die(var_dump($dates));
-    }
-
-    return $posts;
-}
-
 function stripAccents($str) {
     return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
 }
