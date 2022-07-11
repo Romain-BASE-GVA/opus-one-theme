@@ -1,14 +1,14 @@
-.block--our-services {
+.block--see-more {
     padding: $gutter*4 $gutter;
-    background-color: $white;
-    color: $purple;
+    background-color: var(--current-bg-color, $white);
+    color: var(--current-txt-color, $purple);
 
     @media screen and (min-width: $lg + 1){
         padding: $space-3xl $gutter*2;
     }
 }
 
-.block--our-services__title {
+.block--see-more__title {
     --wght: 500;
     --wdth: 0;
     @include fs-3xl;
@@ -19,11 +19,11 @@
     margin-bottom: .5em
 }
 
-.our-services-list {
+.see-more-list {
     margin-bottom: 0!important;
 }
 
-.our-services-item {
+.see-more-item {
     @include fs-lg;
     border-bottom: 1px solid rgba($purple, .6);
 

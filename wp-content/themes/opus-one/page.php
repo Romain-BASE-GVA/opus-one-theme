@@ -267,6 +267,31 @@
                 <?php endif; ?>
 
             </main>
+            <?php if (have_rows('voir_plus')) : ?>
+                <div class="block block--see-more" style="--current-txt-color: #6E32FF; --current-bg-color: #fff;">
+                    <h2 class="block--see-more__title">Nos <br>Services </h2>
+                    <ul class="see-more-list">
+                        <?php while (have_rows('voir_plus')) : the_row();
+                            $lien = get_sub_field('lien');
+                            $lienUrl = $lien['url'];
+                            $lienTitle = $lien['title'];
+                            $lienTarget = $lien['target'] ? $link['target'] : '_self';
+
+                        ?>
+                            <li class="see-more-item">
+                                <a class="our-sevices-link" href="<?php echo esc_url($lienUrl); ?>" target="<?php echo esc_attr($lienTarget); ?>">
+                                    <?php echo esc_html($linkTitle); ?>
+                                    <span class="link-arrow">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 199.81 181.64">
+                                            <polygon points="154.4 45.41 108.98 0 108.98 72.66 0 72.66 0 108.98 108.98 108.98 108.98 181.64 154.4 136.23 199.81 90.82 154.4 45.41" />
+                                        </svg>
+                                    </span>
+                                </a>
+                            </li>
+                        <?php endwhile; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
 
         </div>
 <?php endwhile;
