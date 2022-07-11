@@ -269,7 +269,9 @@
             </main>
             <?php if (have_rows('voir_plus')) : ?>
                 <div class="block block--see-more" style="--current-txt-color: #6E32FF; --current-bg-color: #fff;">
-                    <h2 class="block--see-more__title">Nos <br>Services </h2>
+                    <?php  if(get_field('voir_plus_titre')): ?>
+                    <h2 class="block--see-more__title"><?php echo get_field('voir_plus_titre'); ?></h2>
+                    <?php endif; ?>
                     <ul class="see-more-list">
                         <?php while (have_rows('voir_plus')) : the_row();
                             $lien = get_sub_field('lien');
