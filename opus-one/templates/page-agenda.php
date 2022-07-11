@@ -40,7 +40,9 @@
                 <div class="search-events">
                     <!-- Search input statique, la recherceh se fait sur tous les evenement donc le resulktat de la page rehcerche est la page agenda global, (sans taxonomie)  -->
                     <div class="search-events__input-wrapper">
-                        <input class="search-events__input" type="text" placeholder="Recherche">
+                        <form role="search" method="get" action="<?php echo get_home_url(); ?>">
+                            <input class="search-events__input" placeholder="Recherche" type="search" name="s" autocomplete="off">
+                        </form>
                     </div>
                     <button class="search-events__submit" title="Rechercher">
                         <span class="search-events__label">Rechercher</span>
@@ -101,19 +103,14 @@
 
                     <?php
 
+                    foreach ($next_shows as $show){
+                        $the_id = $show['ID'];
+                        $date = $show['meta_value'];
+                        $next_date = substr($date, 0, 6);
+                        $post = get_post($show['ID']);
+                        $month = date_i18n("F", strtotime($next_date . "01"));
+                        if ($date_show != $next_date){?>
 
-                    foreach ($next_shows
-
-                    as $show){
-                    $the_id = $show['ID'];
-                    $date = $show['meta_value'];
-                    $next_date = substr($date, 0, 6);
-                    $post = get_post($show['ID']);
-                    $month = date_i18n("F", strtotime($next_date . "01"));
-                    if ($date_show != $next_date){
-                    $month_focus_id = get_month_focus_id($next_date);
-                    $banner = get_field('banner', $month_focus_id);
-                    $image_bg_url = $banner['sizes']['banner-992']; ?>
                 </ul><!-- event-list -->
             </ul><!-- one-month -->
             <ul class="event-month" data-month-name="<?php echo ucfirst($month); ?>"
@@ -219,7 +216,6 @@
                                                 $location_id = $representation_info['lieux'];
                                                 $location = get_term($location_id, "taxonomy-lieu");
                                                 $location_name = $location->name;
-                                                $location_href = get_term_link($location_id, "taxonomy-lieu");
                                             } else {
                                                 $location_name = $representation_info['nom_du_lieu'];
                                                 $location_href = $representation_info['url_du_lieu'];
@@ -298,7 +294,6 @@
                                                 }
                                                 ?>
                                             </a>
-                                            <!---- @TODO : Ajouter lien reservation et sidebar // voir pour multidates -->
                                             <?php if (!empty($ticket_url)) { ?>
                                                 <a href="<?= $ticket_url ?>"
                                                    class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
@@ -381,7 +376,6 @@
                                                     $location_id = $representation_info['lieux'];
                                                     $location = get_term($location_id, "taxonomy-lieu");
                                                     $location_name = $location->name;
-                                                    $location_href = get_term_link($location_id, "taxonomy-lieu");
                                                 } else {
                                                     $location_name = $representation_info['nom_du_lieu'];
                                                     $location_href = $representation_info['url_du_lieu'];
@@ -434,7 +428,6 @@
                                                     }
                                                     ?>
                                                 </a>
-                                                <!---- @TODO : Ajouter lien reservation et sidebar // voir pour multidates -->
                                                 <?php if (!empty($ticket_url)) { ?>
                                                     <a href="<?= $ticket_url ?>"
                                                        class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>

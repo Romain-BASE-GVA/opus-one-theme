@@ -38,28 +38,29 @@ $the_term = $term;
                         </ul>
                     </div>
                 </div>
-
                 <div class="search-events">
                     <!-- Search input statique, la recherceh se fait sur tous les evenement donc le resulktat de la page rehcerche est la page agenda global, (sans taxonomie)  -->
                     <div class="search-events__input-wrapper">
-                        <input class="search-events__input" type="text" placeholder="Recherche">
+                        <form role="search" method="get" action="<?php echo get_home_url(); ?>">
+                            <input class="search-events__input" placeholder="Recherche" type="search" name="s" autocomplete="off">
+                        </form>
                     </div>
-                    <button class="search-events__submit" title="Rechercher">
+                    <button class="search-events__submit" title="Rechercher" type="submit">
                         <span class="search-events__label">Rechercher</span>
                         <span class="search-events__icon">
-              <svg class="search-events__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.9 16.9">
-                <defs>
-                  <style>
-                    .cls-1 {
-                        fill: #fff;
-                        fill-rule: evenodd;
-                    }
-                  </style>
-                </defs>
-                <path class="cls-1"
-                      d="M16.9,15.49l-4.3-4.3c.9-1.2,1.4-2.66,1.4-4.19,0-1.87-.73-3.63-2.05-4.95C10.62,.73,8.87,0,7,0S3.37,.73,2.05,2.05C-.68,4.78-.68,9.22,2.05,11.95c1.32,1.32,3.08,2.05,4.95,2.05,1.53,0,2.98-.5,4.19-1.4l4.3,4.3,1.41-1.41Zm-9.9-3.49c-1.34,0-2.59-.52-3.54-1.46-1.95-1.95-1.95-5.12,0-7.07,.94-.94,2.2-1.46,3.54-1.46s2.59,.52,3.54,1.46,1.46,2.2,1.46,3.54-.52,2.59-1.46,3.54-2.2,1.46-3.54,1.46Z"/>
-              </svg>
-            </span>
+                          <svg class="search-events__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.9 16.9">
+                            <defs>
+                              <style>
+                                .cls-1 {
+                                    fill: #fff;
+                                    fill-rule: evenodd;
+                                }
+                              </style>
+                            </defs>
+                            <path class="cls-1"
+                                  d="M16.9,15.49l-4.3-4.3c.9-1.2,1.4-2.66,1.4-4.19,0-1.87-.73-3.63-2.05-4.95C10.62,.73,8.87,0,7,0S3.37,.73,2.05,2.05C-.68,4.78-.68,9.22,2.05,11.95c1.32,1.32,3.08,2.05,4.95,2.05,1.53,0,2.98-.5,4.19-1.4l4.3,4.3,1.41-1.41Zm-9.9-3.49c-1.34,0-2.59-.52-3.54-1.46-1.95-1.95-1.95-5.12,0-7.07,.94-.94,2.2-1.46,3.54-1.46s2.59,.52,3.54,1.46,1.46,2.2,1.46,3.54-.52,2.59-1.46,3.54-2.2,1.46-3.54,1.46Z"/>
+                          </svg>
+                        </span>
                     </button>
                 </div>
 
@@ -194,7 +195,6 @@ $the_term = $term;
                                                 $location_id = $representation_info['lieux'];
                                                 $location = get_term($location_id, "taxonomy-lieu");
                                                 $location_name = $location->name;
-                                                $location_href = get_term_link($location_id, "taxonomy-lieu");
                                             } else {
                                                 $location_name = $representation_info['nom_du_lieu'];
                                                 $location_href = $representation_info['url_du_lieu'];
@@ -273,7 +273,6 @@ $the_term = $term;
                                                 }
                                                 ?>
                                             </a>
-                                            <!---- @TODO : Ajouter lien reservation et sidebar // voir pour multidates -->
                                             <?php if (!empty($ticket_url)) { ?>
                                                 <a href="<?= $ticket_url ?>"
                                                    class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
@@ -356,7 +355,6 @@ $the_term = $term;
                                                     $location_id = $representation_info['lieux'];
                                                     $location = get_term($location_id, "taxonomy-lieu");
                                                     $location_name = $location->name;
-                                                    $location_href = get_term_link($location_id, "taxonomy-lieu");
                                                 } else {
                                                     $location_name = $representation_info['nom_du_lieu'];
                                                     $location_href = $representation_info['url_du_lieu'];
@@ -409,7 +407,6 @@ $the_term = $term;
                                                     }
                                                     ?>
                                                 </a>
-                                                <!---- @TODO : Ajouter lien reservation et sidebar // voir pour multidates -->
                                                 <?php if (!empty($ticket_url)) { ?>
                                                     <a href="<?= $ticket_url ?>"
                                                        class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>

@@ -820,22 +820,22 @@ while ( have_posts() ) : the_post();
                                         if($avaibility == 'available' || $avaibility == 'postponed'){
                                             $ticket_link = get_ticket_link($value); ?>
                                             <a href="<?php echo $ticket_link ?>" target="_blank"></a>
-                                    <time datetime class="one-ticket__date"><?php
-                                        if(count($post_artists) > 1){
-                                            $post_id = isset($value['post_id'] ) ? $value['post_id'] : NULL;
-                                            $post = get_post($post_id);
-                                            setup_postdata($post);
-                                            if($value['etat'] == "postponed"){ ?>
-                                                <?php echo ucfirst(date_i18n('d.m.y', strtotime($value['date_de_la_representation'])));
+                                        <time datetime class="one-ticket__date"><?php
+                                            if(count($post_artists) > 1){
+                                                $post_id = isset($value['post_id'] ) ? $value['post_id'] : NULL;
+                                                $post = get_post($post_id);
+                                                setup_postdata($post);
+                                                if($value['etat'] == "postponed"){ ?>
+                                                    <?php echo ucfirst(date_i18n('d.m.y', strtotime($value['date_de_la_representation'])));
+                                                }else{ ?>
+                                                    <?php echo ucfirst(date_i18n('d.m.y', strtotime($value['date_de_la_representation'])));
+                                                }
+                                                $post = $tmp_post;
+                                                setup_postdata($post);
                                             }else{ ?>
                                                 <?php echo ucfirst(date_i18n('d.m.y', strtotime($value['date_de_la_representation'])));
-                                            }
-                                            $post = $tmp_post;
-                                            setup_postdata($post);
-                                        }else{ ?>
-                                            <?php echo ucfirst(date_i18n('d.m.y', strtotime($value['date_de_la_representation'])));
-                                        } ?>
-                                    </time><!-- .date -->
+                                            } ?>
+                                        </time><!-- .date -->
 
                                    <?php
                                         if(count($post_artists) > 1){
@@ -857,7 +857,6 @@ while ( have_posts() ) : the_post();
                                                     $location_id = $value['lieux'];
                                                     $location = get_term($location_id, "taxonomy-lieu");
                                                     $location_name = $location->name;
-                                                    $location_href = get_term_link($location_id, "taxonomy-lieu");
                                                 }else{
                                                     $location_name = $value['nom_du_lieu'];
                                                     $location_href = $value['url_du_lieu'];
@@ -868,7 +867,6 @@ while ( have_posts() ) : the_post();
                                                     $location_id = get_field("lieu");
                                                     $location = get_term($location_id, "taxonomy-lieu");
                                                     $location_name = $location->name;
-                                                    $location_href = get_term_link($location_id, "taxonomy-lieu");
                                                 }else{
                                                     $location_name = get_field("nom_du_lieu");
                                                     $location_href = get_field("url_du_lieu");
@@ -884,7 +882,6 @@ while ( have_posts() ) : the_post();
                                                     $location_id = $value['lieux'];
                                                     $location = get_term($location_id, "taxonomy-lieu");
                                                     $location_name = $location->name;
-                                                    $location_href = get_term_link($location_id, "taxonomy-lieu");
                                                 }else{
                                                     $location_name = $value['nom_du_lieu'];
                                                     $location_href = $value['url_du_lieu'];
@@ -895,19 +892,20 @@ while ( have_posts() ) : the_post();
                                                     $location_id = get_field("lieu");
                                                     $location = get_term($location_id, "taxonomy-lieu");
                                                     $location_name = $location->name;
-                                                    $location_href = get_term_link($location_id, "taxonomy-lieu");
                                                 }else{
                                                     $location_name = get_field("nom_du_lieu");
                                                     $location_href = get_field("url_du_lieu");
                                                 }
                                             }
-                                        }?>
-                                        <div class="marquee3k one-ticket__marquee" data-speed="1">
-                                            <div><span> <?= $post->post_title ?>&nbsp;<?php if(is_string($location_name)){ echo ': '. $location_name; } ?>&nbsp;</span></div>
-                                        </div>
-                                        <?php
+                                        }
                                     }
-                                }?>
+                                }else{
+                                    /* @TODO : Prévoir affichage vente à venir, lorsque la date de mise en vente n'est pas encore atteinte mais que le prix est connu cf. grand corps malade le 22 juillet 2022 */
+                                    echo __('Pas en vente', 'opus-one');
+                                } ?>
+                                    <div class="marquee3k one-ticket__marquee" data-speed="1">
+                                        <div><span> <?= $post->post_title ?>&nbsp;<?php if(is_string($location_name)){ echo ': '. $location_name; } ?>&nbsp;</span></div>
+                                    </div>
                                     <div class="one-ticket__price"><?php
 
                                         if(!$value['fnac_ch'] && !$value['autre_billeterie'] && $value['vip'] == "non"){
@@ -1029,13 +1027,13 @@ while ( have_posts() ) : the_post();
                             $url = get_permalink($post->ID);
                         }
 
-                        $ticket_link = get_ticket_link($representation_info); ?>
+                        $ticket_url = get_ticket_link($representation_info);?>
 
                         <!-- Et Ensuite la liste des evenements, certaine info sont la 2x la version mobile et desktop sont legerement different et ne permettaient pas de faire un seul template -->
                         <li class="event">
                             <div class="event__call-back event__call-back--mobile">
                                 <div class="double-buttons">
-                                    <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
+                                    <a href="<?= $url ?>" class="double-bouttons__btn double-bouttons__btn--info"
                                        title=""><?= __('Informations') ?></a>
                                     <?php if(!empty($ticket_url)){ ?>
                                         <a href="<?= $ticket_url ?>" class="double-bouttons__btn double-bouttons__btn--ticket" title=""><?php __('Tickets') ?></a>

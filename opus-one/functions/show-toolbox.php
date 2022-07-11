@@ -14,6 +14,13 @@ function get_next_show_two_months($year_to_show, $month_to_show){
     return $rows;
 }
 
+function get_next_shows_search($year_to_show, $month_to_show){
+    global $wpdb;
+    $next_month =  date( "Ym", strtotime($year_to_show."-".$month_to_show));
+    $rows = $wpdb->get_results("SELECT DISTINCT ID, meta_value FROM wp_posts P, wp_postmeta M WHERE (P.ID = M.post_id AND P.post_status = 'publish' AND M.meta_key LIKE '%_date_de_la_representation' AND (M.meta_value LIKE '".$year_to_show.$month_to_show."%' OR M.meta_value LIKE '".$next_month."%') AND M.meta_value >= '".date('Ymd')."') OR (P.ID = M.post_id AND P.post_status = 'publish' AND M.meta_key LIKE '%_date_de_report' AND (M.meta_value LIKE '".$year_to_show.$month_to_show."%' OR M.meta_value LIKE '".$next_month."%') AND M.meta_value >= '".date('Ymd')."') ORDER BY meta_value ASC", ARRAY_A);
+    return $rows;
+}
+
 function get_next_show_of_month_by_term($month, $year, $term_id){
     global $wpdb;
     var_dump($month);
@@ -75,6 +82,7 @@ function get_next_show($id){
     $type = get_field("type", $id);
     if($type == "plusieurs_dates"){
         $dates = get_field("date_unique_ou_separee", $id);
+
     }elseif($type == "multidates"){
         $dates = get_field("date_de_la_representation_multidate", $id);
     }
