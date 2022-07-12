@@ -84,6 +84,7 @@ select {
     line-height: 1.15;
     height: 1.15em;
     box-sizing: content-box;
+    appearance: none;
     @include transition;
     transition-duration: .15s;
 

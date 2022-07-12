@@ -18,17 +18,17 @@
                                 <li>
                                     <div>
                                         <label class="label label--is-hidden" for="input_11_15_3">Prénom</label>
-                                        <input type="text" name="input_15.3" id="input_11_15_3" value="" placeholder="Prénom*" aria-label="Prénom" aria-required="true">
+                                        <input type="text" name="input_15.3" id="input_11_15_3" value="" placeholder="Prénom*" aria-label="Prénom" aria-required="true" required>
                                     </div>
                                     <div>
                                         <label class="label label--is-hidden" for="input_11_15_6">Nom</label>
-                                        <input type="text" name="input_15.6" id="input_11_15_6" value="" placeholder="Nom*" aria-label="Nom" aria-required="true">
+                                        <input type="text" name="input_15.6" id="input_11_15_6" value="" placeholder="Nom*" aria-label="Nom" aria-required="true" required>
                                     </div>
                                 </li>
                                 <li>
                                     <div>
                                         <label class="label label--is-hidden" for="input_11_1">E-mail<span>*</span></label>
-                                        <input name="input_1" id="input_11_1" type="text" value="" class="large" aria-required="true" placeholder="E-mail*" aria-invalid="false">
+                                        <input name="input_1" id="input_11_1" type="text" value="" class="large" aria-required="true" placeholder="E-mail*" aria-invalid="false" required>
                                     </div>
                                 </li>
                                 <li>
