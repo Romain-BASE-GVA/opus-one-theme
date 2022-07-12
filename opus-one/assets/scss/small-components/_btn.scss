@@ -151,8 +151,10 @@
     padding: .5em 3em;
     overflow: hidden;
     color: $white;
+    background-color: transparent;
     z-index: 1;
     transition: all .3s ease-in-out;
+    cursor: pointer;
     //flex-wrap: nowrap;
 
     &:before {
