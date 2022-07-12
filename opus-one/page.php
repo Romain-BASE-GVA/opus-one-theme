@@ -72,7 +72,7 @@
                                                                             <button class="dropdown__trigger"><?php echo $titre; ?><span class="dropdown__plus"></span></button>
                                                                         </div>
                                                                         <div class="dropdown__content">
-                                                                            <?php echo $contenu; ?>
+                                                                            <div><?php echo $contenu; ?></div>
                                                                         </div>
                                                                     </li>
                                                                 <?php endwhile; ?>
@@ -173,8 +173,8 @@
                                                                         <a href="mailto:<?php echo $mail; ?>" title="Envoyer un mail a <?php echo $nom ?>"><span>Envoyer un mail a <?php echo $nom ?></span></a>
                                                                         <div class="contact-person__side contact-person__side--img">
                                                                             <?php if ($photo) : ?>
-                                                                                <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['alt']); ?>" />
-                                                                                <div class="img" style="background-image: url(<?php echo esc_url($image['url']); ?>)"></div>
+                                                                                <img src="<?php echo esc_url($photo['url']); ?>" alt="<?php echo esc_attr($photo['alt']); ?>" />
+                                                                                <div class="img" style="background-image: url(<?php echo esc_url($photo['url']); ?>)"></div>
                                                                             <?php endif; ?>
                                                                         </div>
                                                                         <div class="contact-person__side contact-person__side--text">
@@ -231,7 +231,7 @@
                                                                                 <a href="mailto:<?php echo $mail; ?>" title="Envoyer un mail a <?php the_title(); ?>">
                                                                                 <?php endif; ?>
                                                                                 <div class="member__img">
-                                                                                    <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['alt']); ?>" />
+                                                                                    <img src="<?php echo esc_url($memberImg['url']); ?>" alt="<?php echo esc_attr($memberImg['alt']); ?>" />
                                                                                 </div>
                                                                                 <div class="member__info">
                                                                                     <?php if ($memberRole) : ?>
