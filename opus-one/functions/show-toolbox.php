@@ -45,7 +45,6 @@ function get_next_show_of_month_by_term($month, $year, $term_id){
 
 function get_show_from_category_nb($term_id, $nb, $post_id){
     global $wpdb;
-    $my_shows = array();
     $rows = $wpdb->get_results("SELECT DISTINCT P.ID, M.meta_value FROM opus_posts P, opus_postmeta M, opus_term_relationships T WHERE (P.ID = M.post_id AND M.post_id != '".$post_id."' AND P.post_status = 'publish' AND M.meta_key LIKE '%_date_de_la_representation' AND M.meta_value >= '".date('Ymd')."' AND M.meta_value NOT LIKE 'field%' AND T.term_taxonomy_id = ".$term_id." AND T.object_id = P.ID) OR (P.ID = M.post_id AND P.post_status = 'publish' AND M.meta_key LIKE '%_date_de_report' AND M.meta_value >= '".date('Ymd')."' AND M.meta_value NOT LIKE 'field%' AND T.term_taxonomy_id = ".$term_id." AND T.object_id = P.ID) ORDER BY meta_value ASC", ARRAY_A);
 
     $my_shows = array();
@@ -145,6 +144,7 @@ function get_next_shows_terms($nb, $post)
             $index ++;
         }
     }
+
     return $my_shows;
 }
 

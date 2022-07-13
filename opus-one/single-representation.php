@@ -992,7 +992,9 @@ while ( have_posts() ) : the_post();
         <div class="highlights">
             <ul class="event-list">
                 <?php
-                $shows = get_show_from_category_nb(16, 5, $post->ID);
+
+                $terms = get_the_terms($post, 'taxonomy-representation');
+                $shows = get_show_from_category_nb($terms[0]->term_id, 5, $post->ID);
 
                 foreach ($shows as $show){
                     $date = $show['meta_value'];
