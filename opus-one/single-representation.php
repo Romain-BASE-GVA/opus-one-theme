@@ -1036,9 +1036,9 @@ while ( have_posts() ) : the_post();
                             <div class="event__call-back event__call-back--mobile">
                                 <div class="double-buttons">
                                     <a href="<?= $url ?>" class="double-bouttons__btn double-bouttons__btn--info"
-                                       title=""><?= __('Informations') ?></a>
+                                       title="<?= __('Informations') ?>"><?= __('Informations') ?></a>
                                     <?php if(!empty($ticket_url)){ ?>
-                                        <a href="<?= $ticket_url ?>" class="double-bouttons__btn double-bouttons__btn--ticket" title=""><?php __('Tickets') ?></a>
+                                        <a href="<?= $ticket_url ?>" class="double-bouttons__btn double-bouttons__btn--ticket" title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
                                     <?php }?>
                                 </div>
                             </div>
@@ -1136,7 +1136,7 @@ while ( have_posts() ) : the_post();
                                 <div class="event__call-back event__call-back--desktop">
                                     <div class="double-buttons">
                                         <a href="<?= $url ?>" class="double-bouttons__btn double-bouttons__btn--info"
-                                           title="">
+                                           title="<?= __('Informations') ?>">
                                             <?php
                                             if($nb_futur_show <= 1){
                                                 _e("Informations", "opus-one");
@@ -1146,7 +1146,7 @@ while ( have_posts() ) : the_post();
                                             ?>
                                         </a>
                                         <?php if(!empty($ticket_url)){ ?>
-                                            <a href="<?= $ticket_url ?>" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                                            <a href="<?= $ticket_url ?>" class="double-bouttons__btn double-bouttons__btn--ticket" title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
                                         <?php } ?>
                                     </div>
                                 </div>

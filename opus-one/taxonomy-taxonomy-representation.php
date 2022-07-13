@@ -155,11 +155,11 @@ $the_term = $term;
                                     <div class="double-buttons">
                                         <a href="<?= $url ?>"
                                            class="double-bouttons__btn double-bouttons__btn--info"
-                                           title=""><?= __('Informations') ?></a>
+                                           title="<?= __('Informations') ?>"><?= __('Informations') ?></a>
                                         <?php if (!empty($ticket_url)) { ?>
                                             <a href="<?php $ticket_url ?>"
                                                class="double-bouttons__btn double-bouttons__btn--ticket"
-                                               title=""><?php __('Tickets') ?></a>
+                                               title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -264,7 +264,7 @@ $the_term = $term;
                                         <div class="double-buttons">
                                             <a href="<?= $url ?>"
                                                class="double-bouttons__btn double-bouttons__btn--info"
-                                               title="">
+                                               title="<?= __('Informations', 'opus-one') ?>">
                                                 <?php
                                                 if ($nb_futur_show <= 1) {
                                                     _e("Informations", "opus-one");
@@ -275,7 +275,7 @@ $the_term = $term;
                                             </a>
                                             <?php if (!empty($ticket_url)) { ?>
                                                 <a href="<?= $ticket_url ?>"
-                                                   class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                                                   class="double-bouttons__btn double-bouttons__btn--ticket" title="<?= __('Tickets') ?>"><?= __('Tickets') ?></a>
                                             <?php } ?>
                                         </div>
                                     </div>
@@ -298,11 +298,11 @@ $the_term = $term;
                                         <div class="double-buttons">
                                             <a href="<?= get_permalink($post->ID); ?>"
                                                class="double-bouttons__btn double-bouttons__btn--info"
-                                               title=""><?= __('Informations') ?></a>
+                                               title="<?= __('Informations') ?>"><?= __('Informations') ?></a>
                                             <?php if (!empty($ticket_url)) { ?>
                                                 <a href="<?php $ticket_url ?>"
                                                    class="double-bouttons__btn double-bouttons__btn--ticket"
-                                                   title=""><?php __('Tickets') ?></a>
+                                                   title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
                                             <?php } ?>
                                         </div>
                                     </div>
