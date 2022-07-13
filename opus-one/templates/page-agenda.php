@@ -179,11 +179,11 @@
                                     <div class="double-buttons">
                                         <a href="single-event.html"
                                            class="double-bouttons__btn double-bouttons__btn--info"
-                                           title=""><?= __('Informations') ?></a>
+                                           title="<?= __('Informations') ?>"><?= __('Informations') ?></a>
                                         <?php if (!empty($ticket_url)) { ?>
                                             <a href="<?php $ticket_url ?>"
                                                class="double-bouttons__btn double-bouttons__btn--ticket"
-                                               title=""><?php __('Tickets') ?></a>
+                                               title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -322,11 +322,11 @@
                                         <div class="double-buttons">
                                             <a href="<?= get_permalink($post->ID); ?>"
                                                class="double-bouttons__btn double-bouttons__btn--info"
-                                               title=""><?= __('Informations') ?></a>
+                                               title="<?= __('Informations') ?>"><?= __('Informations') ?></a>
                                             <?php if (!empty($ticket_url)) { ?>
                                                 <a href="<?php $ticket_url ?>"
                                                    class="double-bouttons__btn double-bouttons__btn--ticket"
-                                                   title=""><?php __('Tickets') ?></a>
+                                                   title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
                                             <?php } ?>
                                         </div>
                                     </div>
