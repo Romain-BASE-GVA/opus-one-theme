@@ -14,3 +14,5 @@ RewriteRule . /index.php [L]
 </IfModule>
 
 # END WordPress
+
+H2PushResource /wp-content/themes/assets/css/main.min.css

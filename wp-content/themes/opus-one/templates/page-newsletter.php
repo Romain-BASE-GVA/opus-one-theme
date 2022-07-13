@@ -1,7 +1,10 @@
 <?php /* Template Name: Newsletter */ ?>
 <?php get_header(); ?>
-<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-        <div data-barba="container" data-barba-namespace="newsletter" data-bg="#000" data-text-color="#fff" data-logo-title="<?php echo the_title(); ?>">
+<?php if (have_posts()) : while (have_posts()) : the_post(); 
+    $colorBackground = get_field('couleur_de_fond') ? get_field('couleur_de_fond') : '#6E32FF';
+    $colorText = get_field('couleur_du_texte') ? get_field('couleur_de_texte') : '#FFF';
+    ?>
+        <div data-barba="container" data-barba-namespace="newsletter" data-bg="<?php echo $colorBackground; ?>" data-text-color="<?php echo $colorText; ?>" data-logo-title="<?php echo the_title(); ?>">
             <?php if (get_field('titre_header')) : ?>
                 <header class="header header--regular">
                     <h1 class="header--regular__title"><?php echo get_field('titre_header'); ?></h1>

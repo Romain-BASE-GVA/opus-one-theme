@@ -1,7 +1,10 @@
 <?php /* Template Name: Agenda */ ?>
 <?php get_header(); ?>
-<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-    <div data-barba="container" data-barba-namespace="agenda" data-bg="#6E32FF" data-text-color="#fff"
+<?php if (have_posts()) : while (have_posts()) : the_post(); 
+    $colorBackground = get_field('couleur_de_fond') ? get_field('couleur_de_fond') : '#6E32FF';
+    $colorText = get_field('couleur_du_texte') ? get_field('couleur_de_texte') : '#FFF';
+    ?>
+    <div data-barba="container" data-barba-namespace="agenda" data-bg="<?php echo $colorBackground; ?>" data-text-color="<?php echo $colorText; ?>"
          data-logo-title="Agenda">
 
         <main class="main main--agenda page-template-page-agenda">
