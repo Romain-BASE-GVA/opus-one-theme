@@ -145,6 +145,7 @@ function get_next_shows_terms($nb, $post)
             $index ++;
         }
     }
+
     return $my_shows;
 }
 
