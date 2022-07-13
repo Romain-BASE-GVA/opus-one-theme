@@ -83,8 +83,10 @@ select {
     padding: .25em 0;
     line-height: 1.15;
     height: 1.15em;
-    box-sizing: content-box;
+    height: 100%;
+    // box-sizing: content-box;
     appearance: none;
+    border-radius: 0;
     @include transition;
     transition-duration: .15s;
 

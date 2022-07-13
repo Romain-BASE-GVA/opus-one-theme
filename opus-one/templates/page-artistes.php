@@ -1,7 +1,10 @@
 <?php /* Template Name: Artistes */ ?>
 <?php get_header(); ?>
-<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-    <div data-barba="container" data-barba-namespace="artists" data-bg="#6E32FF" data-text-color="#fff" data-logo-title="<?php the_title(); ?>">
+<?php if (have_posts()) : while (have_posts()) : the_post(); 
+    $colorBackground = get_field('couleur_de_fond') ? get_field('couleur_de_fond') : '#6E32FF';
+    $colorText = get_field('couleur_du_texte') ? get_field('couleur_de_texte') : '#FFF';
+    ?>
+    <div data-barba="container" data-barba-namespace="artists" data-bg="<?php echo $colorBackground; ?>" data-text-color="<?php echo $colorText; ?>" data-logo-title="<?php the_title(); ?>">
       <main class="main main--top-padding">
         <section class="section section--artist-list section--no-padding-x" style="--current-bg-color: transparent">
           <h3 class="section__title">We represent the following artists:</h3>
