@@ -1,8 +1,9 @@
 <?php get_header();
 $term = get_queried_object();
 $the_term = $term;
+$termColor = get_field('couleur', $term);
 ?>
-    <div data-barba="container" data-barba-namespace="agenda" data-bg="#6E32FF" data-text-color="#fff"
+    <div data-barba="container" data-barba-namespace="agenda" data-bg="<?php echo $termColor; ?>" data-text-color="#fff"
          data-logo-title="Agenda">
         <main class="main main--agenda">
             <div class="filter-bar">
@@ -13,12 +14,10 @@ $the_term = $term;
                     </button>
                     <div class="event-cat-list">
                         <ul>
-                            <?php $agenda_link = get_field('agenda_link', 'option'); ?>
-                            <li><a href="<?= $agenda_link['url'] ?>"
-                                   title="<?= __('Tout', 'opus-one') ?>"><?= __('Tout', 'opus-one') ?></a></li>
+                            <li><a href="<?php echo get_field('page_agenda', 'option')['url']; ?>" title="Tout">Tout</a></li>
                             <?php
                             $tmp_post = $post;
-                            $taxonomies = array('taxonomy-representation');
+                            $taxonomies = array('taxonomy-types');
                             $args = array(
                                 'orderby' => 'name',
                                 'order' => 'ASC',
@@ -28,7 +27,7 @@ $the_term = $term;
                             foreach ($terms as $term) {
                                 $next_shows = get_show_from_category($term->term_id);
                                 if (count($next_shows) != 0) { ?>
-                                    <li><a href="<?= get_term_link($term, "taxonomy-representation"); ?>"
+                                    <li><a href="<?= get_term_link($term, 'taxonomy-types'); ?>"
                                            title="<?= $term->name; ?>" <?php if ($term == $the_term) {
                                         echo 'class="is-active"';
                                     } ?>><?= $term->name; ?></a></li><?php

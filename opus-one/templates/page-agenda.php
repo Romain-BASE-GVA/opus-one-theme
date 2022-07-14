@@ -18,10 +18,10 @@
 
                         <!-- la liste des autres taxo, la taxo actuelle a la class="is-active" -->
                         <ul>
-
+                            <li><a href="<?php echo get_field('page_agenda', 'option')['url']; ?>" title="Tout" class="is-active">Tout</a></li>
                             <?php
                             $tmp_post = $post;
-                            $taxonomies = array('taxonomy-representation');
+                            $taxonomies = array('taxonomy-types');
                             $args = array(
                                 'orderby' => 'name',
                                 'order' => 'ASC',
@@ -31,7 +31,7 @@
                             foreach ($terms as $term) {
                                 $next_shows = get_show_from_category($term->term_id);
                                 if (count($next_shows) != 0) { ?>
-                                    <li><a href="<?= get_term_link($term, "taxonomy-representation"); ?>"
+                                    <li><a href="<?= get_term_link($term, 'taxonomy-types'); ?>"
                                            title="<?= $term->name; ?>"><?= $term->name; ?></a></li><?php
                                 }
                             }
@@ -232,7 +232,7 @@
                                                 $location_href = $new_location_href;
                                             } ?>
                                             <span>
-                                                    <?php if (!empty($location_href) && is_string($location_href) && $location_type != 'oui'){ ?>
+                                                    <?php if (!empty($location_href) && is_string($location_href)){ ?>
                                                         <a href="<?php if (!empty($location_href)) {
                                                             echo $location_href;
                                                         } ?>" <?php if ($location_type != "oui") {
@@ -392,7 +392,7 @@
                                                     $location_href = $new_location_href;
                                                 } ?>
                                                 <span>
-                                                    <?php if (!empty($location_href) && is_string($location_href) && $location_type != 'oui'){ ?>
+                                                    <?php if (!empty($location_href) && is_string($location_href)){ ?>
                                                         <a href="<?php if (!empty($location_href)) {
                                                             echo $location_href;
                                                         } ?>" <?php if ($location_type != "oui") {
@@ -400,7 +400,7 @@
                                                         } ?>>
                                                     <?php }
                                                     echo $location_name;
-                                                    if (!empty($location_href) && is_string($location_href) && $location_type != 'oui'){ ?>
+                                                    if (!empty($location_href) && is_string($location_href)){ ?>
                                                         </a>
                                                     <?php } ?>
                                                 </span>

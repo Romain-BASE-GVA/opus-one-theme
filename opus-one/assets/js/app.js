@@ -165,9 +165,20 @@ $(document).ready(function () {
 
                 $('.topbar__page-name span').html(nextPageTitle);
 
+                if(next.url.hash != undefined){
+                    var isSpecialPage = next.url.hash == 'page-special';
+
+                    var offset = isSpecialPage ? $('.topbar').outerHeight() + 40 : 0;
+                    gsap.to(window, { duration: 1, scrollTo: { y: '#' + next.url.hash, offsetY: offset }, ease: Power4.easeInOut });
+                };
+
+                
+
                 // currentPageType = next.namespace;
                 // console.log(currentPageType);
                 $('body').addClass(next.namespace);
+
+
 
                 preventSamePageReload();
 
@@ -301,7 +312,7 @@ $(document).ready(function () {
             },
         },
         {
-            namespace: 'single-event',
+            namespace: 'representation',
             afterEnter({ current, next, trigger }) {
                 var eventTitle = $(next.container).data('event-title');
                 eventTitle = $('<span>' + eventTitle + '</span>');

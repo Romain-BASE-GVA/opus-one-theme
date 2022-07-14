@@ -62,11 +62,16 @@ input {
         //color: $white;
     }
 
-    &:focus {
-        background-color: rgba($white, .25);
-        outline: none;
-        padding: .25em 10px;
+    .form & {
+
+        &:focus {
+            background-color: rgba($white, .25);
+            outline: none;
+            padding: .25em 10px;
+        }
+        
     }
+
 } 
 
 [type="text"] {
