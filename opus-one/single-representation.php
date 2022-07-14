@@ -368,10 +368,10 @@ while ( have_posts() ) : the_post();
                                 ?>
                             </div>
 
-                            <!-- @TODO : Le lieux est un lien, il est donc maintenant surligné à enlever dans le CSS --->
+                            <!-- @TODO : Le lieux est un lien, il est donc maintenant surligné à enlever dans le CSS -- Ajouter le before (pastille lieu) même si ce n'est pas un lien --->
                             <?php if(is_string($location_name)){ ?>
                                     <?php if($location_type != 'oui'){ ?> <a class="event-card__where" href="<?= $location_href ?>"> <?php } ?>
-                                         <?= $location_name ?></a>*
+                                         <?= $location_name ?></a>
                                     <?php if($location_type != 'oui'){ ?> </a> <?php } ?>
                             <?php } ?>
 
