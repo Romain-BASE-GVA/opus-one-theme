@@ -325,7 +325,7 @@ while ( have_posts() ) : the_post();
 
                     <ul class="event-card-list">
 
-                        <li class="event-card">
+                        <a class="event-card">
                             <?php if($representation_info['etat'] != "postponed"){
                                 $date_de_report = isset($representation_info['date_de_report'] ) ? $representation_info['date_de_report']  : NULL;
                                 get_avaibility_txt($avaibility, $date_de_report, $post->ID, $representation_info, true);
@@ -370,7 +370,9 @@ while ( have_posts() ) : the_post();
 
                             <!-- @TODO : Le lieux est un lien, il est donc maintenant surligné à enlever dans le CSS --->
                             <?php if(is_string($location_name)){ ?>
-                                <a class="event-card__where" href="<?= $location_href ?>"><?= $location_name ?></a>
+                                    <?php if($location_type != 'oui'){ ?> <a class="event-card__where" href="<?= $location_href ?>"> <?php } ?>
+                                         <?= $location_name ?></a>*
+                                    <?php if($location_type != 'oui'){ ?> </a> <?php } ?>
                             <?php } ?>
 
                             <?php
@@ -1086,11 +1088,11 @@ while ( have_posts() ) : the_post();
                                             $location_href = $new_location_href;
                                         }?>
                                         <span>
-                                                    <?php if(!empty($location_href) && is_string($location_href)){ ?>
+                                                    <?php if(!empty($location_href) && is_string($location_href) && $location_type != "oui"){ ?>
                                                         <a href="<?php if(!empty($location_href)){ echo $location_href; }?>" <?php if($location_type != "oui"){echo 'target="_blank"';} ?>>
                                                     <?php }
                                                     echo $location_name;
-                                                    if(!empty($location_href) && is_string($location_href)){ ?>
+                                                    if(!empty($location_href) && is_string($location_href) && $location_type != "oui"){ ?>
                                                         </a>
                                                     <?php } ?>
                                                 </span>
