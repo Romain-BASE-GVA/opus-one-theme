@@ -265,9 +265,11 @@ while ( have_posts() ) : the_post();
                                 ?>
                             </div>
 
-                            <!-- @TODO : Le lieux est un lien, il est donc maintenant surligné à enlever dans le CSS --->
+                            <!-- @TODO : Le lieux est un lien, il est donc maintenant surligné à enlever dans le CSS -- Ajouter le before (pastille lieu) même si ce n'est pas un lien --->
                             <?php if(is_string($location_name)){ ?>
-                                <a class="event-card__where" href="<?= $location_href ?>"><?= $location_name ?></a>
+                                    <?php if($location_type != 'oui'){ ?> <a class="event-card__where" href="<?= $location_href ?>"> <?php } ?>
+                                         <?= $location_name ?></a>
+                                    <?php if($location_type != 'oui'){ ?> </li> <?php } ?>
                             <?php } ?>
 
                             <?php
@@ -925,11 +927,11 @@ while ( have_posts() ) : the_post();
                                             $location_href = $new_location_href;
                                         }?>
                                         <span>
-                                                    <?php if(!empty($location_href) && is_string($location_href)){ ?>
+                                                    <?php if(!empty($location_href) && is_string($location_href) && $location_type != "oui"){ ?>
                                                         <a href="<?php if(!empty($location_href)){ echo $location_href; }?>" <?php if($location_type != "oui"){echo 'target="_blank"';} ?>>
                                                     <?php }
                                                     echo $location_name;
-                                                    if(!empty($location_href) && is_string($location_href)){ ?>
+                                                    if(!empty($location_href) && is_string($location_href) && $location_type != "oui"){ ?>
                                                         </a>
                                                     <?php } ?>
                                                 </span>
