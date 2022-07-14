@@ -78,110 +78,7 @@ while ( have_posts() ) : the_post();
     $date_de_report =  isset($representation_info['date_de_report'] ) ? $representation_info['date_de_report'] : NULL;
 ?>
 
-<body data-barba="wrapper">
-<div class="topbar">
-    <div class="logo logo--topbar">
-        <a href="index.html" title="OPUS ONE">
-            <span class="logo__letter">O</span>
-            <span class="logo__letter">P</span>
-            <span class="logo__letter">U</span>
-            <span class="logo__letter">S</span>
-            <span class="logo__letter">O</span>
-            <span class="logo__letter">N</span>
-            <span class="logo__letter">E</span>
-        </a>
-        <span class="topbar__page-name">
-        <span>Présente</span>
-      </span>
-    </div>
-    <div class="topbar--page-nav"></div>
-    <button class="nav-trigger" title="Ouvrir la navigation">
-      <span class="burger">
-        <span class="burger__bar burger__bar--top"></span>
-        <span class="burger__bar burger__bar--middle"></span>
-        <span class="burger__bar burger__bar--bottom"></span>
-      </span>
-        <span class="nav-trigger__label">Menu</span>
-    </button>
-</div>
-
-<div class="page-position"></div>
-
-<nav class="nav nav--main nav--main--is-closed">
-    <div class="nav--main__bg" style="background-color: #ee3b3b;"></div>
-    <div class="nav--main__bg" style="background-color: #ff5765;"></div>
-    <div class="nav--main__bg" style="background-color: #ebb335;"></div>
-    <div class="nav--main__bg" style="background-color: #2d7949;"></div>
-    <div class="nav--main__bg" style="background-color: #0C557F;"></div>
-    <div class="nav--main__bg" style="background-color: #190549;"></div>
-    <div class="nav--main__bg" style="background-color: #7b6ca0;"></div>
-    <div class="nav--main__bg" style="background-color: #e07df4;">
-        <div class="nav--main__wrapper">
-            <header class="nav-header">
-                <div class="logo logo--topbar">
-                    <a href="index.html" title="OPUS ONE">
-                        <span class="logo__letter">O</span>
-                        <span class="logo__letter">P</span>
-                        <span class="logo__letter">U</span>
-                        <span class="logo__letter">S</span>
-                        <span class="logo__letter">O</span>
-                        <span class="logo__letter">N</span>
-                        <span class="logo__letter">E</span>
-                    </a>
-                </div>
-                <button class="close-nav" title="Fermer la navigation">
-            <span class="burger">
-              <span class="burger__bar burger__bar--top"></span>
-              <span class="burger__bar burger__bar--bottom"></span>
-            </span>
-                </button>
-            </header>
-            <ul class="nav--main__list">
-                <li>
-                    <a href="#">Agenda</a>
-                    <ul>
-                        <li><a href="agenda.html" title="Tous nos événements">Tous nos événements</a></li>
-                        <li><a href="agenda-humour.html" title="Concerts">Concerts</a></li>
-                        <li><a href="agenda-humour.html" title="Spectacles">Spectacles</a></li>
-                        <li><a href="agenda-humour.html" title="Humour">Humour</a></li>
-                        <li><a href="agenda-humour.html" title="Famille">Famille</a></li>
-                        <li><a href="agenda-humour.html" title="Exposition">Exposition</a></li>
-                        <li><a href="archives.html" title="Historique">Historique</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Opus One</a>
-                    <ul>
-                        <li><a href="manifesto.html" title="Manifesto">Manifesto</a></li>
-                        <li><a href="artists.html" title="Nos Artistes">Nos Artistes</a></li>
-                        <li><a href="services.html" title="Services">Services</a></li>
-                        <li><a href="nous.html" title="Nous!">Nous!</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Infos pratiques</a>
-                    <ul>
-                        <li><a href="help.html" title="Toutes les infos">Toutes les infos</a></li>
-                        <li><a href="help.html" title="Covid">Covid</a></li>
-                        <li><a href="help.html" title="Billeterie">Billeterie</a></li>
-                        <li><a href="help.html" title="PMR">PMR</a></li>
-                        <li><a href="help.html" title="Sécurité">Sécurité</a></li>
-                        <li><a href="help.html" title="VIP">VIP</a></li>
-                        <li><a href="help.html" title="Lieux">Lieux</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
-                    <ul>
-                        <li><a href="contact.html" title="Nous contacter">Nous contacter</a></li>
-                        <li><a href="help.html" title="Press">Covid</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<div data-barba="container" data-barba-namespace="single-event" data-bg="#FF5765" data-text-color="#fff" data-logo-title="Présente" data-event-title="<?php the_title(); ?>">
+<div data-barba="container" data-barba-namespace="representation" data-bg="#FF5765" data-text-color="#fff" data-logo-title="Présente" data-event-title="<?php the_title(); ?>">
     <header class="header header--single-event">
         <div class="header-tickets">
             <div class="one-ticket">
@@ -411,64 +308,6 @@ while ( have_posts() ) : the_post();
                     <div class="block block--text">
                         <?= $content ?>
                     </div>
-
-                    <!--- @TODO : Cette partie ne correspond pas à des champs, et n'est pas configuré pour fonctionner avec un WYSIWYG ($content) -->
-
-                    <div class="block block--text">
-                        <div>
-                            <div class="big-p">
-                                <p>Éclat pop</p>
-                            </div>
-                            <p>Angèle ou l’autre nom de la pop toute puissante. Une fois qu’on y a goûté, impossible d’arrêter. Et
-                                dans ce cas, pas de syndrome de la dernière part, tout le monde se l’arrache.</p>
-                        </div>
-                    </div>
-
-                    <div class="block block--dropdowns">
-
-                        <ul class="dropdowns">
-
-                            <li class="dropdown dropdown--is-closed">
-                                <div class="dropdown__top">
-                                    <button class="dropdown__trigger">Dropdown Title <span class="dropdown__plus"></span></button>
-                                </div>
-                                <div class="dropdown__content">
-                                    <div>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum sequi mollitia nisi illum
-                                            quaerat vel aspernatur unde repellendus iusto beatae dolores excepturi deserunt dignissimos
-                                            inventore dicta, optio, blanditiis saepe cumque.</p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="dropdown dropdown--is-closed">
-                                <div class="dropdown__top">
-                                    <button class="dropdown__trigger">Dropdown Title <span class="dropdown__plus"></span></button>
-                                </div>
-                                <div class="dropdown__content">
-                                    <div>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum sequi mollitia nisi illum
-                                            quaerat vel aspernatur unde repellendus iusto beatae dolores excepturi deserunt dignissimos
-                                            inventore dicta, optio, blanditiis saepe cumque.</p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="dropdown dropdown--is-closed">
-                                <div class="dropdown__top">
-                                    <button class="dropdown__trigger">Dropdown Title <span class="dropdown__plus"></span></button>
-                                </div>
-                                <div class="dropdown__content">
-                                    <div>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum sequi mollitia nisi illum
-                                            quaerat vel aspernatur unde repellendus iusto beatae dolores excepturi deserunt dignissimos
-                                            inventore dicta, optio, blanditiis saepe cumque.</p>
-                                    </div>
-                                </div>
-                            </li>
-
-                        </ul>
-                    </div>
-
-                    <!--- @TODO END : END PART-->
 
                     <div class="block block--list-of-list">
                         <ul class="list-of-list">
@@ -992,7 +831,9 @@ while ( have_posts() ) : the_post();
         <div class="highlights">
             <ul class="event-list">
                 <?php
-                $shows = get_show_from_category_nb(16, 5, $post->ID);
+
+                $terms = get_the_terms($post, 'taxonomy-representation');
+                $shows = get_show_from_category_nb($terms[0]->term_id, 5, $post->ID);
 
                 foreach ($shows as $show){
                     $date = $show['meta_value'];
@@ -1034,9 +875,9 @@ while ( have_posts() ) : the_post();
                             <div class="event__call-back event__call-back--mobile">
                                 <div class="double-buttons">
                                     <a href="<?= $url ?>" class="double-bouttons__btn double-bouttons__btn--info"
-                                       title=""><?= __('Informations') ?></a>
+                                       title="<?= __('Informations') ?>"><?= __('Informations') ?></a>
                                     <?php if(!empty($ticket_url)){ ?>
-                                        <a href="<?= $ticket_url ?>" class="double-bouttons__btn double-bouttons__btn--ticket" title=""><?php __('Tickets') ?></a>
+                                        <a href="<?= $ticket_url ?>" class="double-bouttons__btn double-bouttons__btn--ticket" title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
                                     <?php }?>
                                 </div>
                             </div>
@@ -1134,7 +975,7 @@ while ( have_posts() ) : the_post();
                                 <div class="event__call-back event__call-back--desktop">
                                     <div class="double-buttons">
                                         <a href="<?= $url ?>" class="double-bouttons__btn double-bouttons__btn--info"
-                                           title="">
+                                           title="<?= __('Informations') ?>">
                                             <?php
                                             if($nb_futur_show <= 1){
                                                 _e("Informations", "opus-one");
@@ -1144,7 +985,7 @@ while ( have_posts() ) : the_post();
                                             ?>
                                         </a>
                                         <?php if(!empty($ticket_url)){ ?>
-                                            <a href="<?= $ticket_url ?>" class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                                            <a href="<?= $ticket_url ?>" class="double-bouttons__btn double-bouttons__btn--ticket" title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -1169,94 +1010,7 @@ while ( have_posts() ) : the_post();
         </div>
     </section>
 </div>
-<footer class="footer">
-    <div class="footer__container">
-        <div class="footer__item">
-            <h3 class="footer-title">Raccourcis</h3>
-            <nav class="nav nav--footer nav--footer--shortcuts">
-                <ul>
-                    <li><a href="agenda.html" title="Agenda">Agenda</a></li>
-                    <li><a href="#" title="Nous">Nous</a></li>
-                    <li><a href="help.html" title="Info pratiques">Infos pratiques</a></li>
-                    <li><a href="contact.html" title="Contact">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-        <div class="footer__item">
-            <h3 class="footer-title">Nos reseaux</h3>
-            <nav class="nav nav--footer nav--footer--social">
-                <ul class="socials">
-                    <li class="socials__item socials__item--ig">
-                        <a href="#" title="Instagram">
-                            <h4 class="socials_item__title">Instagram</h4>
-                            <span>IG</span>
-                        </a>
-                    </li>
-                    <li class="socials__item socials__item--fb">
-                        <a href="#" title="Facebook">
-                            <h4 class="socials_item__title">Facebook</h4>
-                            <span>FB</span>
-                        </a>
-                    </li>
-                    <li class="socials__item socials__item--tw">
-                        <a href="#" title="Twitter">
-                            <h4 class="socials_item__title">Twitter</h4>
-                            <span>TT</span>
-                        </a>
-                    </li>
-                    <li class="socials__item socials__item--yt">
-                        <a href="#" title="Youtube">
-                            <h4 class="socials_item__title">Youtube</h4>
-                            <span>YT</span>
-                        </a>
-                    </li>
-                    <li class="socials__item  socials__item--li">
-                        <a href="#" title="LinkedIn">
-                            <h4 class="socials_item__title">LinkedIn</h4>
-                            <span>LI</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <div class="footer__bottom">
-            <div class="logo logo--footer">
-                <img src="https://c.tenor.com/tlceri6zsQMAAAAC/concert.gif" class="logo--footer__img" alt="">
-                <a href="index.html" title="OPUS ONE">
-                    <span class="logo__letter">O</span>
-                    <span class="logo__letter">P</span>
-                    <span class="logo__letter">U</span>
-                    <span class="logo__letter">S</span>
-                    <span class="logo__letter">O</span>
-                    <span class="logo__letter">N</span>
-                    <span class="logo__letter">E</span>
-                </a>
-            </div>
-            <div class="footer__footer">
-                <p class="footer__strapline">Depuis 1993, Opus One réunit une équipe multidisciplinaire, passionnée par la
-                    musique, le spectacle et la production de concerts et d’événements.</p>
-                <p class="footer__copyright">©2022 – Website <a href="https://www.basedesign.com" target="_blank"
-                                                                title="Base Design">Basedesign.com</a></p>
-            </div>
-        </div>
-    </div>
-</footer>
-<div class="page-transition">
-    <div class="page-transition__line"></div>
-    <div class="page-transition__line"></div>
-    <div class="page-transition__line"></div>
-    <div class="page-transition__line"></div>
-    <div class="page-transition__line"></div>
-    <div class="page-transition__line"></div>
-    <div class="page-transition__line"></div>
-    <div class="page-transition__line"></div>
-    <div class="page-transition__line"></div>
-    <div class="page-transition__line"></div>
-</div>
-<script src="assets/js/main.min.js"></script>
-
-</body>
 
 <?php
 endwhile;
-get_footer();
+get_footer();?>

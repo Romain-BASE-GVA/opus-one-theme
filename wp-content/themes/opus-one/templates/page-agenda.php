@@ -18,10 +18,10 @@
 
                         <!-- la liste des autres taxo, la taxo actuelle a la class="is-active" -->
                         <ul>
-
+                            <li><a href="<?php echo get_field('page_agenda', 'option')['url']; ?>" title="Tout" class="is-active">Tout</a></li>
                             <?php
                             $tmp_post = $post;
-                            $taxonomies = array('taxonomy-representation');
+                            $taxonomies = array('taxonomy-types');
                             $args = array(
                                 'orderby' => 'name',
                                 'order' => 'ASC',
@@ -31,7 +31,7 @@
                             foreach ($terms as $term) {
                                 $next_shows = get_show_from_category($term->term_id);
                                 if (count($next_shows) != 0) { ?>
-                                    <li><a href="<?= get_term_link($term, "taxonomy-representation"); ?>"
+                                    <li><a href="<?= get_term_link($term, 'taxonomy-types'); ?>"
                                            title="<?= $term->name; ?>"><?= $term->name; ?></a></li><?php
                                 }
                             }
@@ -179,11 +179,11 @@
                                     <div class="double-buttons">
                                         <a href="single-event.html"
                                            class="double-bouttons__btn double-bouttons__btn--info"
-                                           title=""><?= __('Informations') ?></a>
+                                           title="<?= __('Informations') ?>"><?= __('Informations') ?></a>
                                         <?php if (!empty($ticket_url)) { ?>
                                             <a href="<?php $ticket_url ?>"
                                                class="double-bouttons__btn double-bouttons__btn--ticket"
-                                               title=""><?php __('Tickets') ?></a>
+                                               title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -322,11 +322,11 @@
                                         <div class="double-buttons">
                                             <a href="<?= get_permalink($post->ID); ?>"
                                                class="double-bouttons__btn double-bouttons__btn--info"
-                                               title=""><?= __('Informations') ?></a>
+                                               title="<?= __('Informations') ?>"><?= __('Informations') ?></a>
                                             <?php if (!empty($ticket_url)) { ?>
                                                 <a href="<?php $ticket_url ?>"
                                                    class="double-bouttons__btn double-bouttons__btn--ticket"
-                                                   title=""><?php __('Tickets') ?></a>
+                                                   title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
                                             <?php } ?>
                                         </div>
                                     </div>

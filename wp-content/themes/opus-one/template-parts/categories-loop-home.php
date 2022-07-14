@@ -1,4 +1,55 @@
 <div class="categories">
+    <?php
+    $terms = get_terms(
+        array(
+            'taxonomy'   => 'taxonomy-types',
+            'hide_empty' => true,
+        )
+    )
+    ?>
+
+    <?php if (!empty($terms) && is_array($terms)) : ?>
+        <?php foreach ($terms as $term) : 
+            $catName = $term->name;
+            $catNameLower = strtolower($catName);
+            $catImage = get_field('image', $term);
+        ?>
+            <div class="category category--<?php echo $catNameLower; ?>" id="<?php echo $catNameLower; ?>">
+                <div class="category__bg">
+                    <img src="<?php echo $catImage['url']; ?>" class="category__media" alt="<?php echo $catIimage['alt']; ?>">
+                </div>
+                <div class="category__fg">
+                    <h2 class="category__title">
+                        <span class="category__word category__word--desktop">
+                            <?php
+                                $catLetters = str_split(ucfirst(stripAccents($catName)));
+
+                                foreach ($catLetters as $catLetter) {
+                                    echo '<span class="category__letter">' . $catLetter . '</span>';
+                                }
+                                ?>
+                        </span>
+                        <span class="category__word category__word--mobile"><?php echo $catName; ?></span>
+                    </h2>
+                    <div class="category__bottom">
+                        <a href="agenda.html" class="see-more"><span>+</span></a>
+                        <div class="shortly">
+                            <span class="shortly__title">Prochainement</span>
+                            <div class="marquee3k shortly__marquee" data-speed="1" data-pausable="true">
+                                <div>
+                                    <a href="single-event.html">Angèle </a>
+                                    <a href="single-event.html">Michael Jackson </a>
+                                    <a href="single-event.html">Hubert-Félix Thiéfaine</a>
+                                    <a href="single-event.html">Pogo Car Crash Control</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <!--
     <div class="category category--concert" id="concerts">
         <div class="category__bg">
             <img src="/assets/img/cat-bg-concert.jpg" class="category__media" alt="">
@@ -182,4 +233,5 @@
             </div>
         </div>
     </div>
+        -->
 </div>
