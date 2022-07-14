@@ -232,7 +232,7 @@
                                                 $location_href = $new_location_href;
                                             } ?>
                                             <span>
-                                                    <?php if (!empty($location_href) && is_string($location_href)){ ?>
+                                                    <?php if (!empty($location_href) && is_string($location_href) && $location_type != 'oui'){ ?>
                                                         <a href="<?php if (!empty($location_href)) {
                                                             echo $location_href;
                                                         } ?>" <?php if ($location_type != "oui") {
@@ -392,7 +392,7 @@
                                                     $location_href = $new_location_href;
                                                 } ?>
                                                 <span>
-                                                    <?php if (!empty($location_href) && is_string($location_href)){ ?>
+                                                    <?php if (!empty($location_href) && is_string($location_href) && $location_type != 'oui'){ ?>
                                                         <a href="<?php if (!empty($location_href)) {
                                                             echo $location_href;
                                                         } ?>" <?php if ($location_type != "oui") {
@@ -400,7 +400,7 @@
                                                         } ?>>
                                                     <?php }
                                                     echo $location_name;
-                                                    if (!empty($location_href) && is_string($location_href)){ ?>
+                                                    if (!empty($location_href) && is_string($location_href) && $location_type != 'oui'){ ?>
                                                         </a>
                                                     <?php } ?>
                                                 </span>
