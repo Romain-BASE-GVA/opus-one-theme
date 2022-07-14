@@ -1229,8 +1229,4 @@ $(document).ready(function () {
         };
     };
 
-
-
-
-
 });
