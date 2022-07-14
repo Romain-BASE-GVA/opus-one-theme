@@ -7,13 +7,11 @@ function get_show_from_category($term_id){
     return $rows;
 }
 
-
 function get_first_show_category($term_id){
     global $wpdb;
     $rows = $wpdb->get_results("SELECT DISTINCT ID, meta_value FROM opus_posts P, opus_postmeta M, opus_term_relationships T WHERE P.ID = M.post_id AND P.post_status = 'publish' AND M.meta_key LIKE '%_date_de_la_representation' AND M.meta_value >= '".date('Ymd')."' AND M.meta_value NOT LIKE 'field%' AND T.term_taxonomy_id = ".$term_id." AND T.object_id = P.ID ORDER BY meta_value ASC LIMIT 1", ARRAY_A);
     return $rows[0];
 }
-
 
 function get_next_show_two_months($year_to_show, $month_to_show){
     global $wpdb;
