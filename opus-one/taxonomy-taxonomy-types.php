@@ -1,11 +1,9 @@
 <?php get_header();
 $term = get_queried_object();
 $the_term = $term;
-
 $termColor = get_field('couleur', $term);
 ?>
     <div data-barba="container" data-barba-namespace="agenda" data-bg="<?php echo $termColor; ?>" data-text-color="#fff"
-
          data-logo-title="Agenda">
         <main class="main main--agenda">
             <div class="filter-bar">
@@ -16,11 +14,7 @@ $termColor = get_field('couleur', $term);
                     </button>
                     <div class="event-cat-list">
                         <ul>
-
-                            <?php $agenda_link = get_field('agenda_link', 'option'); ?>
-                            <li><a href="<?= $agenda_link['url'] ?>"
-                                   title="<?= __('Tout', 'opus-one') ?>"><?= __('Tout', 'opus-one') ?></a></li>
-
+                            <li><a href="<?php echo get_field('page_agenda', 'option')['url']; ?>" title="Tout">Tout</a></li>
                             <?php
                             $tmp_post = $post;
                             $taxonomies = array('taxonomy-types');
@@ -33,9 +27,7 @@ $termColor = get_field('couleur', $term);
                             foreach ($terms as $term) {
                                 $next_shows = get_show_from_category($term->term_id);
                                 if (count($next_shows) != 0) { ?>
-
                                     <li><a href="<?= get_term_link($term, 'taxonomy-types'); ?>"
-
                                            title="<?= $term->name; ?>" <?php if ($term == $the_term) {
                                         echo 'class="is-active"';
                                     } ?>><?= $term->name; ?></a></li><?php
@@ -77,9 +69,7 @@ $termColor = get_field('couleur', $term);
             <?php
             $next_shows = get_show_from_category($the_term->term_id);
             $today = date("Y-m-01");
-
-            $first_show = get_first_show_category($the_term->term_id);
-
+            $first_show = get_first_show();
             $date_first_show = $first_show['meta_value'];
             $year_to_show = substr($date_first_show, 0, 4);
             $month_to_show = substr($date_first_show, 4, 2);
@@ -90,6 +80,9 @@ $termColor = get_field('couleur', $term);
             $last_show = get_last_show();
             $month = date_i18n("F", strtotime($date_show . "01")); ?>
 
+            <div class="next_request" data-next-year="<?php echo substr($next, 0, 4); ?>"
+                 data-next-month="<?php echo substr($next, 4, 2); ?>"
+                 data-last-date="<?php echo substr($last_show, 0, 6); ?>"></div>
 
             <div class="event-month" data-month-name="<?php echo ucfirst($month); ?>"
                  id="<?= $month ?>-<?= $year_to_show ?>">
@@ -108,8 +101,9 @@ $termColor = get_field('couleur', $term);
                     </span>
                 </h3><?php
 
-                foreach ($next_shows as $show){
+                foreach ($next_shows
 
+                as $show){
                 $the_id = $show['ID'];
                 $date = $show['meta_value'];
                 $next_date = substr($date, 0, 6);
@@ -125,38 +119,6 @@ $termColor = get_field('couleur', $term);
                         $type = get_field("type", $post->ID);
                         $post = get_post($show['ID']);
                         $terms = wp_get_post_terms($post->ID, "taxonomy-representation");
-
-
-                        $month_show = substr($date, 4, 2);
-                        $year_show = substr($date, 0, 4);
-                        $complete_date = $year_show.$month_show."01";
-
-
-                        $new_month = date_i18n("F", strtotime($complete_date));
-
-                        if($new_month != $month){
-                            $month = $new_month;?>
-                            </ul>
-            </div>
-            <div class="event-month" data-month-name="<?php echo ucfirst($month); ?>"
-                 id="<?= $month ?>-<?= $year_to_show ?>">
-                <h3 class="event-month__title">
-                    <!-- @TODO : JS pour adpater le responsive (?) -->
-                    <span class="event-month__word event-month__word--mobile">Jan<br>vier</span><!--MOBILE-->
-                    <!-- @TODO : END -->
-                    <span class="event-month__word event-month__word--desktop"><!-- DESKTOP -->
-                        <?php
-                        $monthLetters = str_split(ucfirst(stripAccents($month)));
-
-                        foreach ($monthLetters as $monthLetter) {
-                            echo '<span class="event-month__letter">' . $monthLetter . '</span>';
-                        }
-                        ?>
-                    </span>
-                </h3>
-                        <?php
-                        }
-
 
                         if ($type == "plusieurs_dates") {
                             $dates = get_field("date_unique_ou_separee", $post->ID);
@@ -245,9 +207,7 @@ $termColor = get_field('couleur', $term);
                                                 $location_href = $new_location_href;
                                             } ?>
                                             <span>
-
-                                                    <?php if (!empty($location_href) && is_string($location_href) && $location_type != 'oui'){ ?>
-
+                                                    <?php if (!empty($location_href) && is_string($location_href)){ ?>
                                                         <a href="<?php if (!empty($location_href)) {
                                                             echo $location_href;
                                                         } ?>" <?php if ($location_type != "oui") {
@@ -407,9 +367,7 @@ $termColor = get_field('couleur', $term);
                                                     $location_href = $new_location_href;
                                                 } ?>
                                                 <span>
-
-                                                    <?php if (!empty($location_href) && is_string($location_href) && $location_type != 'oui'){ ?>
-
+                                                    <?php if (!empty($location_href) && is_string($location_href)){ ?>
                                                         <a href="<?php if (!empty($location_href)) {
                                                             echo $location_href;
                                                         } ?>" <?php if ($location_type != "oui") {

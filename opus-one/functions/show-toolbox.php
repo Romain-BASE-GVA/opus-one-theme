@@ -7,13 +7,6 @@ function get_show_from_category($term_id){
     return $rows;
 }
 
-function get_first_show_category($term_id){
-    global $wpdb;
-    $rows = $wpdb->get_results("SELECT DISTINCT ID, meta_value FROM opus_posts P, opus_postmeta M, opus_term_relationships T WHERE P.ID = M.post_id AND P.post_status = 'publish' AND M.meta_key LIKE '%_date_de_la_representation' AND M.meta_value >= '".date('Ymd')."' AND M.meta_value NOT LIKE 'field%' AND T.term_taxonomy_id = ".$term_id." AND T.object_id = P.ID ORDER BY meta_value ASC LIMIT 1", ARRAY_A);
-    return $rows[0];
-}
-
-
 function get_next_show_two_months($year_to_show, $month_to_show){
     global $wpdb;
     $next_month =  date( "Ym", strtotime($year_to_show."-".$month_to_show." +1 month"));
@@ -135,6 +128,29 @@ function get_next_shows($nb)
 function get_next_shows_terms($nb, $post)
 {
     $terms = get_the_terms($post, 'taxonomy-representation');
+
+    global $wpdb;
+    $rows = $wpdb->get_results("
+                SELECT DISTINCT P.ID, M.meta_value 
+                FROM opus_posts P, opus_postmeta M, opus_postmeta Q, opus_postmeta T
+                WHERE (P.ID = M.post_id AND P.post_status = 'publish' AND M.meta_key LIKE '%_date_de_la_representation' AND M.meta_value >= '20220701' AND M.meta_value NOT LIKE 'field%' AND Q.meta_value NOT LIKE 'field%' AND Q.meta_key LIKE '%_etat' AND (Q.meta_value != 'cancelled' AND Q.meta_value != 'postponed') AND Q.post_id = M.post_id AND T.meta_key = 'categories' AND T.meta_value LIKE '%".$terms[0]->term_id."%' AND Q.post_id = T.post_id) OR (P.ID = M.post_id AND P.post_status = 'publish' AND M.meta_key LIKE '%_date_de_report' AND M.meta_value >= '20220701' AND M.meta_value NOT LIKE 'field%' AND Q.meta_value NOT LIKE 'field%' AND Q.meta_key LIKE '%_etat' AND Q.post_id = M.post_id AND T.meta_key = 'categories' AND T.meta_value LIKE '%".$terms[0]->term_id."%' AND T.post_id = Q.post_id)
+                ", ARRAY_A);
+    $my_shows = array();
+    $index = 0;
+    foreach($rows as $one_date){
+        if(!in_array_r($one_date['ID'],$my_shows) && $index < $nb){
+            $my_shows[$index]['ID'] = $one_date['ID'];
+            $my_shows[$index]['meta_value'] = $one_date['meta_value'];
+            $index ++;
+        }
+    }
+
+    return $my_shows;
+}
+
+function get_next_shows_terms_types ($nb, $post)
+{
+    $terms = get_the_terms($post, 'taxonomy-types');
 
     global $wpdb;
     $rows = $wpdb->get_results("

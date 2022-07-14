@@ -42,7 +42,7 @@ foreach ($swp_query->posts as $show)
 
                         <?php
                         $tmp_post = $post;
-                        $taxonomies = array('taxonomy-types');
+                        $taxonomies = array('taxonomy-representation');
                         $args = array(
                             'orderby' => 'name',
                             'order' => 'ASC',
