@@ -18,7 +18,7 @@ $the_term = $term;
                                    title="<?= __('Tout', 'opus-one') ?>"><?= __('Tout', 'opus-one') ?></a></li>
                             <?php
                             $tmp_post = $post;
-                            $taxonomies = array('taxonomy-types');
+                            $taxonomies = array('taxonomy-representation');
                             $args = array(
                                 'orderby' => 'name',
                                 'order' => 'ASC',
@@ -102,11 +102,13 @@ $the_term = $term;
                     </span>
                 </h3><?php
 
-                foreach ($next_shows as $show){
+                foreach ($next_shows
+
+                as $show){
                 $the_id = $show['ID'];
                 $date = $show['meta_value'];
                 $next_date = substr($date, 0, 6);
-                $post = get_post($show['ID']);?>
+                $post = get_post($show['ID']); ?>
 
                 <ul class="event-list"> <?php
 

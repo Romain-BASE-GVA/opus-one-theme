@@ -18,7 +18,7 @@
                     'key'   => 'artiste_represente_par_opus_one',
                     'value' => true,
                 )
-            )
+              )
             )
           )
           ?>
@@ -39,11 +39,11 @@
                       </div>
                       <div class="event__bottom">
                         <h3 class="event__title">
-                          <a href="single-event.html" title="<?php echo $term->name ?>"><?php echo $term->name; ?></a>
+                          <a href="<?= get_term_link($term, 'taxonomy-artistes'); ?>" title="<?php echo $term->name ?>"><?php echo $term->name; ?></a>
                         </h3>
                       </div>
                     </div>
-                    <a class="link-arrow" href="#">
+                    <a class="link-arrow" href="<?= get_term_link($term, 'taxonomy-artistes'); ?>">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 199.81 181.64">
                         <polygon points="154.4 45.41 108.98 0 108.98 72.66 0 72.66 0 108.98 108.98 108.98 108.98 181.64 154.4 136.23 199.81 90.82 154.4 45.41" />
                       </svg>
@@ -82,7 +82,7 @@
             $artistImg = get_field('artiste_photo', $term);   
           ?>
             <div class="card card--artist">
-              <a href="#" class="card__link"></a>
+              <a href="<?= get_term_link($term, 'taxonomy-artistes'); ?>" class="card__link"></a>
               <div class="card__img">
                 <img src="<?php echo esc_url($artistImg['url']); ?>" alt="<?php echo esc_attr($artistImg['alt']); ?>">
                 <div class="img" style="background-image: url(<?php echo esc_url($artistImg['url']); ?>)">
