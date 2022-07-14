@@ -154,16 +154,10 @@ function get_next_shows_terms($nb, $post)
     return $my_shows;
 }
 
-function get_next_shows_terms_types ($nb, $post)
-{
-    $terms = get_the_terms($post, 'taxonomy-types');
-
+function get_show_from_category_nb_types($term_id, $nb){
     global $wpdb;
-    $rows = $wpdb->get_results("
-                SELECT DISTINCT P.ID, M.meta_value 
-                FROM opus_posts P, opus_postmeta M, opus_postmeta Q, opus_postmeta T
-                WHERE (P.ID = M.post_id AND P.post_status = 'publish' AND M.meta_key LIKE '%_date_de_la_representation' AND M.meta_value >= '20220701' AND M.meta_value NOT LIKE 'field%' AND Q.meta_value NOT LIKE 'field%' AND Q.meta_key LIKE '%_etat' AND (Q.meta_value != 'cancelled' AND Q.meta_value != 'postponed') AND Q.post_id = M.post_id AND T.meta_key = 'categories' AND T.meta_value LIKE '%".$terms[0]->term_id."%' AND Q.post_id = T.post_id) OR (P.ID = M.post_id AND P.post_status = 'publish' AND M.meta_key LIKE '%_date_de_report' AND M.meta_value >= '20220701' AND M.meta_value NOT LIKE 'field%' AND Q.meta_value NOT LIKE 'field%' AND Q.meta_key LIKE '%_etat' AND Q.post_id = M.post_id AND T.meta_key = 'categories' AND T.meta_value LIKE '%".$terms[0]->term_id."%' AND T.post_id = Q.post_id)
-                ", ARRAY_A);
+    $rows = $wpdb->get_results("SELECT DISTINCT P.ID, M.meta_value FROM opus_posts P, opus_postmeta M, opus_term_relationships T WHERE (P.ID = M.post_id AND P.post_status = 'publish' AND M.meta_key LIKE '%_date_de_la_representation' AND M.meta_value >= '".date('Ymd')."' AND M.meta_value NOT LIKE 'field%' AND T.term_taxonomy_id = ".$term_id." AND T.object_id = P.ID) OR (P.ID = M.post_id AND P.post_status = 'publish' AND M.meta_key LIKE '%_date_de_report' AND M.meta_value >= '".date('Ymd')."' AND M.meta_value NOT LIKE 'field%' AND T.term_taxonomy_id = ".$term_id." AND T.object_id = P.ID) ORDER BY meta_value ASC", ARRAY_A);
+
     $my_shows = array();
     $index = 0;
     foreach($rows as $one_date){
@@ -173,7 +167,6 @@ function get_next_shows_terms_types ($nb, $post)
             $index ++;
         }
     }
-
     return $my_shows;
 }
 

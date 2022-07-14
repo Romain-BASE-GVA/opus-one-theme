@@ -34,7 +34,7 @@
                     <div class="category__bottom">
                         <a href="<?= get_term_link($term, 'taxonomy-types'); ?>" class="see-more"><span>+</span></a>
                         <?php var_dump($term); ?>
-                        <?php $nextEvents = get_next_shows_terms_types(10, $term); ?>
+                        <?php $nextEvents = get_show_from_category_nb_types(10, $term->term_id); ?>
                         
                         <div class="shortly">
                             <span class="shortly__title">Prochainement</span>
@@ -43,12 +43,6 @@
                                 <?php foreach ($nextEvents as $show): ?>
                                     <a href="<?php echo get_permalink($show['ID']); ?>" title="<?php echo get_the_title( $show['ID'] ) ?>"><?php echo get_the_title( $show['ID'] ) ?></a>
                                 <?php endforeach; ?>
-                                    <!--
-                                    <a href="single-event.html">Angèle </a>
-                                    <a href="single-event.html">Michael Jackson </a>
-                                    <a href="single-event.html">Hubert-Félix Thiéfaine</a>
-                                    <a href="single-event.html">Pogo Car Crash Control</a>
-                            -->
                                 </div>
                             </div>
                         </div>
