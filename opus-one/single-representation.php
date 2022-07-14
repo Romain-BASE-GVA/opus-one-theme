@@ -325,7 +325,7 @@ while ( have_posts() ) : the_post();
 
                     <ul class="event-card-list">
 
-                        <a class="event-card">
+                        <li class="event-card">
                             <?php if($representation_info['etat'] != "postponed"){
                                 $date_de_report = isset($representation_info['date_de_report'] ) ? $representation_info['date_de_report']  : NULL;
                                 get_avaibility_txt($avaibility, $date_de_report, $post->ID, $representation_info, true);
@@ -372,7 +372,7 @@ while ( have_posts() ) : the_post();
                             <?php if(is_string($location_name)){ ?>
                                     <?php if($location_type != 'oui'){ ?> <a class="event-card__where" href="<?= $location_href ?>"> <?php } ?>
                                          <?= $location_name ?></a>
-                                    <?php if($location_type != 'oui'){ ?> </a> <?php } ?>
+                                    <?php if($location_type != 'oui'){ ?> </li> <?php } ?>
                             <?php } ?>
 
                             <?php
