@@ -22,7 +22,7 @@ function custom_taxonomy_representation() {
 	);
 	$rewrite_1 = array(
 		'slug' => 'categorie',
-		'with_front' => true,
+		'with_front' => false,
 		'hierarchical' => false,
 	);
 	$args_1 = array(
@@ -58,7 +58,7 @@ function custom_taxonomy_representation() {
 	);
 	$rewrite_2 = array(
 		'slug' => 'lieux',
-		'with_front' => true,
+		'with_front' => false,
 		'hierarchical' => false,
 	);
 	$args_2 = array(
@@ -129,8 +129,8 @@ function custom_taxonomy_representation() {
 		'not_found' => __( 'Aucune', 'ergopix' )
 	);
 	$rewrite_4 = array(
-		'slug' => 'type',
-		'with_front' => false,
+		'slug' => 'types',
+		'with_front' => true,
 		'hierarchical' => false,
 	);
 	$args_4 = array(
