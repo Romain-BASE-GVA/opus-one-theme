@@ -206,7 +206,7 @@ $the_term = $term;
                                                 $location_href = $new_location_href;
                                             } ?>
                                             <span>
-                                                    <?php if (!empty($location_href) && is_string($location_href) && $location_type != 'oui'){ ?>
+                                                    <?php if (!empty($location_href) && is_string($location_href)){ ?>
                                                         <a href="<?php if (!empty($location_href)) {
                                                             echo $location_href;
                                                         } ?>" <?php if ($location_type != "oui") {
@@ -366,7 +366,7 @@ $the_term = $term;
                                                     $location_href = $new_location_href;
                                                 } ?>
                                                 <span>
-                                                    <?php if (!empty($location_href) && is_string($location_href) && $location_type != 'oui'){ ?>
+                                                    <?php if (!empty($location_href) && is_string($location_href)){ ?>
                                                         <a href="<?php if (!empty($location_href)) {
                                                             echo $location_href;
                                                         } ?>" <?php if ($location_type != "oui") {

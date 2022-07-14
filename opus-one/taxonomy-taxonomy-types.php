@@ -1,8 +1,11 @@
 <?php get_header();
 $term = get_queried_object();
 $the_term = $term;
+
+$termColor = get_field('couleur', $term);
 ?>
-    <div data-barba="container" data-barba-namespace="agenda" data-bg="#6E32FF" data-text-color="#fff"
+    <div data-barba="container" data-barba-namespace="agenda" data-bg="<?php echo $termColor; ?>" data-text-color="#fff"
+
          data-logo-title="Agenda">
         <main class="main main--agenda">
             <div class="filter-bar">
@@ -13,9 +16,11 @@ $the_term = $term;
                     </button>
                     <div class="event-cat-list">
                         <ul>
+
                             <?php $agenda_link = get_field('agenda_link', 'option'); ?>
                             <li><a href="<?= $agenda_link['url'] ?>"
                                    title="<?= __('Tout', 'opus-one') ?>"><?= __('Tout', 'opus-one') ?></a></li>
+
                             <?php
                             $tmp_post = $post;
                             $taxonomies = array('taxonomy-types');
@@ -28,7 +33,9 @@ $the_term = $term;
                             foreach ($terms as $term) {
                                 $next_shows = get_show_from_category($term->term_id);
                                 if (count($next_shows) != 0) { ?>
-                                    <li><a href="<?= get_term_link($term, "taxonomy-representation"); ?>"
+
+                                    <li><a href="<?= get_term_link($term, 'taxonomy-types'); ?>"
+
                                            title="<?= $term->name; ?>" <?php if ($term == $the_term) {
                                         echo 'class="is-active"';
                                     } ?>><?= $term->name; ?></a></li><?php
@@ -70,7 +77,9 @@ $the_term = $term;
             <?php
             $next_shows = get_show_from_category($the_term->term_id);
             $today = date("Y-m-01");
+
             $first_show = get_first_show_category($the_term->term_id);
+
             $date_first_show = $first_show['meta_value'];
             $year_to_show = substr($date_first_show, 0, 4);
             $month_to_show = substr($date_first_show, 4, 2);
@@ -80,6 +89,7 @@ $the_term = $term;
             $next = date("Ym", strtotime($year_to_show . "-" . $month_to_show . " +2 month"));
             $last_show = get_last_show();
             $month = date_i18n("F", strtotime($date_show . "01")); ?>
+
 
             <div class="event-month" data-month-name="<?php echo ucfirst($month); ?>"
                  id="<?= $month ?>-<?= $year_to_show ?>">
@@ -99,6 +109,7 @@ $the_term = $term;
                 </h3><?php
 
                 foreach ($next_shows as $show){
+
                 $the_id = $show['ID'];
                 $date = $show['meta_value'];
                 $next_date = substr($date, 0, 6);
@@ -114,6 +125,7 @@ $the_term = $term;
                         $type = get_field("type", $post->ID);
                         $post = get_post($show['ID']);
                         $terms = wp_get_post_terms($post->ID, "taxonomy-representation");
+
 
                         $month_show = substr($date, 4, 2);
                         $year_show = substr($date, 0, 4);
@@ -233,7 +245,9 @@ $the_term = $term;
                                                 $location_href = $new_location_href;
                                             } ?>
                                             <span>
+
                                                     <?php if (!empty($location_href) && is_string($location_href) && $location_type != 'oui'){ ?>
+
                                                         <a href="<?php if (!empty($location_href)) {
                                                             echo $location_href;
                                                         } ?>" <?php if ($location_type != "oui") {
@@ -393,7 +407,9 @@ $the_term = $term;
                                                     $location_href = $new_location_href;
                                                 } ?>
                                                 <span>
+
                                                     <?php if (!empty($location_href) && is_string($location_href) && $location_type != 'oui'){ ?>
+
                                                         <a href="<?php if (!empty($location_href)) {
                                                             echo $location_href;
                                                         } ?>" <?php if ($location_type != "oui") {
