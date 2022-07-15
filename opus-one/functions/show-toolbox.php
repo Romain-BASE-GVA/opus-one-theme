@@ -306,10 +306,6 @@ function stripAccents($str) {
 
 function get_ticket_link($date, $debug = false)
 {
-    if($debug){
-        opus_die(var_dump($date));
-    }
-
     $ticket = null;
     if(isset($date['fnac_ch']) && !empty($date['fnac_ch'])){
         $ticket = $date['fnac_ch'];
