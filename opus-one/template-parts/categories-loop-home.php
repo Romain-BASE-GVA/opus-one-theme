@@ -31,12 +31,24 @@
                         </span>
                         <span class="category__word category__word--mobile"><?php echo $catName; ?></span>
                     </h2>
+                    
                     <div class="category__bottom">
                         <a href="<?= get_term_link($term, 'taxonomy-types'); ?>" class="see-more"><span>+</span></a>
                         <?php var_dump($term); ?>
-                        <?php $nextEvents = get_show_from_category_nb_types($term->term_id, 10); ?>
+                        <?php $nextEvents = get_show_from_category_nb_types(10, $term->term_id); ?>
                         
+                        <div class="shortly">
+                            <span class="shortly__title">Prochainement</span>
+                            <div class="marquee3k shortly__marquee" data-speed="1" data-pausable="true">
+                                <div>
+                                <?php foreach ($nextEvents as $show): ?>
+                                    <a href="<?php echo get_permalink($show['ID']); ?>" title="<?php echo get_the_title( $show['ID'] ) ?>"><?php echo get_the_title( $show['ID'] ) ?></a>
+                                <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         <?php endforeach; ?>
