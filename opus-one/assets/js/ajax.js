@@ -10,7 +10,6 @@ $(document).ready(function () {
     window_width = $(window).width();
 
     host = "https://"+window.location.hostname;
-    host = "http://localhost:10008";
 
     var processing = false;
     if ($('[data-ajax-action="next_month"]').length > 0) {
