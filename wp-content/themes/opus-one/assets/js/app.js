@@ -99,6 +99,7 @@ $(document).ready(function () {
     init();
 
     barba.init({
+        debug: true,
         preventRunning: true,
         transitions: [{
             name: 'switch',
@@ -224,7 +225,7 @@ $(document).ready(function () {
                 gsap.to($('.topbar--page-nav'), {
                     autoAlpha: 1, onComplete: function () {
                         Draggable.create($(pageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(pageNav) });
-                        Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
+                        // Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
                     }
                 });
 
@@ -265,7 +266,7 @@ $(document).ready(function () {
                 gsap.to($('.topbar--page-nav'), {
                     autoAlpha: 1, onComplete: function () {
                         Draggable.create($(pageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(pageNav) });
-                        Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
+                        // Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
                     }
                 });
 
@@ -305,7 +306,7 @@ $(document).ready(function () {
                 gsap.to($('.topbar--page-nav'), {
                     autoAlpha: 1, onComplete: function () {
                         Draggable.create($(pageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(pageNav) });
-                        Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
+                        // Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
                     }
                 });
 
@@ -375,7 +376,7 @@ $(document).ready(function () {
                 gsap.to($('.topbar--page-nav'), {
                     autoAlpha: 1, onComplete: function () {
                         Draggable.create($(pageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(pageNav) });
-                        Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
+                        // Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
                     }
                 });
 
@@ -416,7 +417,7 @@ $(document).ready(function () {
                 gsap.to($('.topbar--page-nav'), {
                     autoAlpha: 1, onComplete: function () {
                         Draggable.create($(pageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(pageNav) });
-                        Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
+                        // Draggable.create($(mobilePageNav).find('.page-nav'), { type: 'x', edgeResistance: 0.65, bounds: $(mobilePageNav) });
                     }
                 });
 
