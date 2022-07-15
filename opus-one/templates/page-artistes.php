@@ -39,7 +39,10 @@
                       </div>
                       <div class="event__bottom">
                         <h3 class="event__title">
+                          <!--
                           <a href="<?= get_term_link($term, 'taxonomy-artistes'); ?>" title="<?php echo $term->name ?>"><?php echo $term->name; ?></a>
+                          -->
+                          <span><?php echo $term->name; ?></span>
                         </h3>
                       </div>
                     </div>

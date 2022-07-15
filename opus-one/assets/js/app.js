@@ -818,7 +818,7 @@ $(document).ready(function () {
 
         if (!isTouch) {
 
-            $('.event--artist a').on('mouseenter, mousemove', function (e) {
+            $('.event--artist a, .event--artist span').on('mouseenter, mousemove', function (e) {
                 // var xPos = e.pageX;
                 // var yPos = e.pageY;
                 let transform = gsap.utils.pipe(
@@ -846,7 +846,7 @@ $(document).ready(function () {
                 console.log(xRange);
             });
 
-            $('.event--artist a').on('mouseleave', function (e) {
+            $('.event--artist a, .event--artist span').on('mouseleave', function (e) {
                 $('.represented-artist-img').removeClass('represented-artist-img--is-visible');
                 //gsap.to('.represented-artist-img img', {'--scale': 1.2, ease: Power2.easeOut});
             });
