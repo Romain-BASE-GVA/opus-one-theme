@@ -129,7 +129,7 @@ function custom_taxonomy_representation() {
 		'not_found' => __( 'Aucune', 'ergopix' )
 	);
 	$rewrite_4 = array(
-		'slug' => 'type',
+		'slug' => 'types',
 		'with_front' => false,
 		'hierarchical' => false,
 	);
