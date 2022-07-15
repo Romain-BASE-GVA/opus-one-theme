@@ -16,7 +16,7 @@
         ?>
             <div class="category category--<?php echo $catNameLower; ?>" id="<?php echo $catNameLower; ?>">
                 <div class="category__bg">
-                    <img src="<?php echo $catImage['url']; ?>" class="category__media" alt="<?php echo $catIimage['alt']; ?>">
+                    <img src="<?php echo $catImage['url']; ?>" class="category__media" alt="<?php echo $catImage['alt']; ?>">
                 </div>
                 <div class="category__fg">
                     <h2 class="category__title">
@@ -34,7 +34,7 @@
                     <div class="category__bottom">
                         <a href="<?= get_term_link($term, 'taxonomy-types'); ?>" class="see-more"><span>+</span></a>
                         <?php var_dump($term); ?>
-                        <?php $nextEvents = get_show_from_category_nb_types(10, $term->term_id); ?>
+                        <?php $nextEvents = get_show_from_category_nb_types($term->term_id, 10); ?>
                         
                         <div class="shortly">
                             <span class="shortly__title">Prochainement</span>
