@@ -38,7 +38,7 @@ $(document).ready(function () {
                     $.ajax({
                         type: 'GET',
                         url: host + '/wp-content/themes/opus-one/ajax.php',
-                        data: {action: 'next_months', month_to_show: next_month, year_to_show: next_year, taxo_type: isTaxo, term_id: term_id}
+                        data: {action: 'next_months', month_to_show: next_month, year_to_show: next_year, isTaxo: isTaxo, term_id: term_id}
                     }).done(function (data) {
                         n = data.indexOf("one-month")
                         if (n >= 0) {

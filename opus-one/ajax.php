@@ -4,6 +4,7 @@ include_once("../../../wp-load.php");
 if($_GET['action'] != ""){
 
     if($_GET['action'] == "next_months"){
+
         $isTaxo = $_GET['isTaxo'];
 
         $year_to_show = $_GET['year_to_show'];
@@ -12,6 +13,9 @@ if($_GET['action'] != ""){
         $next =  date( "Ym", strtotime($year_to_show."-".$month_to_show." +2 month"));
         $month = date_i18n("F", strtotime($date_show . "01"));
         $array_show_multidate = array();
+
+        $next_shows = get_next_show_two_months($year_to_show, $month_to_show);
+        $last_show = get_last_show();
 
         if($isTaxo == 'false') {
             $next_shows = get_next_show_two_months($year_to_show, $month_to_show);

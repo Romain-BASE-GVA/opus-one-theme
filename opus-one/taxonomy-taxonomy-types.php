@@ -459,8 +459,9 @@ $termColor = get_field('couleur', $term);
                 }
                 }
                 } ?>
-                <div class="next-dates"></div>
+            </ul>
             </div>
+            <div class="next-dates"></div>
         </main>
     </div>
 <?php get_footer(); ?>

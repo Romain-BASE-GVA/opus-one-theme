@@ -460,8 +460,10 @@
                 }
             }
             } ?>
-            <div class="next-dates"></div>
+        </ul>
     </div>
+    <div class="next-dates"></div>
+    </main>
 <?php endwhile;
 endif; ?>
     <?php get_footer(); ?>
