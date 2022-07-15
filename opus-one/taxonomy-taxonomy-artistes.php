@@ -824,17 +824,7 @@ while ( have_posts() ) : the_post();
             </aside>
         </div>
     </main>
-    <section class="section section--agenda-cta" style="--section-color: #fff; --current-bg-color: #10CF72;">
-        <?php
-        $agenda_url = get_field('agenda_link', 'options');
-        ?>
-        <h3 class="section__title"><?= __('Émotions, vibrations, révélations', 'opus-one') ?></h3>
-        <div class="agenda-cta">
-            <h4><?= __('agenda', 'opus-one') ?></h4>
-            <a href="<?= $agenda_url['url'] ?>" class="see-more" title="Découvrir toute notre programmation">Découvrir toute notre
-                programmation</a>
-        </div>
-    </section>
+    <?php get_template_part('template-parts/agenda-cta'); ?>
 </div>
 
 <?php
