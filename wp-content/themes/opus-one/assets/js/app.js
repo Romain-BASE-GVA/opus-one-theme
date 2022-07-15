@@ -99,6 +99,7 @@ $(document).ready(function () {
     init();
 
     barba.init({
+        timeout: 10000,
         debug: true,
         preventRunning: true,
         transitions: [{

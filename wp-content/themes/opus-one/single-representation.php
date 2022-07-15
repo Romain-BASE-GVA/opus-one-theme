@@ -944,18 +944,21 @@ while ( have_posts() ) : the_post();
                                     } ?><!-- avaibality -->
 
                                     <!-- la liste des reports -->
-                                    <ul class="event__top-info__item event__postpone">
-                                        <?php if($representation_info['etat'] == "postponed" && $representation_info['date_de_report'] == $date){ ?>
-                                            <li class="event__postpone__item">
-                                                <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
-                                                     viewBox="0 0 164.24 128.77">
-                                                    <path
-                                                            d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
-                                                </svg>
-                                                <span><?php echo __(" Report du "). ucfirst(date_i18n(get_option('date_format' ), strtotime($representation_info['date_de_la_representation']))); ?></span>
-                                            </li>
-                                        <?php } ?>
-                                    </ul>
+                                    <li class="event__top-info__item event__top-info__item--postpone">
+                                        <ul class="event__postpone">
+                                            <?php if($representation_info['etat'] == "postponed" && $representation_info['date_de_report'] == $date){ ?>
+                                                <li class="event__postpone__item">
+                                                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 164.24 128.77">
+                                                        <path
+                                                                d="M121.31,128.77v-35.57H46.6c-12.92,0-23.91-4.55-32.99-13.66C4.54,70.43,0,59.45,0,46.6S4.54,22.77,13.61,13.66C22.69,4.56,33.68,0,46.6,0h2.38V14.71h-2.38c-8.88,0-16.41,3.11-22.6,9.34-6.19,6.23-9.29,13.75-9.29,22.55s3.1,16.33,9.29,22.55c6.19,6.23,13.73,9.34,22.6,9.34H121.31V42.92l42.92,42.92-42.92,42.92Z" />
+                                                    </svg>
+                                                    <span><?php echo __(" Report du "). ucfirst(date_i18n(get_option('date_format' ), strtotime($representation_info['date_de_la_representation']))); ?></span>
+                                                </li>
+                                            <?php } ?>
+                                        </ul>
+                                    </li>
+
                                 </ul>
                                 <span class="event__hashtag event__hashtag--desktop">
                                              <?php
