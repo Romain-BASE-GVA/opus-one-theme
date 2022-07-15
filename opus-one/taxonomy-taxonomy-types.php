@@ -5,6 +5,8 @@ $termColor = get_field('couleur', $term);
 ?>
     <div data-barba="container" data-barba-namespace="agenda" data-bg="<?php echo $termColor; ?>" data-text-color="#fff"
          data-ajax-action="next_month"
+         data-ajax-option="taxonomy"
+         data-ajax-term-id="<?= $term->term_id ?>"
          data-logo-title="Agenda">
         <main class="main main--agenda">
             <div class="filter-bar">

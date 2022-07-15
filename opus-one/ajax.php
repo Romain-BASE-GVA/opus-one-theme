@@ -4,14 +4,23 @@ include_once("../../../wp-load.php");
 if($_GET['action'] != ""){
 
     if($_GET['action'] == "next_months"){
+        $isTaxo = $_GET['isTaxo'];
+
         $year_to_show = $_GET['year_to_show'];
         $month_to_show = $_GET['month_to_show'];
         $date_show = $year_to_show . $month_to_show;
-        $next_shows = get_next_show_two_months($year_to_show, $month_to_show);
         $next =  date( "Ym", strtotime($year_to_show."-".$month_to_show." +2 month"));
-        $last_show = get_last_show();
         $month = date_i18n("F", strtotime($date_show . "01"));
         $array_show_multidate = array();
+
+        if($isTaxo == 'false') {
+            $next_shows = get_next_show_two_months($year_to_show, $month_to_show);
+            $last_show = get_last_show();
+        }else {
+            $term_id = $_GET['term_id'];
+            $next_shows = get_next_show_two_months_by_terms($year_to_show, $month_to_show, $term_id);
+            $last_show = get_last_show_by_term($term_id);
+        }
 
         if($next_shows){ ?>
 
