@@ -65,7 +65,8 @@
     <div class="page-transition__line"></div>
 </div>
 <script src="<?php echo get_template_directory_uri(); ?>/assets/js/main.min.js"></script>
+<script src="<?php echo get_template_directory_uri(); ?>/assets/js/jquery.matchHeight-min.js"></script>
+<script src="<?php echo get_template_directory_uri(); ?>/assets/js/main.min.js"></script>
 
 </body>
-
 </html>
