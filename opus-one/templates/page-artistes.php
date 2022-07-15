@@ -7,7 +7,7 @@
     <div data-barba="container" data-barba-namespace="artists" data-bg="<?php echo $colorBackground; ?>" data-text-color="<?php echo $colorText; ?>" data-logo-title="<?php the_title(); ?>">
       <main class="main main--top-padding">
         <section class="section section--artist-list section--no-padding-x" style="--current-bg-color: transparent">
-          <h3 class="section__title">We represent the following artists:</h3>
+          <h3 class="section__title">Nous représentons les artistes suivants</h3>
           <?php
           $terms = get_terms(
             array(
@@ -60,6 +60,7 @@
             <img src="" alt="">
           </div>
         </div>
+        <!--
         <section class="section section--artist-grid section--no-padding-x" style="--section-bg-color: transparent">
           <h3 class="section__title">We book and/or promote the following artists:</h3>
           <?php
@@ -100,6 +101,7 @@
           </div>
           <?php endif; ?>
         </section>
+          -->
       </main>
     </div>
 <?php endwhile;

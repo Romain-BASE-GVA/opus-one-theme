@@ -36,16 +36,6 @@
                         <?php var_dump($term); ?>
                         <?php $nextEvents = get_show_from_category_nb_types($term->term_id, 10); ?>
                         
-                        <div class="shortly">
-                            <span class="shortly__title">Prochainement</span>
-                            <div class="marquee3k shortly__marquee" data-speed="1" data-pausable="true">
-                                <div>
-                                <?php foreach ($nextEvents as $show): ?>
-                                    <a href="<?php echo get_permalink($show['ID']); ?>" title="<?php echo get_the_title( $show['ID'] ) ?>"><?php echo get_the_title( $show['ID'] ) ?></a>
-                                <?php endforeach; ?>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
