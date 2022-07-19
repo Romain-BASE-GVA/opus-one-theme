@@ -72,8 +72,11 @@
 }
 
 .double-bouttons__btn {
+    display: flex;
     @include transition;
     text-align: center;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
         background-color: $white;

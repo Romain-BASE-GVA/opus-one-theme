@@ -99,6 +99,10 @@ select {
         background-color: rgba($white, .25);
         outline: none;
     }
+
+    option {
+        background-color: var(--current-bg-color, $black);
+    }
 }
 
 label {

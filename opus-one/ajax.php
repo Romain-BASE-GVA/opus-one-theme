@@ -32,7 +32,7 @@ if($_GET['action'] != ""){
             id="<?= $month ?>-<?= $year_to_show ?>">
             <h3 class="event-month__title">
                 <!-- @TODO : JS pour adpater le responsive (?) -->
-                <span class="event-month__word event-month__word--mobile">Jan<br>vier</span><!--MOBILE-->
+                <span class="event-month__word event-month__word--mobile"><?php echo $month; ?></span><!--MOBILE-->
                 <!-- @TODO : END -->
                 <span class="event-month__word event-month__word--desktop"><!-- DESKTOP -->
                         <?php
@@ -60,7 +60,7 @@ if($_GET['action'] != ""){
             id="<?= $month ?>-<?= $year_to_show ?>">
             <h3 class="event-month__title">
                 <!-- @TODO : JS pour adpater le responsive (?) -->
-                <span class="event-month__word event-month__word--mobile">Jan<br>vier</span><!--MOBILE-->
+                <span class="event-month__word event-month__word--mobile"><?php echo $month; ?></span><!--MOBILE-->
                 <!-- @TODO : END -->
                 <span class="event-month__word event-month__word--desktop"><!-- DESKTOP -->
                                 <?php
@@ -117,13 +117,19 @@ if($_GET['action'] != ""){
                 <li class="event">
                     <div class="event__call-back event__call-back--mobile">
                         <div class="double-buttons">
-                            <a href="single-event.html"
-                               class="double-bouttons__btn double-bouttons__btn--info"
-                               title="<?= __('Informations') ?>"><?= __('Informations') ?></a>
+                            <a href="<?= get_permalink($post->ID); ?>"
+                                class="double-bouttons__btn double-bouttons__btn--info" title="">
+                                <?php
+                                if ($nb_futur_show <= 1) {
+                                    _e("Informations", "opus-one");
+                                } else {
+                                    _e("Informations tournée", "opus-one");
+                                }
+                                ?>
+                            </a>
                             <?php if (!empty($ticket_url)) { ?>
-                                <a href="<?php $ticket_url ?>"
-                                   class="double-bouttons__btn double-bouttons__btn--ticket"
-                                   title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
+                                <a href="<?= $ticket_url ?>"
+                                    class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
                             <?php } ?>
                         </div>
                     </div>
@@ -146,7 +152,7 @@ if($_GET['action'] != ""){
                                 <span class="event__hashtag event__hashtag--mobile">
                                                     <?php
                                                     foreach ($terms as $term) {
-                                                        echo '#' . $term->name;
+                                                        echo '<span>#' . $term->name . '</span>';
                                                     }
                                                     ?>
                                                 </span> <!-- categorie de l event -->
@@ -209,7 +215,7 @@ if($_GET['action'] != ""){
                         <span class="event__hashtag event__hashtag--desktop">
                                              <?php
                                              foreach ($terms as $term) {
-                                                 echo '#' . $term->name . ' ';
+                                                 echo '<span>#' . $term->name . '</span>';
                                              }
                                              ?>
                                         </span>
@@ -261,12 +267,18 @@ if($_GET['action'] != ""){
                         <div class="event__call-back event__call-back--mobile">
                             <div class="double-buttons">
                                 <a href="<?= get_permalink($post->ID); ?>"
-                                   class="double-bouttons__btn double-bouttons__btn--info"
-                                   title="<?= __('Informations') ?>"><?= __('Informations') ?></a>
+                                    class="double-bouttons__btn double-bouttons__btn--info" title="">
+                                    <?php
+                                    if ($nb_futur_show <= 1) {
+                                        _e("Informations", "opus-one");
+                                    } else {
+                                        _e("Informations tournée", "opus-one");
+                                    }
+                                    ?>
+                                </a>
                                 <?php if (!empty($ticket_url)) { ?>
-                                    <a href="<?php $ticket_url ?>"
-                                       class="double-bouttons__btn double-bouttons__btn--ticket"
-                                       title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
+                                    <a href="<?= $ticket_url ?>"
+                                        class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
                                 <?php } ?>
                             </div>
                         </div>
@@ -349,7 +361,7 @@ if($_GET['action'] != ""){
                             <span class="event__hashtag event__hashtag--desktop">
                                              <?php
                                              foreach ($terms as $term) {
-                                                 echo '#' . $term->name . ' ';
+                                                 echo '<span>#' . $term->name . '</span>';
                                              }
                                              ?>
                                         </span>

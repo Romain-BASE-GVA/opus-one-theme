@@ -68,7 +68,7 @@ $termColor = get_field('couleur', $term);
                     </button>
                 </div>
 
-                <div class="mobile-page-nav"></div>
+                <!--<div class="mobile-page-nav"></div>-->
             </div>
 
             <?php
@@ -94,7 +94,7 @@ $termColor = get_field('couleur', $term);
                  id="<?= $month ?>-<?= $year_to_show ?>">
                 <h3 class="event-month__title">
                     <!-- @TODO : JS pour adpater le responsive (?) -->
-                    <span class="event-month__word event-month__word--mobile">Jan<br>vier</span><!--MOBILE-->
+                    <span class="event-month__word event-month__word--mobile"><?php echo $month; ?></span><!--MOBILE-->
                     <!-- @TODO : END -->
                     <span class="event-month__word event-month__word--desktop"><!-- DESKTOP -->
                         <?php
@@ -141,7 +141,7 @@ $termColor = get_field('couleur', $term);
                  id="<?= $month ?>-<?= $year_to_show ?>">
                 <h3 class="event-month__title">
                     <!-- @TODO : JS pour adpater le responsive (?) -->
-                    <span class="event-month__word event-month__word--mobile">Jan<br>vier</span><!--MOBILE-->
+                    <span class="event-month__word event-month__word--mobile"><?php echo $month; ?></span><!--MOBILE-->
                     <!-- @TODO : END -->
                     <span class="event-month__word event-month__word--desktop"><!-- DESKTOP -->
                         <?php
@@ -187,18 +187,25 @@ $termColor = get_field('couleur', $term);
 
                     <!-- Et Ensuite la liste des evenements, certaine info sont la 2x la version mobile et desktop sont legerement different et ne permettaient pas de faire un seul template -->
                     <li class="event">
-                        <div class="event__call-back event__call-back--mobile">
-                            <div class="double-buttons">
-                                <a href="<?= $url ?>"
-                                   class="double-bouttons__btn double-bouttons__btn--info"
-                                   title="<?= __('Informations') ?>"><?= __('Informations') ?></a>
-                                <?php if (!empty($ticket_url)) { ?>
-                                    <a href="<?php $ticket_url ?>"
-                                       class="double-bouttons__btn double-bouttons__btn--ticket"
-                                       title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
-                                <?php } ?>
-                            </div>
-                        </div>
+                    <div class="event__call-back event__call-back--mobile">
+                                    <div class="double-buttons">
+                                        <a href="<?= get_permalink($post->ID); ?>"
+                                           class="double-bouttons__btn double-bouttons__btn--info"
+                                           title="">
+                                            <?php
+                                            if ($nb_futur_show <= 1) {
+                                                _e("Informations", "opus-one");
+                                            } else {
+                                                _e("Informations tournée", "opus-one");
+                                            }
+                                            ?>
+                                        </a>
+                                        <?php if (!empty($ticket_url)) { ?>
+                                            <a href="<?= $ticket_url ?>"
+                                               class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                                        <?php } ?>
+                                    </div>
+                                </div>
                         <div class="event__top">
                             <ul class="event__top-info">
                                 <li class="event__top-info__item event__top-info__item--when">
@@ -218,7 +225,7 @@ $termColor = get_field('couleur', $term);
                                     <span class="event__hashtag event__hashtag--mobile">
                                                     <?php
                                                     foreach ($terms as $term) {
-                                                        echo '#' . $term->name;
+                                                        echo '<span>#' . $term->name . '</span>';
                                                     }
                                                     ?>
                                                 </span> <!-- categorie de l event -->
@@ -281,7 +288,7 @@ $termColor = get_field('couleur', $term);
                             <span class="event__hashtag event__hashtag--desktop">
                                              <?php
                                              foreach ($terms as $term) {
-                                                 echo '#' . $term->name . ' ';
+                                                echo '<span>#' . $term->name . '</span>';
                                              }
                                              ?>
                                         </span>
@@ -331,18 +338,25 @@ $termColor = get_field('couleur', $term);
                         $avaibility = $representation_info['etat']; ?>
 
                         <li class="event">
-                            <div class="event__call-back event__call-back--mobile">
-                                <div class="double-buttons">
-                                    <a href="<?= get_permalink($post->ID); ?>"
-                                       class="double-bouttons__btn double-bouttons__btn--info"
-                                       title="<?= __('Informations') ?>"><?= __('Informations') ?></a>
-                                    <?php if (!empty($ticket_url)) { ?>
-                                        <a href="<?php $ticket_url ?>"
-                                           class="double-bouttons__btn double-bouttons__btn--ticket"
-                                           title="<?= __('Tickets', 'opus-one') ?>"><?= __('Tickets', 'opus-one') ?></a>
-                                    <?php } ?>
+                        <div class="event__call-back event__call-back--mobile">
+                                    <div class="double-buttons">
+                                        <a href="<?= get_permalink($post->ID); ?>"
+                                           class="double-bouttons__btn double-bouttons__btn--info"
+                                           title="">
+                                            <?php
+                                            if ($nb_futur_show <= 1) {
+                                                _e("Informations", "opus-one");
+                                            } else {
+                                                _e("Informations tournée", "opus-one");
+                                            }
+                                            ?>
+                                        </a>
+                                        <?php if (!empty($ticket_url)) { ?>
+                                            <a href="<?= $ticket_url ?>"
+                                               class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
+                                        <?php } ?>
+                                    </div>
                                 </div>
-                            </div>
                             <div class="event__top">
                                 <ul class="event__top-info">
                                     <li class="event__top-info__item event__top-info__item--when">
@@ -379,7 +393,7 @@ $termColor = get_field('couleur', $term);
                                         <span class="event__hashtag event__hashtag--mobile">
                                                     <?php
                                                     foreach ($terms as $term) {
-                                                        echo '#' . $term->name;
+                                                        echo '<span>#' . $term->name . '</span>';
                                                     }
                                                     ?>
                                                 </span> <!-- categorie de l event -->
@@ -422,7 +436,7 @@ $termColor = get_field('couleur', $term);
                                 <span class="event__hashtag event__hashtag--desktop">
                                              <?php
                                              foreach ($terms as $term) {
-                                                 echo '#' . $term->name . ' ';
+                                                echo '<span>#' . $term->name . '</span>';
                                              }
                                              ?>
                                         </span>
@@ -462,6 +476,38 @@ $termColor = get_field('couleur', $term);
             </ul>
             </div>
             <div class="next-dates"></div>
+            <div class="loader-agenda">
+            <svg
+
+                viewBox="0 0 200 200"
+                color="#3f51b5"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                >
+                <defs>
+                    <linearGradient id="spinner-secondHalf">
+                    <stop offset="0%" stop-opacity="0" stop-color="white" />
+                    <stop offset="100%" stop-opacity="0.5" stop-color="white" />
+                    </linearGradient>
+                    <linearGradient id="spinner-firstHalf">
+                    <stop offset="0%" stop-opacity="1" stop-color="white" />
+                    <stop offset="100%" stop-opacity="0.5" stop-color="white" />
+                    </linearGradient>
+                </defs>
+
+                <g stroke-width="8">
+                    <path stroke="url(#spinner-secondHalf)" d="M 4 100 A 96 96 0 0 1 196 100" />
+                    <path stroke="url(#spinner-firstHalf)" d="M 196 100 A 96 96 0 0 1 4 100" />
+
+                    <!-- 1deg extra path to have the round end cap -->
+                    <path
+                    stroke="white"
+                    stroke-linecap="round"
+                    d="M 4 100 A 96 96 0 0 1 4 98"
+                    />
+                </g>
+                </svg>
+            </div>
         </main>
     </div>
 <?php get_footer(); ?>

@@ -237,10 +237,10 @@
                                                                                     <img src="<?php echo esc_url($memberImg['url']); ?>" alt="<?php echo esc_attr($memberImg['alt']); ?>" />
                                                                                 </div>
                                                                                 <div class="member__info">
+                                                                                    <span class="member__name"><?php the_title(); ?></span>
                                                                                     <?php if ($memberRole) : ?>
                                                                                         <span class="member__role"><?php echo $memberRole; ?></span>
                                                                                     <?php endif; ?>
-                                                                                    <span class="member__name"><?php the_title(); ?></span>
                                                                                     <?php if ($memberTag) : ?>
                                                                                         <span class="member__tag">#<?php echo $memberTag; ?></span>
                                                                                     <?php endif; ?>
@@ -270,6 +270,7 @@
                 <?php endif; ?>
 
             </main>
+            
             <?php if (have_rows('voir_plus')) : ?>
                 <div class="block block--see-more" style="--current-txt-color: #6E32FF; --current-bg-color: #fff;">
                     <?php  if(get_field('voir_plus_titre')): ?>
@@ -297,7 +298,7 @@
                     </ul>
                 </div>
             <?php endif; ?>
-
+        
         </div>
 <?php endwhile;
 endif; ?>

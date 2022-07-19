@@ -1,8 +1,15 @@
 .screen-contact {
+    display: flex;
+    flex-direction: column;
     position: relative;
     width: 100%;
     height: 100vh;
     overflow: hidden;
+}
+
+.screen-contact__layers {
+    position: relative;
+    flex: 1 1 100%;
 }
 
 .screen-contact__layer {
@@ -52,4 +59,20 @@
             @include fs-md;
         }
     }
+}
+
+.screen-contact__infos {
+    display: flex;
+    flex-direction: column;
+    @include fs-md;
+    padding-bottom: $gutter;
+
+    span {
+        margin-bottom: .5em;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
 }

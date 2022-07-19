@@ -71,7 +71,7 @@
             </button>
         </div>
 
-        <div class="mobile-page-nav"></div>
+        <!--<div class="mobile-page-nav"></div>-->
     </div>
 
     <?php
@@ -94,7 +94,7 @@
     <div class="event-month" data-month-name="<?php echo ucfirst($month); ?>" id="<?= $month ?>-<?= $year_to_show ?>">
         <h3 class="event-month__title">
             <!-- @TODO : JS pour adpater le responsive (?) -->
-            <span class="event-month__word event-month__word--mobile">Jan<br>vier</span>
+            <span class="event-month__word event-month__word--mobile"><?php echo $month; ?></span>
             <!--MOBILE-->
             <!-- @TODO : END -->
             <span class="event-month__word event-month__word--desktop">
@@ -127,7 +127,7 @@
     <div class="event-month" data-month-name="<?php echo ucfirst($month); ?>" id="<?= $month ?>-<?= $year_to_show ?>">
         <h3 class="event-month__title">
             <!-- @TODO : JS pour adpater le responsive (?) -->
-            <span class="event-month__word event-month__word--mobile">Jan<br>vier</span>
+            <span class="event-month__word event-month__word--mobile"><?php echo $month; ?></span>
             <!--MOBILE-->
             <!-- @TODO : END -->
             <span class="event-month__word event-month__word--desktop">
@@ -186,12 +186,19 @@
                     <li class="event">
                         <div class="event__call-back event__call-back--mobile">
                             <div class="double-buttons">
-                                <a href="single-event.html" class="double-bouttons__btn double-bouttons__btn--info"
-                                   title=""><?= __('Informations') ?></a>
+                                <a href="<?= get_permalink($post->ID); ?>"
+                                    class="double-bouttons__btn double-bouttons__btn--info" title="">
+                                    <?php
+                                    if ($nb_futur_show <= 1) {
+                                        _e("Informations", "opus-one");
+                                    } else {
+                                        _e("Informations tournée", "opus-one");
+                                    }
+                                    ?>
+                                </a>
                                 <?php if (!empty($ticket_url)) { ?>
-                                    <a href="<?php $ticket_url ?>"
-                                       class="double-bouttons__btn double-bouttons__btn--ticket"
-                                       title=""><?php __('Tickets') ?></a>
+                                    <a href="<?= $ticket_url ?>"
+                                        class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
                                 <?php } ?>
                             </div>
                         </div>
@@ -214,7 +221,7 @@
                                     <span class="event__hashtag event__hashtag--mobile">
                                                 <?php
                                                 foreach ($terms as $term) {
-                                                    echo '#' . $term->name;
+                                                    echo '<span>#' . $term->name . '</span>';
                                                 }
                                                 ?>
                                             </span> <!-- categorie de l event -->
@@ -281,7 +288,7 @@
                             <span class="event__hashtag event__hashtag--desktop">
                                         <?php
                                         foreach ($terms as $term) {
-                                            echo '#' . $term->name . ' ';
+                                            echo '<span>#' . $term->name . '</span>';
                                         }
                                         ?>
                                     </span>
@@ -333,12 +340,18 @@
                             <div class="event__call-back event__call-back--mobile">
                                 <div class="double-buttons">
                                     <a href="<?= get_permalink($post->ID); ?>"
-                                       class="double-bouttons__btn double-bouttons__btn--info"
-                                       title=""><?= __('Informations') ?></a>
+                                        class="double-bouttons__btn double-bouttons__btn--info" title="">
+                                        <?php
+                                        if ($nb_futur_show <= 1) {
+                                            _e("Informations", "opus-one");
+                                        } else {
+                                            _e("Informations tournée", "opus-one");
+                                        }
+                                        ?>
+                                    </a>
                                     <?php if (!empty($ticket_url)) { ?>
-                                        <a href="<?php $ticket_url ?>"
-                                           class="double-bouttons__btn double-bouttons__btn--ticket"
-                                           title=""><?php __('Tickets') ?></a>
+                                        <a href="<?= $ticket_url ?>"
+                                            class="double-bouttons__btn double-bouttons__btn--ticket" title="">Tickets</a>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -378,7 +391,7 @@
                                         <span class="event__hashtag event__hashtag--mobile">
                                                     <?php
                                                     foreach ($terms as $term) {
-                                                        echo '#' . $term->name;
+                                                        echo '<span>#' . $term->name . '</span>';
                                                     }
                                                     ?>
                                                 </span> <!-- categorie de l event -->
@@ -423,7 +436,7 @@
                                 <span class="event__hashtag event__hashtag--desktop">
                                             <?php
                                             foreach ($terms as $term) {
-                                                echo '#' . $term->name . ' ';
+                                                echo '<span>#' . $term->name . '</span>';
                                             }
                                             ?>
                                         </span>
@@ -463,6 +476,38 @@
         </ul>
     </div>
     <div class="next-dates"></div>
+    <div class="loader-agenda">
+        <svg
+
+    viewBox="0 0 200 200"
+    color="#3f51b5"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    >
+    <defs>
+        <linearGradient id="spinner-secondHalf">
+        <stop offset="0%" stop-opacity="0" stop-color="white" />
+        <stop offset="100%" stop-opacity="0.5" stop-color="white" />
+        </linearGradient>
+        <linearGradient id="spinner-firstHalf">
+        <stop offset="0%" stop-opacity="1" stop-color="white" />
+        <stop offset="100%" stop-opacity="0.5" stop-color="white" />
+        </linearGradient>
+    </defs>
+
+    <g stroke-width="8">
+        <path stroke="url(#spinner-secondHalf)" d="M 4 100 A 96 96 0 0 1 196 100" />
+        <path stroke="url(#spinner-firstHalf)" d="M 196 100 A 96 96 0 0 1 4 100" />
+
+        <!-- 1deg extra path to have the round end cap -->
+        <path
+        stroke="white"
+        stroke-linecap="round"
+        d="M 4 100 A 96 96 0 0 1 4 98"
+        />
+    </g>
+    </svg>
+    </div>
     </main>
         </div>
 <?php endwhile;

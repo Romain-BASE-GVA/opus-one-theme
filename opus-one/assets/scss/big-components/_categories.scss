@@ -1,6 +1,11 @@
 .categories {
-    margin-left: - $gutter*2;
-    width: calc(100% + #{$gutter * 4});
+    margin-left: - $gutter;
+    width: calc(100% + #{$gutter * 2});
+
+    @media screen and (min-width: $lg + 1){
+        margin-left: - $gutter*2;
+        width: calc(100% + #{$gutter * 4});
+    }
 }
 
 .category {

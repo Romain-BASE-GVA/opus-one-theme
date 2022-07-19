@@ -1,5 +1,9 @@
 .event-list {
     @include clean-list;
+
+    .artists & {
+        overflow: hidden;
+    }
 }
 
 .event {
@@ -60,6 +64,7 @@
 .event__top-info__item--when {
     //padding-right: 1em;
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
     margin-right: .5em;
 
@@ -199,6 +204,8 @@
 }
 
 .event__hashtag {
+    display: flex;
+    flex-wrap: wrap;
     @include fs-sm;
 
     &--mobile {
@@ -240,6 +247,7 @@
         transform-origin: center left;
         // font-variation-settings: "wght" var(--wght),"wdth" var(--wdth),"ital" 0;
         display: inline-block;
+        hyphens: auto;
     }
 
     a {
@@ -317,7 +325,7 @@
     >div:not(.event--artist__img-wrapper) {
         display: flex;
         flex-direction: column-reverse;
-        flex: auto;
+        flex: 1 1 auto;
 
         @media screen and (min-width: $lg + 1) {
             flex-direction: column;

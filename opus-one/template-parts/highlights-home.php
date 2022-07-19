@@ -71,7 +71,7 @@
                                     <span class="event__hashtag event__hashtag--mobile">
                                         <?php
                                         foreach ($terms as $term) {
-                                            echo '#' . $term->name;
+                                            echo '<span>#' . $term->name . '</span>';
                                         }
                                         ?>
                                     </span> <!-- categorie de l event -->
@@ -133,7 +133,7 @@
                             <span class="event__hashtag event__hashtag--desktop">
                                 <?php
                                 foreach ($terms as $term) {
-                                    echo '#' . $term->name . ' ';
+                                    echo '<span>#' . $term->name . '</span>';
                                 }
                                 ?>
                             </span>

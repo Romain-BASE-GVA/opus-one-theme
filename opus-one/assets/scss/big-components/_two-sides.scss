@@ -28,6 +28,8 @@
     margin-bottom: 126px;
     font-variation-settings: "wght" var(--wght),"wdth" var(--wdth),"ital" 0;
     text-transform: uppercase;
+    max-width: 100%;
+    hyphens: auto;
     line-height: 0.75;
 }
 

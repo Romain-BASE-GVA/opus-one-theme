@@ -64,7 +64,7 @@ $the_term = $term;
                     </button>
                 </div>
 
-                <div class="mobile-page-nav"></div>
+                <!--<div class="mobile-page-nav"></div>-->
             </div>
 
             <?php
@@ -89,7 +89,7 @@ $the_term = $term;
                  id="<?= $month ?>-<?= $year_to_show ?>">
                 <h3 class="event-month__title">
                     <!-- @TODO : JS pour adpater le responsive (?) -->
-                    <span class="event-month__word event-month__word--mobile">Jan<br>vier</span><!--MOBILE-->
+                    <span class="event-month__word event-month__word--mobile"><?php echo $month; ?></span><!--MOBILE-->
                     <!-- @TODO : END -->
                     <span class="event-month__word event-month__word--desktop"><!-- DESKTOP -->
                         <?php
@@ -182,7 +182,7 @@ $the_term = $term;
                                             <span class="event__hashtag event__hashtag--mobile">
                                                     <?php
                                                     foreach ($terms as $term) {
-                                                        echo '#' . $term->name;
+                                                        echo '<span>#' . $term->name . '</span>';
                                                     }
                                                     ?>
                                                 </span> <!-- categorie de l event -->
@@ -245,7 +245,7 @@ $the_term = $term;
                                     <span class="event__hashtag event__hashtag--desktop">
                                              <?php
                                              foreach ($terms as $term) {
-                                                 echo '#' . $term->name . ' ';
+                                                echo '<span>#' . $term->name . '</span>';
                                              }
                                              ?>
                                         </span>
@@ -342,7 +342,7 @@ $the_term = $term;
                                                 <span class="event__hashtag event__hashtag--mobile">
                                                     <?php
                                                     foreach ($terms as $term) {
-                                                        echo '#' . $term->name;
+                                                        echo '<span>#' . $term->name . '</span>';
                                                     }
                                                     ?>
                                                 </span> <!-- categorie de l event -->
@@ -385,7 +385,7 @@ $the_term = $term;
                                         <span class="event__hashtag event__hashtag--desktop">
                                              <?php
                                              foreach ($terms as $term) {
-                                                 echo '#' . $term->name . ' ';
+                                                echo '<span>#' . $term->name . '</span>';
                                              }
                                              ?>
                                         </span>

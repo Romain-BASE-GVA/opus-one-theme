@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/main.min.css">
     <?php wp_head(); ?>
 
-    <meta name="theme-color" content="#6E32FF">
+    <meta name="theme-color" content="#6E32FF" />
 </head>
 
 <body data-barba="wrapper">

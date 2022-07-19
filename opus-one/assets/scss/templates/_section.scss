@@ -40,6 +40,12 @@
     margin-bottom: $gutter*5;
     text-align: center;
 
+    span {
+        display: block;
+        @include fs-md;
+        margin-top: 1em;
+    }
+
     @media screen and (min-width: $lg + 1){
         text-align: unset;
     }

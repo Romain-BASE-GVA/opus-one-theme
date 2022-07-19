@@ -31,7 +31,7 @@
         <div class="footer__bottom">
             <div class="logo logo--footer">
                 <img src="https://c.tenor.com/tlceri6zsQMAAAAC/concert.gif" class="logo--footer__img" alt="">
-                <a href="index.html" title="OPUS ONE">
+                <a href="<?php echo get_home_url(); ?>" title="OPUS ONE">
                     <span class="logo__letter">O</span>
                     <span class="logo__letter">P</span>
                     <span class="logo__letter">U</span>

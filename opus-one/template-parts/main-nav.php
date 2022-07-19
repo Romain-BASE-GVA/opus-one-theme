@@ -10,7 +10,7 @@
         <div class="nav--main__wrapper">
             <header class="nav-header">
                 <div class="logo logo--topbar">
-                    <a href="index.html" title="OPUS ONE">
+                    <a href="<?php echo get_home_url(); ?>" title="OPUS ONE">
                         <span class="logo__letter">O</span>
                         <span class="logo__letter">P</span>
                         <span class="logo__letter">U</span>

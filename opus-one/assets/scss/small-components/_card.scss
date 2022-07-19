@@ -120,7 +120,7 @@
 
 .contact-person__side--img {
     position: relative;
-    flex: 0 0 calc(100%/4);
+    flex: 0 0 calc(100%/8);
     aspect-ratio: 1;
     padding-top: 100%;
     border-radius: 20px;
@@ -231,7 +231,7 @@
     &.is-not-available {
         
         &:before {
-            background-color: #10CF72;
+            background-color: $red;
         }
     }
 } 
