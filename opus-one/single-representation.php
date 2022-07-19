@@ -14,6 +14,7 @@ while ( have_posts() ) : the_post();
     }elseif($type == "multidates"){
         $dates = get_field("date_de_la_representation_multidate");
     }
+    $tmp_post = $post;
     if(!$date){
         $representation_info = get_next_show($post->ID);
         if($representation_info['etat'] == "postponed"){
@@ -78,112 +79,390 @@ while ( have_posts() ) : the_post();
     $date_sale_formated = date_i18n( 'Y-m-d H:i', strtotime($date_sale." ".$time_sale));
     $now = date_i18n( 'Y-m-d H:i');
     $date_de_report =  isset($representation_info['date_de_report'] ) ? $representation_info['date_de_report'] : NULL;
+    $oneTicketAvailable = false;
+    $othersTicketAvailable = false;
+
+
+    $i = 0;
+    foreach($dates as $key => $value){
+        $today = date("Ymd");
+        if($value['date_de_la_representation'] >= $today || ($value['heure_debut_de_la_representation'] != $representation_info['heure_debut_de_la_representation'] && $value['date_de_la_representation'] >= $today) || $value['date_de_report'] >= $today){
+            $avaibility = $value['etat'];
+
+            if($avaibility == 'available'){
+                $i += 1;
+
+                if($i == 1){
+                    $oneTicketAvailable = true;
+                }elseif ($i == 2){
+                    $othersTicketAvailable = true;
+                }
+            }
+        }
+    }
 ?>
 
 <div data-barba="container" data-barba-namespace="representation" data-bg="<?php echo $couleur; ?>" data-text-color="#fff" data-logo-title="Présente" data-event-title="<?php the_title(); ?>">
     <header class="header header--single-event">
         <div class="header-tickets">
-            <div class="one-ticket">
-                <a href="" title="Angele : Geneve - Palexpo"><span>Angele : Geneve - Palexpo</span></a>
-                <time datetime="" class="one-ticket__date">10.02.22</time>
-                <div class="">
-                    <div><span>Angele : Geneve - Palexpo</span></div>
-                </div>
-                <div class="one-ticket__price">
-                    Dès 49.-
-                    <span class="one-ticket__icon">
-              <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 100">
-                <defs>
-                  <style>
-                    .cls-1 {
-                        fill: #fff;
-                        fill-rule: evenodd;
+            <?php if($oneTicketAvailable){ ?>
+                <div class="one-ticket">
+
+                    <?php
+                    $i = 0;
+                    foreach($dates as $key => $value){
+                        $today = date("Ymd");
+                        if($value['date_de_la_representation'] >= $today || ($value['heure_debut_de_la_representation'] != $representation_info['heure_debut_de_la_representation'] && $value['date_de_la_representation'] >= $today) || $value['date_de_report'] >= $today){
+                            $avaibility = $value['etat'];
+
+                            if($avaibility == 'available'){
+                                $i += 1;
+
+                                if($i == 1){
+                                    $date_sale = $value['date_de_la_mise_en_vente'];
+                                    $time_sale = $value['heure_de_la_mise_en_vente'];
+                                    $date_sale_formated = date_i18n( 'Y-m-d H:i', strtotime($date_sale." ".$time_sale));
+                                    if($now >= $date_sale_formated){
+                                        if($avaibility == 'available' || $avaibility == 'postponed'){
+                                            $ticket_link = get_ticket_link($value); ?>
+                                            <a href="<?php echo $ticket_link ?>" target="_blank"></a>
+                                            <time datetime class="one-ticket__date"><?php
+                                                if(count($post_artists) > 1){
+                                                    $post_id = isset($value['post_id'] ) ? $value['post_id'] : NULL;
+                                                    $post = get_post($post_id);
+                                                    setup_postdata($post);
+                                                    if($value['etat'] == "postponed"){ ?>
+                                                        <?php echo ucfirst(date_i18n('d.m.y', strtotime($value['date_de_la_representation'])));
+                                                    }else{ ?>
+                                                        <?php echo ucfirst(date_i18n('d.m.y', strtotime($value['date_de_la_representation'])));
+                                                    }
+                                                    $post = $tmp_post;
+                                                    setup_postdata($post);
+                                                }else{ ?>
+                                                    <?php echo ucfirst(date_i18n('d.m.y', strtotime($value['date_de_la_representation'])));
+                                                } ?>
+                                            </time><!-- .date -->
+
+                                            <?php
+                                            if(count($post_artists) > 1){
+                                                $post_id = isset($value['post_id'] ) ? $value['post_id'] : NULL;
+                                                $post = get_post($post_id);
+                                                setup_postdata($post);
+                                                $type = get_field("type");
+                                                $location_name_tmp = $location_name;
+                                                if($type == "plusieurs_dates"){
+                                                    $location_type = $value['choisir_un_lieu_existant'];
+                                                    if($location_type == "oui"){
+                                                        $nouveau_lieu = $value['nouveau_lieu'];
+                                                        if($nouveau_lieu){
+                                                            $location_id_new = $value['nouveau_lieu'];
+                                                            $location_new = get_term($location_id_new, "taxonomy-lieu");
+                                                            $location_name_new = $location_new->name;
+                                                            $location_href_new = get_term_link($location_id_new, "taxonomy-lieu");
+                                                        }
+                                                        $location_id = $value['lieux'];
+                                                        $location = get_term($location_id, "taxonomy-lieu");
+                                                        $location_name = $location->name;
+                                                    }else{
+                                                        $location_name = $value['nom_du_lieu'];
+                                                        $location_href = $value['url_du_lieu'];
+                                                    }
+                                                }elseif($type == "multidates"){
+                                                    $location_type = get_field("choisir_un_lieu_existant");
+                                                    if($location_type == "oui"){
+                                                        $location_id = get_field("lieu");
+                                                        $location = get_term($location_id, "taxonomy-lieu");
+                                                        $location_name = $location->name;
+                                                    }else{
+                                                        $location_name = get_field("nom_du_lieu");
+                                                        $location_href = get_field("url_du_lieu");
+                                                    }
+                                                }
+                                                $post = $tmp_post;
+                                                setup_postdata($post);
+                                            }else{
+                                                $location_name_tmp = $location_name;
+                                                if($type == "plusieurs_dates"){
+                                                    $location_type = $value['choisir_un_lieu_existant'];
+                                                    if($location_type == "oui"){
+                                                        $location_id = $value['lieux'];
+                                                        $location = get_term($location_id, "taxonomy-lieu");
+                                                        $location_name = $location->name;
+                                                    }else{
+                                                        $location_name = $value['nom_du_lieu'];
+                                                        $location_href = $value['url_du_lieu'];
+                                                    }
+                                                }elseif($type == "multidates"){
+                                                    $location_type = get_field("choisir_un_lieu_existant");
+                                                    if($location_type == "oui"){
+                                                        $location_id = get_field("lieu");
+                                                        $location = get_term($location_id, "taxonomy-lieu");
+                                                        $location_name = $location->name;
+                                                    }else{
+                                                        $location_name = get_field("nom_du_lieu");
+                                                        $location_href = get_field("url_du_lieu");
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }else{
+                                        /* @TODO : Prévoir affichage vente à venir, lorsque la date de mise en vente n'est pas encore atteinte mais que le prix est connu cf. grand corps malade le 22 juillet 2022 */
+                                        echo __('Pas en vente', 'opus-one');
+                                    } ?>
+                                    <div class="marquee3k one-ticket__marquee" data-speed="1">
+                                        <div><span> <?= $post->post_title ?>&nbsp;<?php if(is_string($location_name)){ echo ': '. $location_name; } ?>&nbsp;</span></div>
+                                    </div>
+                                    <div class="one-ticket__price"><?php
+
+                                        if(!$value['fnac_ch'] && !$value['autre_billeterie'] && $value['vip'] == "non"){
+
+                                            if($value['prix_le_plus_eleve']){
+                                                echo __("Dès ")." ".$value['prix_le_plus_bas'];
+                                                if(!is_float($value['prix_le_plus_bas'])){
+                                                    echo ".-";
+                                                }
+                                            }else{
+                                                if($value['prix_le_plus_bas']){
+                                                    echo __("Dès "). $value['prix_le_plus_bas'];
+                                                    if(!is_float($value['prix_le_plus_bas'])){
+                                                        echo ".-";
+                                                    }
+                                                }else{
+                                                    _e("à venir", "opus-one");
+                                                }
+                                            }
+                                        }else{
+                                            $post_id = isset($value['post_id'] ) ? $value['post_id'] : NULL;
+                                            if($post_id){
+                                                $the_id_for_buy = $value['post_id'];
+                                            }else{
+                                                $the_id_for_buy = $post->ID;
+                                            }
+                                            if($value['prix_le_plus_eleve']){
+                                                echo __("Dès ").$value['prix_le_plus_bas'];
+                                                if(!is_float($value['prix_le_plus_bas'])){
+                                                    echo ".-";
+                                                }
+                                                echo "</span>";
+                                            }else{
+                                                if($value['prix_le_plus_bas']){
+                                                    echo __("Dès ") . $value['prix_le_plus_bas'];
+                                                    if(!is_float($value['prix_le_plus_bas'])){
+                                                        echo ".-";
+                                                    }
+                                                }else{
+                                                    _e("à venir", "opus-one");
+                                                }
+                                            } ?>
+                                            </a><!-- .btn-reservation-sidebar tooltip-sidebar -->
+                                            <!-- .reservation-btn --><?php
+                                        } ?>
+                                        <span class="one-ticket__icon">
+                                                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 100">
+                                                    <defs>
+                                                    <style>
+                                                      .cls-1 {
+                                                          fill: #fff;
+                                                          fill-rule: evenodd;
+                                                      }
+                                                    </style>
+                                                    </defs>
+                                                    <path class="cls-1"
+                                                          d="M210,0h-70.04V22.82h-13.05V0H0V100H126.91v-22.82h13.05v22.82h70.04V0ZM127.39,38.61v22.77h12.94v-22.77h-12.94Z" />
+                                                    </svg>
+                                                </span>
+                                    </div>
+                                   <?php
+                                }
+                            }
+                        }
                     }
-                  </style>
-                </defs>
-                <path class="cls-1"
-                      d="M210,0h-70.04V22.82h-13.05V0H0V100H126.91v-22.82h13.05v22.82h70.04V0ZM127.39,38.61v22.77h12.94v-22.77h-12.94Z" />
-              </svg>
-            </span>
+                    $post = $tmp_post;
+                    setup_postdata($post);?>
+
                 </div>
-            </div>
-            <button class="header-tickets__trigger" title="Voir les autres dates">Voir les autres dates</button>
-            <div class="header-tickets__list">
-                <ul class="ticket-list">
-                    <li class="one-ticket">
-                        <a href="" title="Angele : Geneve - Palexpo"><span>Angele : Geneve - Palexpo</span></a>
-                        <time datetime="" class="one-ticket__date">10.02.22</time>
-                        <div class="">
-                            <div><span>Angele : Geneve - Palexpo</span></div>
-                        </div>
-                        <div class="one-ticket__price">
-                            Dès 49.-
-                            <span class="one-ticket__icon">
-                  <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 100">
-                    <defs>
-                      <style>
-                        .cls-1 {
-                            fill: #fff;
-                            fill-rule: evenodd;
+            <?php }
+
+            if($othersTicketAvailable){ ?>
+                <button class="header-tickets__trigger" title="Voir les autres dates">Voir les autres dates</button>
+                <div class="header-tickets__list">
+                    <ul class="ticket-list">
+                        <?php
+                        $i = 0;
+                        foreach($dates as $key => $value){
+                            $today = date("Ymd");
+                            if($value['date_de_la_representation'] >= $today || ($value['heure_debut_de_la_representation'] != $representation_info['heure_debut_de_la_representation'] && $value['date_de_la_representation'] >= $today) || $value['date_de_report'] >= $today){
+                                $avaibility = $value['etat'];
+
+                                if($avaibility == 'available'){
+                                    $i += 1;
+
+                                    if($i != 1){
+                                        echo '<li class="one-ticket">';
+
+                                        $date_sale = $value['date_de_la_mise_en_vente'];
+                                        $time_sale = $value['heure_de_la_mise_en_vente'];
+                                        $date_sale_formated = date_i18n( 'Y-m-d H:i', strtotime($date_sale." ".$time_sale));
+                                        if($now >= $date_sale_formated){
+                                            if($avaibility == 'available' || $avaibility == 'postponed'){
+                                                $ticket_link = get_ticket_link($value); ?>
+                                                <a href="<?php echo $ticket_link ?>" target="_blank"></a>
+                                                <time datetime class="one-ticket__date"><?php
+                                                    if(count($post_artists) > 1){
+                                                        $post_id = isset($value['post_id'] ) ? $value['post_id'] : NULL;
+                                                        $post = get_post($post_id);
+                                                        setup_postdata($post);
+                                                        if($value['etat'] == "postponed"){ ?>
+                                                            <?php echo ucfirst(date_i18n('d.m.y', strtotime($value['date_de_la_representation'])));
+                                                        }else{ ?>
+                                                            <?php echo ucfirst(date_i18n('d.m.y', strtotime($value['date_de_la_representation'])));
+                                                        }
+                                                        $post = $tmp_post;
+                                                        setup_postdata($post);
+                                                    }else{ ?>
+                                                        <?php echo ucfirst(date_i18n('d.m.y', strtotime($value['date_de_la_representation'])));
+                                                    } ?>
+                                                </time><!-- .date -->
+
+                                                <?php
+                                                if(count($post_artists) > 1){
+                                                    $post_id = isset($value['post_id'] ) ? $value['post_id'] : NULL;
+                                                    $post = get_post($post_id);
+                                                    setup_postdata($post);
+                                                    $type = get_field("type");
+                                                    $location_name_tmp = $location_name;
+                                                    if($type == "plusieurs_dates"){
+                                                        $location_type = $value['choisir_un_lieu_existant'];
+                                                        if($location_type == "oui"){
+                                                            $nouveau_lieu = $value['nouveau_lieu'];
+                                                            if($nouveau_lieu){
+                                                                $location_id_new = $value['nouveau_lieu'];
+                                                                $location_new = get_term($location_id_new, "taxonomy-lieu");
+                                                                $location_name_new = $location_new->name;
+                                                                $location_href_new = get_term_link($location_id_new, "taxonomy-lieu");
+                                                            }
+                                                            $location_id = $value['lieux'];
+                                                            $location = get_term($location_id, "taxonomy-lieu");
+                                                            $location_name = $location->name;
+                                                        }else{
+                                                            $location_name = $value['nom_du_lieu'];
+                                                            $location_href = $value['url_du_lieu'];
+                                                        }
+                                                    }elseif($type == "multidates"){
+                                                        $location_type = get_field("choisir_un_lieu_existant");
+                                                        if($location_type == "oui"){
+                                                            $location_id = get_field("lieu");
+                                                            $location = get_term($location_id, "taxonomy-lieu");
+                                                            $location_name = $location->name;
+                                                        }else{
+                                                            $location_name = get_field("nom_du_lieu");
+                                                            $location_href = get_field("url_du_lieu");
+                                                        }
+                                                    }
+                                                    $post = $tmp_post;
+                                                    setup_postdata($post);
+                                                }else{
+                                                    $location_name_tmp = $location_name;
+                                                    if($type == "plusieurs_dates"){
+                                                        $location_type = $value['choisir_un_lieu_existant'];
+                                                        if($location_type == "oui"){
+                                                            $location_id = $value['lieux'];
+                                                            $location = get_term($location_id, "taxonomy-lieu");
+                                                            $location_name = $location->name;
+                                                        }else{
+                                                            $location_name = $value['nom_du_lieu'];
+                                                            $location_href = $value['url_du_lieu'];
+                                                        }
+                                                    }elseif($type == "multidates"){
+                                                        $location_type = get_field("choisir_un_lieu_existant");
+                                                        if($location_type == "oui"){
+                                                            $location_id = get_field("lieu");
+                                                            $location = get_term($location_id, "taxonomy-lieu");
+                                                            $location_name = $location->name;
+                                                        }else{
+                                                            $location_name = get_field("nom_du_lieu");
+                                                            $location_href = get_field("url_du_lieu");
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else{
+                                            /* @TODO : Prévoir affichage vente à venir, lorsque la date de mise en vente n'est pas encore atteinte mais que le prix est connu cf. grand corps malade le 22 juillet 2022 */
+                                            echo __('Pas en vente', 'opus-one');
+                                        } ?>
+                                        <div class="marquee3k one-ticket__marquee" data-speed="1">
+                                            <div><span> <?= $post->post_title ?>&nbsp;<?php if(is_string($location_name)){ echo ': '. $location_name; } ?>&nbsp;</span></div>
+                                        </div>
+                                        <div class="one-ticket__price"><?php
+
+                                            if(!$value['fnac_ch'] && !$value['autre_billeterie'] && $value['vip'] == "non"){
+
+                                                if($value['prix_le_plus_eleve']){
+                                                    echo __("Dès ")." ".$value['prix_le_plus_bas'];
+                                                    if(!is_float($value['prix_le_plus_bas'])){
+                                                        echo ".-";
+                                                    }
+                                                }else{
+                                                    if($value['prix_le_plus_bas']){
+                                                        echo __("Dès "). $value['prix_le_plus_bas'];
+                                                        if(!is_float($value['prix_le_plus_bas'])){
+                                                            echo ".-";
+                                                        }
+                                                    }else{
+                                                        _e("à venir", "opus-one");
+                                                    }
+                                                }
+                                            }else{
+                                                $post_id = isset($value['post_id'] ) ? $value['post_id'] : NULL;
+                                                if($post_id){
+                                                    $the_id_for_buy = $value['post_id'];
+                                                }else{
+                                                    $the_id_for_buy = $post->ID;
+                                                }
+                                                if($value['prix_le_plus_eleve']){
+                                                    echo __("Dès ").$value['prix_le_plus_bas'];
+                                                    if(!is_float($value['prix_le_plus_bas'])){
+                                                        echo ".-";
+                                                    }
+                                                    echo "</span>";
+                                                }else{
+                                                    if($value['prix_le_plus_bas']){
+                                                        echo __("Dès ") . $value['prix_le_plus_bas'];
+                                                        if(!is_float($value['prix_le_plus_bas'])){
+                                                            echo ".-";
+                                                        }
+                                                    }else{
+                                                        _e("à venir", "opus-one");
+                                                    }
+                                                } ?>
+                                                </a><!-- .btn-reservation-sidebar tooltip-sidebar -->
+                                                <!-- .reservation-btn --><?php
+                                            } ?>
+                                            <span class="one-ticket__icon">
+                                                    <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 100">
+                                                    <defs>
+                                                    <style>
+                                                      .cls-1 {
+                                                          fill: #fff;
+                                                          fill-rule: evenodd;
+                                                      }
+                                                    </style>
+                                                    </defs>
+                                                    <path class="cls-1"
+                                                          d="M210,0h-70.04V22.82h-13.05V0H0V100H126.91v-22.82h13.05v22.82h70.04V0ZM127.39,38.61v22.77h12.94v-22.77h-12.94Z" />
+                                                    </svg>
+                                                </span>
+                                        </div>
+                                        </li><!-- .sidebar-block --><?php
+                                    }
+                                }
+                            }
                         }
-                      </style>
-                    </defs>
-                    <path class="cls-1"
-                          d="M210,0h-70.04V22.82h-13.05V0H0V100H126.91v-22.82h13.05v22.82h70.04V0ZM127.39,38.61v22.77h12.94v-22.77h-12.94Z" />
-                  </svg>
-                </span>
-                        </div>
-                    </li>
-                    <li class="one-ticket">
-                        <a href="" title="Angele : Geneve - Palexpo"><span>Angele : Geneve - Palexpo</span></a>
-                        <time datetime="" class="one-ticket__date">10.02.22</time>
-                        <div class="">
-                            <div><span>Angele : Geneve - Palexpo</span></div>
-                        </div>
-                        <div class="one-ticket__price">
-                            Dès 49.-
-                            <span class="one-ticket__icon">
-                  <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 100">
-                    <defs>
-                      <style>
-                        .cls-1 {
-                            fill: #fff;
-                            fill-rule: evenodd;
-                        }
-                      </style>
-                    </defs>
-                    <path class="cls-1"
-                          d="M210,0h-70.04V22.82h-13.05V0H0V100H126.91v-22.82h13.05v22.82h70.04V0ZM127.39,38.61v22.77h12.94v-22.77h-12.94Z" />
-                  </svg>
-                </span>
-                        </div>
-                    </li>
-                    <li class="one-ticket">
-                        <a href="" title="Angele : Geneve - Palexpo"><span>Angele : Geneve - Palexpo</span></a>
-                        <time datetime="" class="one-ticket__date">10.02.22</time>
-                        <div class="">
-                            <div><span>Angele : Geneve - Palexpo</span></div>
-                        </div>
-                        <div class="one-ticket__price">
-                            Dès 49.-
-                            <span class="one-ticket__icon">
-                  <svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 100">
-                    <defs>
-                      <style>
-                        .cls-1 {
-                            fill: #fff;
-                            fill-rule: evenodd;
-                        }
-                      </style>
-                    </defs>
-                    <path class="cls-1"
-                          d="M210,0h-70.04V22.82h-13.05V0H0V100H126.91v-22.82h13.05v22.82h70.04V0ZM127.39,38.61v22.77h12.94v-22.77h-12.94Z" />
-                  </svg>
-                </span>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+                        $post = $tmp_post;
+                        setup_postdata($post);?>
+                    </ul>
+                </div>
+            <?php } ?>
         </div>
 
         <div class="header-carousel">
@@ -274,18 +553,27 @@ while ( have_posts() ) : the_post();
 
                             <?php
                             if(($avaibility == 'available' && $date >= $today) || ($avaibility == 'postponed' && $date >= $today)){
-                                if(!$representation_info['fnac_ch'] && !$representation_info['autre_billeterie'] && $representation_info['vip'] == "non"){
-                                    if($representation_info['prix_le_plus_eleve']){
-                                        echo '<a href="'.$representation_info['ticketcorner'].'" target="_blank" class="event-card__cta">'.__("Réserver Dès ", "opus-one").$representation_info['prix_le_plus_bas'].'.-</a>';
-                                    }else{
-                                        if($representation_info['prix_le_plus_bas']){
-                                            echo '<a href="'.$representation_info['ticketcorner'].'" target="_blank" class="event-card__cta">'.__("Réserver Dès ", "opus-one").$representation_info['prix_le_plus_bas'].'.-</a>';
-                                        }else{
-                                            _e("à venir", "opus-one");
-                                        }
-                                    }
-                                }else{
-                                    /** @TODO : Ajouter moyen de payement autre billeterie Tooltip */
+                                $ticket_link = get_ticket_link($representation_info);
+                                if($ticket_link != null){ ?>
+                                <a class="event-card__cta" href="<?php echo $ticket_link ?>" target="_blank">
+                                    <span class="btn-reservation-sidebar <?php if(!$representation_info['prix_le_plus_bas']){echo "no-price";} if($post->ID == 22663 && $representation_info["date_de_report"] == "20200509"){echo " hidden";} ?>"><?php
+                                        if($representation_info['prix_le_plus_eleve']){
+                                            echo __("Réserver")." <span class='from'>".__("Dès ")."</span><span class='price'>".$representation_info['prix_le_plus_bas'];
+                                            if(!is_float($representation_info['prix_le_plus_bas'])){
+                                                echo ".-";
+                                            }
+                                            echo "</span>";
+                                        }else {
+                                            if ($representation_info['prix_le_plus_bas']) {
+                                                echo __("Réserver") . " / <span class='price'>" . $representation_info['prix_le_plus_bas'];
+                                                if (!is_float($representation_info['prix_le_plus_bas'])) {
+                                                    echo ".-";
+                                                }
+                                            } else {
+                                                _e("à venir", "opus-one");
+                                            }
+                                        }?>
+                                    </a><?php
                                 }
                             }
                             ?>
