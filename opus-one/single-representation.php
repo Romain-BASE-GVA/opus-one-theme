@@ -274,18 +274,27 @@ while ( have_posts() ) : the_post();
 
                             <?php
                             if(($avaibility == 'available' && $date >= $today) || ($avaibility == 'postponed' && $date >= $today)){
-                                if(!$representation_info['fnac_ch'] && !$representation_info['autre_billeterie'] && $representation_info['vip'] == "non"){
-                                    if($representation_info['prix_le_plus_eleve']){
-                                        echo '<a href="'.$representation_info['ticketcorner'].'" target="_blank" class="event-card__cta">'.__("Réserver Dès ", "opus-one").$representation_info['prix_le_plus_bas'].'.-</a>';
-                                    }else{
-                                        if($representation_info['prix_le_plus_bas']){
-                                            echo '<a href="'.$representation_info['ticketcorner'].'" target="_blank" class="event-card__cta">'.__("Réserver Dès ", "opus-one").$representation_info['prix_le_plus_bas'].'.-</a>';
-                                        }else{
-                                            _e("à venir", "opus-one");
-                                        }
-                                    }
-                                }else{
-                                    /** @TODO : Ajouter moyen de payement autre billeterie Tooltip */
+                                $ticket_link = get_ticket_link($representation_info);
+                                if($ticket_link != null){ ?>
+                                <a class="event-card__cta" href="<?php echo $ticket_link ?>" target="_blank">
+                                    <span class="btn-reservation-sidebar <?php if(!$representation_info['prix_le_plus_bas']){echo "no-price";} if($post->ID == 22663 && $representation_info["date_de_report"] == "20200509"){echo " hidden";} ?>"><?php
+                                        if($representation_info['prix_le_plus_eleve']){
+                                            echo __("Réserver")." <span class='from'>".__("Dès ")."</span><span class='price'>".$representation_info['prix_le_plus_bas'];
+                                            if(!is_float($representation_info['prix_le_plus_bas'])){
+                                                echo ".-";
+                                            }
+                                            echo "</span>";
+                                        }else {
+                                            if ($representation_info['prix_le_plus_bas']) {
+                                                echo __("Réserver") . " / <span class='price'>" . $representation_info['prix_le_plus_bas'];
+                                                if (!is_float($representation_info['prix_le_plus_bas'])) {
+                                                    echo ".-";
+                                                }
+                                            } else {
+                                                _e("à venir", "opus-one");
+                                            }
+                                        }?>
+                                    </a><?php
                                 }
                             }
                             ?>
