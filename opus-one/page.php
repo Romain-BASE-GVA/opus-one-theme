@@ -231,7 +231,7 @@
                                                                     ?>
                                                                         <li class="member">
                                                                             <?php if ($memberEmail) : ?>
-                                                                                <a href="mailto:<?php echo $mail; ?>" title="Envoyer un mail a <?php the_title(); ?>">
+                                                                                <a href="mailto:<?php echo $memberEmail ?>" title="Envoyer un mail a <?php the_title(); ?>">
                                                                                 <?php endif; ?>
                                                                                 <div class="member__img">
                                                                                     <img src="<?php echo esc_url($memberImg['url']); ?>" alt="<?php echo esc_attr($memberImg['alt']); ?>" />

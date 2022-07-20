@@ -10,5 +10,6 @@
 //@prepros-append vendor/cqfill.js
 //@prepros-append vendor/cqfill.js
 //@prepros-append vendor/split-type.js
+//@prepros-append vendor/jquery.matchHeight-min.js
 
 //@prepros-append app.js

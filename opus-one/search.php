@@ -60,9 +60,8 @@ foreach ($swp_query->posts as $show)
                     </ul>
                 </div>
             </div>
-
+            <!--
             <div class="search-events">
-                <!-- Search input statique, la recherceh se fait sur tous les evenement donc le resulktat de la page rehcerche est la page agenda global, (sans taxonomie)  -->
                 <div class="search-events__input-wrapper">
                     <form role="search" method="get" action="<?php echo get_home_url(); ?>">
                         <input class="search-events__input" placeholder="Recherche" type="search" name="s"
@@ -87,7 +86,7 @@ foreach ($swp_query->posts as $show)
             </span>
                 </button>
             </div>
-
+            -->
             <!--<div class="mobile-page-nav"></div>-->
         </div>
 
